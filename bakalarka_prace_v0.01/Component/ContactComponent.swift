@@ -30,8 +30,10 @@ class ContactComponent: GKComponent {
         
             //defeaultně bude false
             physicsBody.affectedByGravity = true
+            print("Contact was done for \(spriteNode.node.name)")
         }
          super.init()
+  
     }
     
     required init?(coder aDecoder: NSCoder) {

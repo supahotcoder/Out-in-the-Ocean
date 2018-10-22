@@ -43,6 +43,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             pNode.position = self.scene?.position ?? CGPoint(x: -200, y: 0)
             pNode.size = CGSize(width: 60 , height: 60)
             playerNode = pNode
+            print("Contact masks \(pNode.physicsBody?.contactTestBitMask)")
         }
         entityManager.add(entity: player)
         
@@ -53,6 +54,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             acNode.position = CGPoint(x: -200, y: 0)
         }
         entityManager.add(entity: activeBack)
+        
     }
 
     
@@ -62,6 +64,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             if let joystickNode = joystickNode {
                 let loc = touch.location(in: joystickNode)
                 joystick.didTouchJoystick(location: loc)
+                print(joystick.insideFrame)
             }
         }
     }
@@ -118,18 +121,20 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     //MARK: UPDATE
     override func update(_ currentTime: TimeInterval) {
-        let deltaTime = currentTime - previousTimeInterval
-        previousTimeInterval = currentTime
-        
-        let xPos = Double(joystick.touch.x)
-        let yPos = Double(joystick.touch.y)
-        
-        let movement = CGVector(dx: deltaTime * xPos * joystick.speed, dy:  deltaTime * yPos * joystick.speed)
-        //print(movement)
-        let rotation = SKAction.rotate(toAngle: (joystick.turnAngle + CGFloat(90 * (Double.pi/50)) + 0.2), duration: 0.1, shortestUnitArc: true)
-        // + 0.2 protože na testovací textuře nejsou oči v rovině
-        let move = SKAction.move(by: movement, duration: 0.1)
-        let actionSeq = SKAction.sequence([rotation,move])
-        playerNode?.run(actionSeq)
+        if joystick.insideFrame{
+            let deltaTime = currentTime - previousTimeInterval
+            previousTimeInterval = currentTime
+            
+            let xPos = Double(joystick.touch.x)
+            let yPos = Double(joystick.touch.y)
+            
+            let movement = CGVector(dx: deltaTime * xPos * joystick.speed, dy:  deltaTime * yPos * joystick.speed)
+            //print(movement)
+            let rotation = SKAction.rotate(toAngle: (joystick.turnAngle + CGFloat(90 * (Double.pi/50)) + 0.2), duration: 0.1, shortestUnitArc: true)
+            // + 0.2 protože na testovací textuře nejsou oči v rovině
+            let move = SKAction.move(by: movement, duration: 0.1)
+            let actionSeq = SKAction.sequence([rotation,move])
+            playerNode?.run(actionSeq)
+        }
     }
 }

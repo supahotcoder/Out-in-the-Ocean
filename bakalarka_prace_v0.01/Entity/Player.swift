@@ -16,10 +16,13 @@ class Player: GKEntity {
         super.init()
         let texture = SKTexture(imageNamed: imageName)
         let spriteComp = SpriteComponent(entity: self, texture: texture, size: texture.size())
-        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.player.rawValue, dynamicObject: true, canRotate: true)
-        
-        addComponent(contactComp)
         addComponent(spriteComp)
+        //add spriteComponent první protože by se potom v contactu nedotázalo na spriteComponentu
+        
+        
+        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.player.rawValue, dynamicObject: true, canRotate: true)
+        addComponent(contactComp)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
