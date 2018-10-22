@@ -11,10 +11,8 @@ import GameplayKit
 
 class ContactComponent: GKComponent {
     
-    
     init(entity : GKEntity , bitmask: UInt32 , dynamicObject dynamic: Bool,canRotate rotation: Bool) {
         if let spriteNode = entity.component(ofType: SpriteComponent.self) {
-            //var physicsBody = spriteNode.node.physicsBody
             let physicsBody = SKPhysicsBody(circleOfRadius: spriteNode.node.size.height)
             physicsBody.categoryBitMask = bitmask
             // přidá kolize se všemi entitami které reagují na kontakt
@@ -27,7 +25,9 @@ class ContactComponent: GKComponent {
             
             physicsBody.friction = 0.2
             physicsBody.restitution = 1
-        
+            physicsBody.linearDamping = 1
+            physicsBody.angularDamping = 0.7
+            
             //defeaultně bude false
             physicsBody.affectedByGravity = false
             //nastaví vytovřený physics body do raálného physics body

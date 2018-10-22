@@ -16,15 +16,14 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var joystickNode :SKSpriteNode?
     var entityManager : EntityManager!
     
+    
     var previousTimeInterval = TimeInterval(0)
     
     var joystickFrame: SKNode?
     
-    
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
         //nastavení fyziky
-   
         joystick = Joystick()
         joystickNode = joystick.node
         joystickNode?.alpha = CGFloat(0.4)
@@ -35,7 +34,6 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
 
         entityManager = EntityManager(scene: self.scene!)
 
-        //contact test
         let activeBack = ActiveBackground(imageName: "player_test")
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
            acNode.size = CGSize(width: 30 , height: 30)
@@ -75,19 +73,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                 joystick.touch = position
             } else {
                 joystick.touch  = CGPoint(x: cos(angle) * joystick.touchRadius, y: sin(angle) * joystick.touchRadius)
+                }
             }
-        }
+
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        joystick.stopMovement()
         joystick.touch = CGPoint(x: 0, y: 0)
-        //resetování do půvvodní polohy (není pohyb)
-        
-        let xPos = Double(joystick.touch.x)
-        let yPos = Double(joystick.touch.y)
-        let movement = CGVector(dx: xPos * joystick.speed * 2 , dy:   yPos * joystick.speed * 2)
-        let move = SKAction.move(by: movement, duration: 0.4)
-        playerNode?.run(move)
-        // pomalejší zastavení
     }
     
     //MARK: COLISION/CONTACT
@@ -108,27 +100,24 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             print("Not a player contact")
             return
         }
-        
+        //odražení od objektu
+        player.applyForce(CGVector(dx: -player.velocity.dx, dy: -player.velocity.dy))
     }
     
     
     //MARK: UPDATE
     override func update(_ currentTime: TimeInterval) {
         if joystick.insideFrame{
-            let deltaTime = currentTime - previousTimeInterval
-            previousTimeInterval = currentTime
-            
             let xPos = Double(joystick.touch.x)
             let yPos = Double(joystick.touch.y)
+
+            let movement = CGVector(dx: (xPos * joystick.speed)/100, dy:  (yPos * joystick.speed)/100)
+            let rotation = SKAction.rotate(toAngle: (joystick.turnAngle + CGFloat(90 * (Double.pi/50)) + 0.5), duration: 0.1, shortestUnitArc: true)
             
-            let movement = CGVector(dx: deltaTime * xPos * joystick.speed, dy:  deltaTime * yPos * joystick.speed)
-            //print(movement)
-            let rotation = SKAction.rotate(toAngle: (joystick.turnAngle + CGFloat(90 * (Double.pi/50)) + 0.2), duration: 0.1, shortestUnitArc: true)
-            // + 0.2 protože na testovací textuře nejsou oči v rovině
-            let move = SKAction.move(by: movement, duration: 0.1)
-            let actionSeq = SKAction.sequence([rotation,move])
-            playerNode?.run(actionSeq)
+            playerNode?.run(rotation)
+            playerNode?.physicsBody?.applyImpulse(movement)
+            //maxspeed check
+            playerNode?.physicsBody?.velocity = joystick.maxVelocityCheck(velocity: (playerNode?.physicsBody?.velocity)!)
         }
-       // print(playerNode?.position)
     }
 }
