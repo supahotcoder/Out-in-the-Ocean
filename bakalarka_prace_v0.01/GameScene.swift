@@ -38,23 +38,26 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
 
         entityManager = EntityManager(scene: self.scene!)
         
-         let player = Player(imageName: "player_test")
-        if let pNode = player.component(ofType: SpriteComponent.self)?.node {
-            pNode.position = self.scene?.position ?? CGPoint(x: -200, y: 0)
-            pNode.size = CGSize(width: 60 , height: 60)
-            playerNode = pNode
-            print("Contact masks \(pNode.physicsBody?.contactTestBitMask)")
-        }
-        entityManager.add(entity: player)
+
         
         //contact test
         let activeBack = ActiveBackground(imageName: "player_test")
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
-           acNode.size = CGSize(width: 80 , height: 80)
-            acNode.position = CGPoint(x: -200, y: 0)
+           acNode.size = CGSize(width: 30 , height: 30)
+            acNode.position = CGPoint(x: -250, y: 0)
         }
         entityManager.add(entity: activeBack)
         
+        let player = Player(imageName: "player_test")
+        if let pNode = player.component(ofType: SpriteComponent.self)?.node {
+            pNode.position =  CGPoint(x: 250,y: 0)//self.scene?.position ?? CGPoint(x: 0, y: 0)
+            pNode.size = CGSize(width: 60 , height: 60)
+            playerNode = pNode
+        }
+        entityManager.add(entity: player)
+        
+        
+        //playerNode?.physicsBody?.isDynamic = false
     }
 
     
@@ -64,7 +67,6 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             if let joystickNode = joystickNode {
                 let loc = touch.location(in: joystickNode)
                 joystick.didTouchJoystick(location: loc)
-                print(joystick.insideFrame)
             }
         }
     }
@@ -99,9 +101,10 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     //MARK: COLISION/CONTACT
     
     func didBegin(_ contact: SKPhysicsContact) {
+        //playerNode?.physicsBody?.isDynamic = true
+        
         let player : SKPhysicsBody
         let otherNode : SKPhysicsBody
-        
         print("Contact")
         
         if contact.bodyA.node?.name == playerNode?.name {
@@ -116,6 +119,8 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             return
         }
         player.applyImpulse(CGVector(dx: -player.velocity.dx, dy: -player.velocity.dy))
+        
+        //playerNode?.physicsBody?.isDynamic = false
     }
     
     
@@ -136,5 +141,6 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             let actionSeq = SKAction.sequence([rotation,move])
             playerNode?.run(actionSeq)
         }
+       // print(playerNode?.position)
     }
 }

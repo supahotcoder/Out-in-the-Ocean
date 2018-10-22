@@ -26,11 +26,12 @@ class ContactComponent: GKComponent {
             physicsBody.allowsRotation = rotation
             
             physicsBody.friction = 0.2
-            physicsBody.restitution = 1
+            physicsBody.restitution = 0.1
         
             //defeaultně bude false
-            physicsBody.affectedByGravity = true
-            print("Contact was done for \(spriteNode.node.name)")
+            physicsBody.affectedByGravity = false
+            //nastaví vytovřený physics body do raálného physics body
+            spriteNode.node.physicsBody = physicsBody
         }
          super.init()
   

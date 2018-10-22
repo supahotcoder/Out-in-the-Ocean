@@ -15,7 +15,7 @@ class Player: GKEntity {
      init(imageName : String) {
         super.init()
         let texture = SKTexture(imageNamed: imageName)
-        let spriteComp = SpriteComponent(entity: self, texture: texture, size: texture.size())
+        let spriteComp = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 58, height: 58))
         addComponent(spriteComp)
         //add spriteComponent první protože by se potom v contactu nedotázalo na spriteComponentu
         
