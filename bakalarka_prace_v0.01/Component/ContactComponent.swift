@@ -15,7 +15,7 @@ class ContactComponent: GKComponent {
     init(entity : GKEntity , bitmask: UInt32 , dynamicObject dynamic: Bool,canRotate rotation: Bool) {
         if let spriteNode = entity.component(ofType: SpriteComponent.self) {
             //var physicsBody = spriteNode.node.physicsBody
-            let physicsBody = SKPhysicsBody(rectangleOf: spriteNode.node.size)
+            let physicsBody = SKPhysicsBody(circleOfRadius: spriteNode.node.size.height)
             physicsBody.categoryBitMask = bitmask
             // přidá kolize se všemi entitami které reagují na kontakt
             for i in bitmasks.allCases{
@@ -26,7 +26,7 @@ class ContactComponent: GKComponent {
             physicsBody.allowsRotation = rotation
             
             physicsBody.friction = 0.2
-            physicsBody.restitution = 0.1
+            physicsBody.restitution = 1
         
             //defeaultně bude false
             physicsBody.affectedByGravity = false

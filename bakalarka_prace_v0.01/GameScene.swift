@@ -22,24 +22,19 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     
     override func didMove(to view: SKView) {
+        physicsWorld.contactDelegate = self
+        //nastavení fyziky
    
         joystick = Joystick()
         joystickNode = joystick.node
         joystickNode?.alpha = CGFloat(0.4)
         joystickFrame = JoystickFrame().node
-        // joystickFrame -> Obal na joystick at je možnost odchytávat dotyk
-//        joystickFrame = SKSpriteNode(texture: SKTexture(imageNamed: "transp"), color: .white, size: CGSize(width: joystick.touchRadius, height: joystick.touchRadius))
-//        joystickFrame?.position = CGPoint(x: -210, y: -90)
-//
-//        joystickNode?.position = CGPoint(x: 0,y: 0) // musí být vynulované jinak textura fuč
-//
+
         joystickFrame?.addChild(joystickNode!)
         self.addChild(joystickFrame!)
 
         entityManager = EntityManager(scene: self.scene!)
-        
 
-        
         //contact test
         let activeBack = ActiveBackground(imageName: "player_test")
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
@@ -55,9 +50,6 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             playerNode = pNode
         }
         entityManager.add(entity: player)
-        
-        
-        //playerNode?.physicsBody?.isDynamic = false
     }
 
     
@@ -101,26 +93,22 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     //MARK: COLISION/CONTACT
     
     func didBegin(_ contact: SKPhysicsContact) {
-        //playerNode?.physicsBody?.isDynamic = true
-        
         let player : SKPhysicsBody
         let otherNode : SKPhysicsBody
-        print("Contact")
-        
-        if contact.bodyA.node?.name == playerNode?.name {
+
+        if contact.bodyA.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
             player = contact.bodyA
             otherNode = contact.bodyB
         }
-        else if contact.bodyB.node?.name == playerNode?.name {
+        else if contact.bodyB.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
             player = contact.bodyB
             otherNode = contact.bodyA
         }
         else {
+            print("Not a player contact")
             return
         }
-        player.applyImpulse(CGVector(dx: -player.velocity.dx, dy: -player.velocity.dy))
         
-        //playerNode?.physicsBody?.isDynamic = false
     }
     
     
