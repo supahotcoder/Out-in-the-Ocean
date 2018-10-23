@@ -20,7 +20,28 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
 
     var joystickFrame: SKNode?
     // pozadi
-    let backgr = SKSpriteNode(fileNamed: "pozadi_ostatni")
+    var backgr : SKSpriteNode?
+    
+    
+    func cameraBoundaries() {
+        let l : CGFloat = CGFloat(-Double((backgr?.size.width)!) + Double(size.width  / 2))
+        let r : CGFloat = CGFloat(Double((backgr?.size.width)!) - Double(size.width / 2))
+        let t : CGFloat = CGFloat(-Double((backgr?.size.height)!) - Double(size.height / 2))
+        let b : CGFloat = CGFloat(Double((backgr?.size.height)!) + Double(size.height / 2))
+        if (camera?.position.x)! < l{
+            camera?.position.x = l
+        }
+        else if (camera?.position.x)! > r{
+            camera?.position.x = r
+        }
+        
+        if (camera?.position.y)! > t {
+            camera?.position.y = t
+        }
+        else if (camera?.position.x)! < b{
+            camera?.position.x = b
+        }
+    }
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -33,6 +54,9 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         joystickFrame?.addChild(joystickNode!)
         joystickFrame?.zPosition = 5
         
+        backgr = childNode(withName: "pozadi") as? SKSpriteNode
+        
+    
         // CAMERA
         let cameraNode = SKCameraNode()
         addChild(cameraNode)
@@ -87,6 +111,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                 }
             }
 
+
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         joystick.stopMovement()
@@ -132,5 +157,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         }
         let cameraMove = SKAction.move(to: (playerNode?.position)!, duration: 0.3)
         camera?.run(cameraMove)
+        // camera void block
+        //cameraBoundaries()
     }
 }

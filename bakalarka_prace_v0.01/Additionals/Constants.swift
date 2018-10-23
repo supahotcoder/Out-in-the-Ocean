@@ -13,12 +13,13 @@ enum bitmasks : UInt32 , CaseIterable {
     case player = 0b1
     case activeBackground = 0b10
     case frame = 0b11
+    case camera = 0b100
     
     init?(id: Int){
         switch id {
         case 1: self = .player
         case 2: self = .activeBackground
-        case 3: self = .frame
+        //case 3: self = .frame
         default: return nil
         }
     }
