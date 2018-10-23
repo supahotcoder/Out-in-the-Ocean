@@ -16,10 +16,11 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var joystickNode :SKSpriteNode?
     var entityManager : EntityManager!
     
-    
     var previousTimeInterval = TimeInterval(0)
-    
+
     var joystickFrame: SKNode?
+    // pozadi
+    let backgr = SKSpriteNode(fileNamed: "pozadi_ostatni")
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -30,14 +31,23 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         joystickFrame = JoystickFrame().node
 
         joystickFrame?.addChild(joystickNode!)
-        self.addChild(joystickFrame!)
-
+        joystickFrame?.zPosition = 5
+        
+        // CAMERA
+        let cameraNode = SKCameraNode()
+        addChild(cameraNode)
+        self.camera = cameraNode
+        cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
+        cameraNode.addChild(joystickFrame!)
+        
         entityManager = EntityManager(scene: self.scene!)
 
         let activeBack = ActiveBackground(imageName: "player_test")
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
-           acNode.size = CGSize(width: 30 , height: 30)
+           acNode.size = CGSize(width: 100 , height: 100)
             acNode.position = CGPoint(x: -250, y: 0)
+            // nastavení Z pozice
+            acNode.zPosition = 3
         }
         entityManager.add(entity: activeBack)
         
@@ -46,11 +56,12 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             pNode.position =  CGPoint(x: 250,y: 0)//self.scene?.position ?? CGPoint(x: 0, y: 0)
             pNode.size = CGSize(width: 60 , height: 60)
             playerNode = pNode
+             // nastavení Z pozice
+            playerNode?.zPosition = 3
         }
         entityManager.add(entity: player)
     }
 
-    
     // MARK: TOUCHES
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
@@ -119,5 +130,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             //maxspeed check
             playerNode?.physicsBody?.velocity = joystick.maxVelocityCheck(velocity: (playerNode?.physicsBody?.velocity)!)
         }
+        let cameraMove = SKAction.move(to: (playerNode?.position)!, duration: 0.3)
+        camera?.run(cameraMove)
     }
 }
