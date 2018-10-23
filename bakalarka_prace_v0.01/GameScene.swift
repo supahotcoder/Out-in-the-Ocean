@@ -16,30 +16,40 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var joystickNode :SKSpriteNode?
     var entityManager : EntityManager!
     
-    var previousTimeInterval = TimeInterval(0)
-
     var joystickFrame: SKNode?
-    // pozadi
     var backgr : SKSpriteNode?
     
-    
-    func cameraBoundaries() {
-        let l : CGFloat = CGFloat(-Double((backgr?.size.width)!) + Double(size.width  / 2))
-        let r : CGFloat = CGFloat(Double((backgr?.size.width)!) - Double(size.width / 2))
-        let t : CGFloat = CGFloat(-Double((backgr?.size.height)!) - Double(size.height / 2))
-        let b : CGFloat = CGFloat(Double((backgr?.size.height)!) + Double(size.height / 2))
-        if (camera?.position.x)! < l{
-            camera?.position.x = l
-        }
-        else if (camera?.position.x)! > r{
-            camera?.position.x = r
-        }
+    func cameraMovement() {
+        // TODO: nějak k tomu přidat pozice kde se frame nachází at pri kazdém levelu nestartuju uprostřed
+        var change = false
+        let l : CGFloat = -(backgr?.frame.width)! / 2 + size.width / 2
+        let r : CGFloat = (backgr?.frame.width)! / 2 - size.width / 2
+        let b : CGFloat = -(backgr?.frame.height)! / 2 + size.height / 2
+        let t : CGFloat = (backgr?.frame.height)! / 2 - size.height / 2
+
+        var position : CGPoint = (playerNode?.position)!
         
-        if (camera?.position.y)! > t {
-            camera?.position.y = t
+        if (camera?.position.x)! < l && (playerNode?.position.x)! <= l {
+            change = true
+            position.x = l
         }
-        else if (camera?.position.x)! < b{
-            camera?.position.x = b
+        else if (camera?.position.x)! > r && (playerNode?.position.x)! >= r {
+            change = true
+            position.x = r
+        }
+        if (camera?.position.y)! > t && (playerNode?.position.y)! >= t {
+            change = true
+            position.y = t
+        }
+        else if (camera?.position.y)! < b && (playerNode?.position.y)! <= b {
+            change = true
+            position.y = b
+        }
+        if !change {
+            camera?.run(SKAction.move(to: (playerNode?.position)!, duration: 0.3))
+        }
+        else{
+            camera?.run(SKAction.move(to: position, duration: 0.3))
         }
     }
     
@@ -56,7 +66,12 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         backgr = childNode(withName: "pozadi") as? SKSpriteNode
         
-    
+        let edgePhysicsBody = SKPhysicsBody(edgeLoopFrom: (backgr?.frame)!) //
+        edgePhysicsBody.categoryBitMask = bitmasks.frame.rawValue
+        edgePhysicsBody.contactTestBitMask = bitmasks.player.rawValue
+        edgePhysicsBody.collisionBitMask = bitmasks.player.rawValue
+        self.physicsBody = edgePhysicsBody
+        
         // CAMERA
         let cameraNode = SKCameraNode()
         addChild(cameraNode)
@@ -110,8 +125,6 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                 joystick.touch  = CGPoint(x: cos(angle) * joystick.touchRadius, y: sin(angle) * joystick.touchRadius)
                 }
             }
-
-
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         joystick.stopMovement()
@@ -140,24 +153,20 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         player.applyForce(CGVector(dx: -player.velocity.dx, dy: -player.velocity.dy))
     }
     
-    
-    //MARK: UPDATE
+        //MARK: UPDATE
     override func update(_ currentTime: TimeInterval) {
         if joystick.insideFrame{
             let xPos = Double(joystick.touch.x)
             let yPos = Double(joystick.touch.y)
 
             let movement = CGVector(dx: (xPos * joystick.speed)/100, dy:  (yPos * joystick.speed)/100)
-            let rotation = SKAction.rotate(toAngle: (joystick.turnAngle + CGFloat(90 * (Double.pi/50)) + 0.5), duration: 0.1, shortestUnitArc: true)
+            let rotation = SKAction.rotate(toAngle: (joystick.turnAngle + CGFloat(90 * (Double.pi/50)) + 0.7), duration: 0.1, shortestUnitArc: true)
             
             playerNode?.run(rotation)
             playerNode?.physicsBody?.applyImpulse(movement)
             //maxspeed check
             playerNode?.physicsBody?.velocity = joystick.maxVelocityCheck(velocity: (playerNode?.physicsBody?.velocity)!)
         }
-        let cameraMove = SKAction.move(to: (playerNode?.position)!, duration: 0.3)
-        camera?.run(cameraMove)
-        // camera void block
-        //cameraBoundaries()
+        cameraMovement()
     }
 }

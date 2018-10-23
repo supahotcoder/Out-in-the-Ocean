@@ -28,16 +28,18 @@ class Joystick {
         insideFrame = false
     }
     
+    //kontrola kliknutí do joysticku
     func didTouchJoystick(location: CGPoint){
         insideFrame = (node?.frame.contains(location))!
     }
     
+    //konec pohybu
     func stopMovement(){
         insideFrame = false
     }
     
+    // regulátor maximální rychlosti
     func maxVelocityCheck(velocity : CGVector) -> CGVector{
-        
         if abs(velocity.dx) > maxVelocity && abs(velocity.dy) > maxVelocity {
             if velocity.dx < 0 && velocity.dy < 0{
                 return CGVector(dx: -maxVelocity, dy: -maxVelocity)

@@ -9,10 +9,4 @@
 import SpriteKit
 import GameplayKit
 
-class MoveActions: SKAction {
-    
-//    func movePlayer(){
-//    }
 
-    
-}

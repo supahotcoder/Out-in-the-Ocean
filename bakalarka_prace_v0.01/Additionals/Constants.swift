@@ -19,7 +19,7 @@ enum bitmasks : UInt32 , CaseIterable {
         switch id {
         case 1: self = .player
         case 2: self = .activeBackground
-        //case 3: self = .frame
+        case 3: self = .frame
         default: return nil
         }
     }
