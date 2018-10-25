@@ -17,7 +17,7 @@ class Joystick {
     var touch  = CGPoint(x: 0, y: 0)
     var turnAngle : CGFloat = 0
 
-    let speed : Double = 4
+    let speed : CGFloat = 4
     let touchRadius : CGFloat = 100
     let maxVelocity : CGFloat = 150
     
@@ -39,35 +39,36 @@ class Joystick {
     }
     
     // regulátor maximální rychlosti
-    func maxVelocityCheck(velocity : CGVector) -> CGVector{
-        if abs(velocity.dx) > maxVelocity && abs(velocity.dy) > maxVelocity {
-            if velocity.dx < 0 && velocity.dy < 0{
-                return CGVector(dx: -maxVelocity, dy: -maxVelocity)
-            }
-            else if velocity.dx < 0 {
-                return CGVector(dx: -maxVelocity, dy: maxVelocity)
-            }
-            else if  velocity.dy < 0{
-                return CGVector(dx: maxVelocity, dy: -maxVelocity)
-            }
-             return CGVector(dx: maxVelocity, dy: maxVelocity)
-        }
-        else if abs(velocity.dx) > maxVelocity {
+    func maxVelocityCheck(node : SKSpriteNode){
+        var velocity = (node.physicsBody?.velocity)!
+        if abs(velocity.dx) > maxVelocity {
             if velocity.dx < 0{
-                return CGVector(dx: -maxVelocity, dy: velocity.dy)
+                velocity = CGVector(dx: -maxVelocity, dy: velocity.dy)
             }
-             return CGVector(dx: maxVelocity, dy: velocity.dy)
+            else{
+               velocity = CGVector(dx: maxVelocity, dy: velocity.dy)
+            }
         }
-        
-        else if abs(velocity.dy) > maxVelocity {
+        if abs(velocity.dy) > maxVelocity {
             if velocity.dy < 0{
-                return CGVector(dx: velocity.dx, dy: -maxVelocity)
+                velocity = CGVector(dx: velocity.dx, dy: -maxVelocity)
             }
-            return CGVector(dx: velocity.dx, dy: maxVelocity)
+            else {
+                velocity = CGVector(dx: velocity.dx, dy: maxVelocity)
+                
+            }
         }
-        else{
-            return velocity
-            
+        node.physicsBody?.velocity = velocity
+    }
+    
+    func movement(moveWith node: SKSpriteNode) {
+        if insideFrame{
+            let movement = CGVector(dx: (touch.x * speed)/100, dy:  (touch.y * speed)/100)
+            let rotation = SKAction.rotate(toAngle: (turnAngle + CGFloat(90 * (Double.pi/50)) + 0.7), duration: 0.1, shortestUnitArc: true)
+            node.run(rotation)
+            node.physicsBody?.applyImpulse(movement)
+            //maxspeed check
+            maxVelocityCheck(node: node)
         }
     }
     

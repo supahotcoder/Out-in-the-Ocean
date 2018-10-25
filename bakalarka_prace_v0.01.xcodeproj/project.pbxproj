@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		982234512182216D00634AF5 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982234502182216D00634AF5 /* Camera.swift */; };
 		9882A74A216AC890005F0AEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9882A749216AC890005F0AEE /* Assets.xcassets */; };
 		9882A74C216AC9B1005F0AEE /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9882A74B216AC9B1005F0AEE /* EntityManager.swift */; };
 		9882A74E216ACF54005F0AEE /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9882A74D216ACF54005F0AEE /* SpriteComponent.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		982234502182216D00634AF5 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		9882A749216AC890005F0AEE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9882A74B216AC9B1005F0AEE /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
 		9882A74D216ACF54005F0AEE /* SpriteComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				98B12BA2216FAFAA008D7D7B /* Constants.swift */,
+				982234502182216D00634AF5 /* Camera.swift */,
 			);
 			path = Additionals;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 				98EAF1A421525AF500A707A9 /* GameViewController.swift in Sources */,
 				98E79B7E216BD5C0005B3BEC /* Player.swift in Sources */,
 				98B7E70F2174A6D50071DC84 /* JoystickFrame.swift in Sources */,
+				982234512182216D00634AF5 /* Camera.swift in Sources */,
 				98EAF19C21525AF500A707A9 /* AppDelegate.swift in Sources */,
 				9882A74C216AC9B1005F0AEE /* EntityManager.swift in Sources */,
 			);
@@ -377,6 +381,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8HN3V2HHQW;
 				INFOPLIST_FILE = bakalarka_prace_v0.01/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -395,6 +400,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8HN3V2HHQW;
 				INFOPLIST_FILE = bakalarka_prace_v0.01/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

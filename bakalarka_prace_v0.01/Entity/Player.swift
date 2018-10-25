@@ -19,7 +19,6 @@ class Player: GKEntity {
         addComponent(spriteComp)
         //add spriteComponent první protože by se potom v contactu nedotázalo na spriteComponentu
         
-        
         let contactComp = ContactComponent(entity: self, bitmask: bitmasks.player.rawValue, dynamicObject: true, canRotate: true)
         addComponent(contactComp)
         

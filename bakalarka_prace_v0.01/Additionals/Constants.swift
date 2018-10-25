@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 enum bitmasks : UInt32 , CaseIterable {
     case player = 0b1
     case activeBackground = 0b10
