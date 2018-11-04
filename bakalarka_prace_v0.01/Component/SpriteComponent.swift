@@ -11,7 +11,7 @@ import GameplayKit
 
 class SpriteComponent: GKComponent{
     
-    //MARK: RE-WRITE
+    //MARK: - RE-WRITE
     
    let node : SKSpriteNode
     

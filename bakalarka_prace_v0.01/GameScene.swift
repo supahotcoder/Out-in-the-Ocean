@@ -11,6 +11,8 @@ import GameplayKit
 
 class GameScene: SKScene , SKPhysicsContactDelegate {
   
+    // MARK: - GLOBAL VARS
+    
     var playerNode : SKSpriteNode?
     var joystick : Joystick!
     var joystickNode :SKSpriteNode?
@@ -18,6 +20,8 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     var joystickFrame: SKNode?
     var background : SKSpriteNode?
+    
+    // MARK: - DIDMOVE
     
     override func didMove(to view: SKView) {
         //nastavení fyziky
@@ -71,7 +75,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         entityManager.add(entity: player)
     }
 
-    // MARK: TOUCHES
+    // MARK: - TOUCHES
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             if let joystickNode = joystickNode {
@@ -101,7 +105,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         joystick.touch = CGPoint(x: 0, y: 0)
     }
     
-    //MARK: COLISION/CONTACT
+    //MARK: - COLISION/CONTACT
     func didBegin(_ contact: SKPhysicsContact) {
         let player : SKPhysicsBody
         let otherNode : SKPhysicsBody
@@ -121,7 +125,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         player.applyForce(CGVector(dx: -player.velocity.dx, dy: -player.velocity.dy))
     }
     
-        //MARK: UPDATE
+        //MARK: - UPDATE
     override func update(_ currentTime: TimeInterval) {
         joystick.movement(moveWith: playerNode!)
         camera?.cameraMovementWithin(Within: background!, CameraFocusOn: playerNode! , durationOfCameraMovement: 0.3)
