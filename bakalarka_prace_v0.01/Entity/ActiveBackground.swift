@@ -11,15 +11,19 @@ import GameplayKit
 
 class ActiveBackground: GKEntity {
     
-     init(imageName: String) {
+    init(imageName: String, entityManager: EntityManager) {
         super.init()
         let texture = SKTexture(imageNamed: imageName)
-        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 46, height: 46))
+        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 100, height: 100))
         addComponent(spriteComponent)
         
         let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false)
         addComponent(contactComponent)
-
+        
+        let moveComponent = MoveComponent(maxSpeed: 0, maxAcceleration: 0, effectiveRadius: Float(spriteComponent.node.size.width / 2), entityManager: entityManager)
+        addComponent(moveComponent)
+        
+        addComponent(AvoidCollisionComponent())
     }
     
     required init?(coder aDecoder: NSCoder) {

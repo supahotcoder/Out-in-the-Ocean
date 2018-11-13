@@ -20,6 +20,9 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     var joystickFrame: SKNode?
     var background : SKSpriteNode?
+    var activeBack : ActiveBackground!
+    
+    var lastUpdateTimeInterval: TimeInterval = 0
     
     // MARK: - DIDMOVE
     
@@ -37,10 +40,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         // BACKGROUND BOUNDARY
         background = childNode(withName: "pozadi") as? SKSpriteNode
-        let edgePhysicsBody = SKPhysicsBody(edgeLoopFrom: (background?.frame)!) //
-        edgePhysicsBody.categoryBitMask = bitmasks.frame.rawValue
-        edgePhysicsBody.contactTestBitMask = bitmasks.player.rawValue
-        edgePhysicsBody.collisionBitMask = bitmasks.player.rawValue
+        let edgePhysicsBody = SKPhysicsBody(edgeLoopFrom: (background?.frame)!)
         self.physicsBody = edgePhysicsBody
         
         // CAMERA SETUP
@@ -54,28 +54,22 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         entityManager = EntityManager(scene: self.scene!)
 
         // ACTIVE BACKGROUND SETUP
-        let activeBack = ActiveBackground(imageName: "player_test")
-        if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
-           acNode.size = CGSize(width: 100 , height: 100)
-            acNode.position = CGPoint(x: -250, y: 0)
-            // nastavení Z pozice
-            acNode.zPosition = 3
-        }
-        entityManager.add(entity: activeBack)
+        activeBack = entityManager.loadActiveBackground()
         
         //PLAYER SETUP
-        let player = Player(imageName: "player_test")
-        if let pNode = player.component(ofType: SpriteComponent.self)?.node {
-            pNode.position =  CGPoint(x: (background?.frame.minX)! + 10,y: (self.scene?.position.y)!)
-            pNode.size = CGSize(width: 60 , height: 60)
-            playerNode = pNode
-             // nastavení Z pozice
-            playerNode?.zPosition = 3
-        }
-        entityManager.add(entity: player)
+        let playerSpawnPosition = CGPoint(x: (background?.frame.minX)! + 10,y: (self.scene?.position.y)!)
+        playerNode = entityManager.loadPlayer(position: playerSpawnPosition)
+        
+        //SEARCHER SETUP
+        entityManager.loadSearcher()
+
     }
 
+    // MARK: - Double tap on joystick will instantly stop player and go to stealth mode
+
+    
     // MARK: - TOUCHES
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             if let joystickNode = joystickNode {
@@ -121,13 +115,24 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         else {
             return
         }
-        //odražení od objektu
-        player.applyForce(CGVector(dx: -player.velocity.dx, dy: -player.velocity.dy))
+        
+        // ODSTRANĚNÍ PŘI KOLIZI
+        if otherNode.node?.physicsBody?.categoryBitMask == bitmasks.activeBackground.rawValue{
+            entityManager.remove(entity: activeBack)
+        }
+        
+        //player.applyForce(CGVector(dx: -player.velocity.dx, dy: -player.velocity.dy))
     }
     
         //MARK: - UPDATE
     override func update(_ currentTime: TimeInterval) {
+        
+        let deltaTime = currentTime - lastUpdateTimeInterval
+        lastUpdateTimeInterval = currentTime
+        
         joystick.movement(moveWith: playerNode!)
         camera?.cameraMovementWithin(Within: background!, CameraFocusOn: playerNode! , durationOfCameraMovement: 0.3)
+        
+        entityManager.update(deltaTime)
     }
 }

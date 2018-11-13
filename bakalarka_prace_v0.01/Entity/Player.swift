@@ -12,16 +12,20 @@ import GameplayKit
 class Player: GKEntity {
     
     // imageName -> protože se bude Player textura měnit počas hry
-     init(imageName : String) {
+    init(imageName : String, entityManager: EntityManager) {
         super.init()
         let texture = SKTexture(imageNamed: imageName)
-        let spriteComp = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 26, height: 26)) // real width a height / 2
+        let spriteComp = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 60, height: 60))
         addComponent(spriteComp)
         //add spriteComponent první protože by se potom v contactu nedotázalo na spriteComponentu
         
         let contactComp = ContactComponent(entity: self, bitmask: bitmasks.player.rawValue, dynamicObject: true, canRotate: true)
         addComponent(contactComp)
         
+        let moveComp = MoveComponent(maxSpeed: 0, maxAcceleration: 0, effectiveRadius: Float(spriteComp.node.size.width / 2 ), entityManager: entityManager)
+        addComponent(moveComp)
+        
+        addComponent(PlayerComponent())
     }
     
     required init?(coder aDecoder: NSCoder) {
