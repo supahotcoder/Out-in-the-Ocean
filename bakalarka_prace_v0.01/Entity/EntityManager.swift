@@ -97,9 +97,10 @@ class EntityManager {
     }
     
     func loadActiveBackground() -> ActiveBackground? {
-        let activeBack = ActiveBackground(imageName: "player_test",entityManager: self)
+        let activeBack = ActiveBackground(imageName: "rucka",entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
-            acNode.position = CGPoint(x: -250, y: 0)
+            acNode.position = CGPoint(x: Int(arc4random_uniform(840)) - Int(arc4random_uniform(840)), y: Int(arc4random_uniform(640)) - Int(arc4random_uniform(640)))
+            acNode.zRotation = CGFloat(arc4random_uniform(360))
             acNode.zPosition = 3
             self.add(entity: activeBack)
             return activeBack

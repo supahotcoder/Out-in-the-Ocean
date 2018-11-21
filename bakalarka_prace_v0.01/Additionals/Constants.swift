@@ -22,7 +22,7 @@ enum bitmasks : UInt32 , CaseIterable {
         case 3: self = .frame
         case 4: self = .searcher
         default: return nil
-        }
+        }	
     }
 }
 

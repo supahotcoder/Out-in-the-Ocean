@@ -21,11 +21,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var joystickFrame: SKNode?
     var background : SKSpriteNode?
     var activeBack : ActiveBackground!
+    var goals : [ActiveBackground] = [ActiveBackground]()
+    
+    var playerSpawnPosition: CGPoint? = nil
     
     var lastUpdateTimeInterval: TimeInterval = 0
     
     // MARK: - DIDMOVE
-    
     override func didMove(to view: SKView) {
         //nastavení fyziky
         physicsWorld.contactDelegate = self
@@ -38,31 +40,22 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         joystickFrame?.addChild(joystickNode!)
         joystickFrame?.zPosition = 5
         
-        // BACKGROUND BOUNDARY
-        background = childNode(withName: "pozadi") as? SKSpriteNode
-        let edgePhysicsBody = SKPhysicsBody(edgeLoopFrom: (background?.frame)!)
-        self.physicsBody = edgePhysicsBody
-        
         // CAMERA SETUP
         let cameraNode = SKCameraNode()
         cameraNode.addChild(joystickFrame!)
         self.camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
         addChild(cameraNode)
- 
+        
         // ENTITY SETUP
         entityManager = EntityManager(scene: self.scene!)
-
-        // ACTIVE BACKGROUND SETUP
-        activeBack = entityManager.loadActiveBackground()
         
         //PLAYER SETUP
-        let playerSpawnPosition = CGPoint(x: (background?.frame.minX)! + 10,y: (self.scene?.position.y)!)
-        playerNode = entityManager.loadPlayer(position: playerSpawnPosition)
-        
-        //SEARCHER SETUP
-        entityManager.loadSearcher()
+        if playerSpawnPosition == nil {
+            playerSpawnPosition = CGPoint(x: (background?.frame.minX)! + 10,y: (self.scene?.position.y)!)
+        }
 
+        playerNode = entityManager.loadPlayer(position: playerSpawnPosition!)
     }
 
     // MARK: - Double tap on joystick will instantly stop player and go to stealth mode
@@ -71,10 +64,15 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     // MARK: - TOUCHES
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
         for touch in touches{
+            //stealth mode
             if let joystickNode = joystickNode {
-                let loc = touch.location(in: joystickNode)
-                joystick.didTouchJoystick(location: loc)
+            let loc = touch.location(in: joystickNode)
+            joystick.didTouchJoystick(location: loc)
+            if touch.tapCount == 2 && joystick.insideFrame{
+                    joystick.stealthMode(playerNode: playerNode!)
+                }
             }
         }
     }
@@ -116,23 +114,38 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             return
         }
         
-        // ODSTRANĚNÍ PŘI KOLIZI
-        if otherNode.node?.physicsBody?.categoryBitMask == bitmasks.activeBackground.rawValue{
-            entityManager.remove(entity: activeBack)
+//         ODSTRANĚNÍ PŘI KOLIZI
+            if otherNode.node?.physicsBody?.categoryBitMask == bitmasks.activeBackground.rawValue{
+                entityManager.remove(entity: activeBack)
+                activeBack = nil
+
+            }
+        if otherNode.node?.physicsBody?.categoryBitMask == bitmasks.searcher.rawValue{
+            gameOver()
         }
         
         //player.applyForce(CGVector(dx: -player.velocity.dx, dy: -player.velocity.dy))
     }
     
+    func gameOver() {
+        if let scene = SKScene(fileNamed: "GameScene") {
+            self.removeAllActions()
+            self.removeAllChildren()
+            view!.presentScene(scene)
+        }
+    }
+    
         //MARK: - UPDATE
     override func update(_ currentTime: TimeInterval) {
-        
         let deltaTime = currentTime - lastUpdateTimeInterval
         lastUpdateTimeInterval = currentTime
         
         joystick.movement(moveWith: playerNode!)
         camera?.cameraMovementWithin(Within: background!, CameraFocusOn: playerNode! , durationOfCameraMovement: 0.3)
-        
         entityManager.update(deltaTime)
+        
+        if (activeBack == nil){
+            activeBack = entityManager.loadActiveBackground()
+        }
     }
 }

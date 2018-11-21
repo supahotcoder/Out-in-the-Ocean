@@ -12,6 +12,50 @@ import SpriteKit
 
 // TODO: - Add camera extension
 
+extension CGVector{
+    static func >(left: CGVector ,right: CGVector) -> Bool {
+        if left.dx <= right.dx , left.dy <= right.dy {
+            return false
+        }
+        else{
+            return true
+        }
+    }
+    static func <(left: CGVector ,right: CGVector) -> Bool {
+        if left.dx >= right.dx , left.dy >= right.dy {
+            return false
+        }
+        else{
+            return true
+        }
+    }
+    static func ==(left: CGVector ,right: CGVector) -> Bool {
+        if left.dx != right.dx , right.dy != left.dy {
+            return false
+        }
+        else{
+            return true
+        }
+    }
+    
+    static func >=(left: CGVector ,right: CGVector) -> Bool {
+        if  left > right || left == right{
+            return true
+        }
+        else{
+            return false
+        }
+    }
+    static func <=(left: CGVector ,right: CGVector) -> Bool {
+        if  left < right || left == right{
+            return true
+        }
+        else{
+            return false
+        }
+    }
+}
+
 extension float2{
     func doubleConvetor() -> (x: Double,y: Double){
         return (x: Double(self.x), y: Double(self.y))

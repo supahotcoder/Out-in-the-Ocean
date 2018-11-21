@@ -38,6 +38,16 @@ class Joystick {
         insideFrame = false
     }
     
+    //konec pohybu
+    func stealthMode(playerNode: SKSpriteNode){
+        insideFrame = false
+        var playerVel = playerNode.physicsBody?.velocity
+        playerVel?.dx *= 0.5
+        playerVel?.dy *= 0.5
+        playerNode.physicsBody?.velocity = playerVel!
+    }
+
+    
     // regulátor maximální rychlosti
     func maxVelocityCheck(node : SKSpriteNode){
         var velocity = (node.physicsBody?.velocity)!

@@ -55,7 +55,7 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
             let player = entityManager.player() // nalezení hráče
             let target = player?.component(ofType: MoveComponent.self)
 
-            behavior = MoveSettings(targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers)
+            behavior = MoveSettings(targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!)
         }
     }
     
