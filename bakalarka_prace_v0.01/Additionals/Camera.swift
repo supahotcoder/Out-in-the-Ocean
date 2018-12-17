@@ -10,7 +10,7 @@ import Foundation
 import SpriteKit
 
 extension SKCameraNode {
-    func cameraMovementWithin(Within boundaries: SKSpriteNode,CameraFocusOn focusedNode: SKSpriteNode, durationOfCameraMovement duration: TimeInterval) {
+    func movementWithin(Within boundaries: SKSpriteNode,CameraFocusOn focusedNode: SKSpriteNode, durationOfMovement duration: TimeInterval) {
         let left : CGFloat = -boundaries.frame.width / 2 + self.scene!.size.width / 2
         let right : CGFloat = -left
         let bottom : CGFloat = -boundaries.frame.height / 2 + self.scene!.size.height / 2

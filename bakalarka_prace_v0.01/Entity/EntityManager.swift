@@ -15,9 +15,15 @@ class EntityManager {
     
     private(set) var scene : SKScene? // možná se bude měnit podle levelu, proto var
     
+    private(set) var player: GKEntity? = nil
+    
      init(scene : SKScene) {
         self.scene = scene
         loadGame()
+    }
+    
+    private func addPlayer(player: GKEntity) {
+        self.player = player
     }
     
     func add(entity: GKEntity){
@@ -48,14 +54,14 @@ class EntityManager {
     }
     
     //TODO: - Možná přepsat na konstantu at je to ryhlejší
-    func player() -> GKEntity? {
-        for entity in gameEntities {
-            if entity.component(ofType: PlayerComponent.self) != nil{
-                return entity
-            }
-        }
-        return nil
-    }
+//    func player() -> GKEntity? {
+//        for entity in gameEntities {
+//            if entity.component(ofType: PlayerComponent.self) != nil{
+//                return entity
+//            }
+//        }
+//        return nil
+//    }
     
     func update(_ deltaTime: CFTimeInterval) {
         for up in entitiesWithMoveComponent(){
@@ -77,6 +83,7 @@ class EntityManager {
     
     func loadPlayer(position: CGPoint) -> SKSpriteNode? {
         let player = Player(imageName: "player_test", entityManager: self)
+        addPlayer(player: player)
         if let pNode = player.component(ofType: SpriteComponent.self)?.node {
             pNode.position =  position
             // nastavení Z pozice
@@ -99,8 +106,8 @@ class EntityManager {
     func loadActiveBackground() -> ActiveBackground? {
         let activeBack = ActiveBackground(imageName: "rucka",entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
-            acNode.position = CGPoint(x: Int(arc4random_uniform(840)) - Int(arc4random_uniform(840)), y: Int(arc4random_uniform(640)) - Int(arc4random_uniform(640)))
-            acNode.zRotation = CGFloat(arc4random_uniform(360))
+            acNode.position = CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
+            acNode.zRotation = CGFloat.random(in: 0...360)
             acNode.zPosition = 3
             self.add(entity: activeBack)
             return activeBack

@@ -12,12 +12,23 @@ import SpriteKit
 class Level1 : GameScene{
     
     override func didMove(to view: SKView) {
-
-        
         // BACKGROUND BOUNDARY
         background = childNode(withName: "pozadi") as? SKSpriteNode
         let edgePhysicsBody = SKPhysicsBody(edgeLoopFrom: (background?.frame)!)
         self.physicsBody = edgePhysicsBody
+        
+        //PLAYER POSITION
+        playerSpawnPosition = CGPoint(x: (background?.frame.minX)! + 150,y: (self.scene?.position.y)!)
+        
+        // první nastavíme physicsBody až poté voláme super.didMove
+        super.didMove(to: view)
+        
+        //SEARCHER SETUP
+        entityManager.loadSearcher()
+        // ACTIVE BACKGROUND SETUP
+        activeBack = entityManager.loadActiveBackground()!
+        
+        //goals.append(activeBack)
         
         // Bubble effect
         let bubblesback = SKEmitterNode(fileNamed: "BubbleEffect")!
@@ -28,19 +39,11 @@ class Level1 : GameScene{
         self.addChild(bubblesfront)
         self.addChild(bubblesback)
         
-        // první nastavíme physicsBody až poté voláme super.didMove
-        super.didMove(to: view)
-        
-        //SEARCHER SETUP
-        entityManager.loadSearcher()
-        // ACTIVE BACKGROUND SETUP
-        activeBack = entityManager.loadActiveBackground()!
-        
-        defer {
-            goals.append(activeBack)
-        }
+        //GOAL SETUP
+        updateGoalText(with: "TEST \n TEST \n TESTING", around: playerNode!)
     }
     
+    //MARK: - TOUCHES
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
     }
@@ -53,11 +56,46 @@ class Level1 : GameScene{
         super.touchesEnded(touches, with: event)
     }
     
-    override func didBegin(_ contact: SKPhysicsContact) {
-        super.didBegin(contact)
+    //MARK: - COLISIONS
+     func didBegin(_ contact: SKPhysicsContact) {
+        let player : SKPhysicsBody
+        let otherNode : SKPhysicsBody
+        
+        if contact.bodyA.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
+            player = contact.bodyA
+            otherNode = contact.bodyB
+        }
+        else if contact.bodyB.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
+            player = contact.bodyB
+            otherNode = contact.bodyA
+        }
+        else {
+            return
+        }
+        
+        if otherNode.node?.physicsBody?.categoryBitMask == bitmasks.activeBackground.rawValue{
+            entityManager.remove(entity: activeBack)
+            activeBack = nil
+            
+        }
+
+        if contact.bodyA.node?.physicsBody?.categoryBitMask == bitmasks.searcher.rawValue ||
+            contact.bodyB.node?.physicsBody?.categoryBitMask == bitmasks.searcher.rawValue {
+            gameOver()
+        }
+    }
+    override func willMove(from view: SKView) {
+        print("cleanUP")
     }
     
-    
+    //MARK: - GAMEOVER
+     func gameOver() {
+        if let scene = SKScene(fileNamed: "Level1") {
+            self.removeAllActions()
+            self.removeAllChildren()
+            view!.presentScene(scene, transition: SKTransition.fade(with: .black, duration: 1.2))
+        }
+    }
     
     override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)

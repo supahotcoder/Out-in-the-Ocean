@@ -10,6 +10,16 @@ import Foundation
 import GameplayKit
 import SpriteKit
 
+extension SKLabelNode{
+    func trackNode(node: SKNode,labelAlligment: CGPoint = CGPoint(x: 0, y: 0)) {
+        let randPos  = CGPoint(x: Int.random(in: 0...30) - Int.random(in: 0...30),
+                               y: Int.random(in: 0...30) - Int.random(in: 0...30)) + labelAlligment
+        self.position = node.position + randPos
+    }
+    
+}
+
+
 // TODO: - Add camera extension
 
 extension CGVector{
@@ -79,6 +89,10 @@ extension CGPoint{
         return CGPoint(x: left.x - right.x, y: left.y - right.y)
     }
     
+    static func + (left: CGPoint, right: CGPoint) -> CGPoint {
+        return CGPoint(x: left.x + right.x, y: left.y + right.y)
+    }
+ 
     func length() -> CGFloat {
         return sqrt(x * x + y * y)
     }

@@ -9,19 +9,29 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene , SKPhysicsContactDelegate {
+protocol GameSceneProtocol {
+    func gameOver()
+    func didBegin(_ contact: SKPhysicsContact)
+}
+
+typealias GameScene = GameSceneClass & GameSceneProtocol
+
+class GameSceneClass: SKScene , SKPhysicsContactDelegate {
   
     // MARK: - GLOBAL VARS
-    
-    var playerNode : SKSpriteNode?
-    var joystick : Joystick!
-    var joystickNode :SKSpriteNode?
+    weak var playerNode : SKSpriteNode?
+    private var joystick : Joystick!
+    private weak var joystickNode :SKSpriteNode?
     var entityManager : EntityManager!
     
     var joystickFrame: SKNode?
-    var background : SKSpriteNode?
-    var activeBack : ActiveBackground!
+    weak var background : SKSpriteNode?
+    weak var activeBack : ActiveBackground!
     var goals : [ActiveBackground] = [ActiveBackground]()
+    
+    var goalText = SKLabelNode()
+    var storyText = SKLabelNode()
+    var warningText = SKLabelNode()
     
     var playerSpawnPosition: CGPoint? = nil
     
@@ -29,6 +39,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     // MARK: - DIDMOVE
     override func didMove(to view: SKView) {
+        
         //nastavení fyziky
         physicsWorld.contactDelegate = self
 
@@ -40,12 +51,6 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         joystickFrame?.addChild(joystickNode!)
         joystickFrame?.zPosition = 5
         
-        // CAMERA SETUP
-        let cameraNode = SKCameraNode()
-        cameraNode.addChild(joystickFrame!)
-        self.camera = cameraNode
-        cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
-        addChild(cameraNode)
         
         // ENTITY SETUP
         entityManager = EntityManager(scene: self.scene!)
@@ -56,15 +61,60 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         }
 
         playerNode = entityManager.loadPlayer(position: playerSpawnPosition!)
+        
+        //CAMERA SETUP
+        let cameraNode = SKCameraNode()
+        cameraNode.addChild(joystickFrame!)
+        self.camera = cameraNode
+        addChild(cameraNode)
+        camera!.movementWithin(Within: background!, CameraFocusOn: playerNode! , durationOfMovement: 0)
+        
+        //DISPLAY TEXT SETUP
+        goalText.fontName = "Futura-CondensedExtraBold"
+        goalText.numberOfLines = 3
+        
+        warningText.fontName = "Futura-CondensedExtraBold"
+        
+        storyText.fontName = "Futura-CondensedExtraBold"
+        storyText.numberOfLines = 5
     }
 
-    // MARK: - Double tap on joystick will instantly stop player and go to stealth mode
-
+    //MARK: - DISPLAY TEXT
+    func updateGoalText(with text: String, around: SKNode) {
+        addChild(goalText)
+        updateText(with: text, label: &goalText, around: around, alligment: .rightTop)
+        displayText(displayIn: 1, fadeOut: 2, label: &goalText)
+    }
     
+    func updateStoryText(with text: String, around: SKNode) {
+        addChild(storyText)
+        updateText(with: text, label: &storyText, around: around, alligment: .rightTop)
+        displayText(displayIn: 1, fadeOut: 2, label: &goalText)
+    }
+    
+    func updateWarningText(with text: String, around: SKNode) {
+        addChild(warningText)
+        updateText(with: text, label: &warningText, around: around, alligment: .rightTop)
+        displayText(displayIn: 1, fadeOut: 2, label: &goalText)
+    }
+    
+    
+    private func displayText(displayIn: TimeInterval,fadeOut: TimeInterval, label: inout SKLabelNode) {
+        label.run(SKAction.sequence([SKAction.wait(forDuration: displayIn),SKAction.fadeIn(withDuration: displayIn / 2),
+                                     SKAction.wait(forDuration: TimeInterval((label.text?.count)! / 5)),SKAction.fadeOut(withDuration: fadeOut), SKAction.removeFromParent()]))
+    }
+
+    private func updateText(with text: String, label: inout SKLabelNode, around: SKNode, alligment: position) {
+        label.text = text
+        label.fontSize = 10
+        label.zPosition = 5
+        label.trackNode(node: around,labelAlligment: alligment.toCGPoint)
+        label.alpha = 0
+    }
+
     // MARK: - TOUCHES
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         for touch in touches{
             //stealth mode
             if let joystickNode = joystickNode {
@@ -80,7 +130,8 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let position = touch.location(in: joystickNode!)
-            let length = sqrt(pow(position.y, 2) + pow(position.x, 2))
+            //FIXME: - 45 degree too fast
+            let length = position.length()//sqrt(pow(position.y, 2) + pow(position.x, 2))
             let angle = atan2(position.y, position.x)
             joystick.turnAngle = angle
             if joystick.touchRadius > length {
@@ -91,57 +142,22 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             }
         }
     }
-    
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         joystick.stopMovement()
         joystick.touch = CGPoint(x: 0, y: 0)
     }
     
-    //MARK: - COLISION/CONTACT
-    func didBegin(_ contact: SKPhysicsContact) {
-        let player : SKPhysicsBody
-        let otherNode : SKPhysicsBody
-
-        if contact.bodyA.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyA
-            otherNode = contact.bodyB
-        }
-        else if contact.bodyB.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyB
-            otherNode = contact.bodyA
-        }
-        else {
-            return
-        }
-        
-//         ODSTRANĚNÍ PŘI KOLIZI
-            if otherNode.node?.physicsBody?.categoryBitMask == bitmasks.activeBackground.rawValue{
-                entityManager.remove(entity: activeBack)
-                activeBack = nil
-
-            }
-        if otherNode.node?.physicsBody?.categoryBitMask == bitmasks.searcher.rawValue{
-            gameOver()
-        }
-        
-        //player.applyForce(CGVector(dx: -player.velocity.dx, dy: -player.velocity.dy))
-    }
+    // implementace bude nutná u každého levelu solo
+    //MARK: - GameOver, každý lvl handle sám
     
-    func gameOver() {
-        if let scene = SKScene(fileNamed: "GameScene") {
-            self.removeAllActions()
-            self.removeAllChildren()
-            view!.presentScene(scene)
-        }
-    }
-    
-        //MARK: - UPDATE
+    //MARK: - UPDATE
     override func update(_ currentTime: TimeInterval) {
         let deltaTime = currentTime - lastUpdateTimeInterval
         lastUpdateTimeInterval = currentTime
         
         joystick.movement(moveWith: playerNode!)
-        camera?.cameraMovementWithin(Within: background!, CameraFocusOn: playerNode! , durationOfCameraMovement: 0.3)
+        camera?.movementWithin(Within: background!, CameraFocusOn: playerNode! , durationOfMovement: 0.3)
         entityManager.update(deltaTime)
         
         if (activeBack == nil){

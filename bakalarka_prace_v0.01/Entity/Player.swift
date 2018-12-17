@@ -14,7 +14,11 @@ class Player: GKEntity {
     // imageName -> protože se bude Player textura měnit počas hry
     init(imageName : String, entityManager: EntityManager) {
         super.init()
+        
+        //TESTING
+        
         let texture = SKTexture(imageNamed: imageName)
+//        let texture = playerTexture
         let spriteComp = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 60, height: 60))
         addComponent(spriteComp)
         //add spriteComponent první protože by se potom v contactu nedotázalo na spriteComponentu

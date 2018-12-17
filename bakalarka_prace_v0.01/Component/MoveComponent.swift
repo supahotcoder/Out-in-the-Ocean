@@ -52,10 +52,10 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
         
         // player se defaultně vyřazuje protože ho ovládá hráč
         if entity?.component(ofType: PlayerComponent.self) == nil{
-            let player = entityManager.player() // nalezení hráče
+            let player = entityManager.player // nalezení hráče
             let target = player?.component(ofType: MoveComponent.self)
 
-            behavior = MoveSettings(targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!)
+            behavior = MoveSettings(npc: entity!,targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!)
         }
     }
     
