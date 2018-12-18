@@ -19,7 +19,6 @@ class EntityManager {
     
      init(scene : SKScene) {
         self.scene = scene
-        loadGame()
     }
     
     private func addPlayer(player: GKEntity) {
@@ -53,15 +52,6 @@ class EntityManager {
         return moveComponents
     }
     
-    //TODO: - Možná přepsat na konstantu at je to ryhlejší
-//    func player() -> GKEntity? {
-//        for entity in gameEntities {
-//            if entity.component(ofType: PlayerComponent.self) != nil{
-//                return entity
-//            }
-//        }
-//        return nil
-//    }
     
     func update(_ deltaTime: CFTimeInterval) {
         for up in entitiesWithMoveComponent(){
@@ -93,7 +83,7 @@ class EntityManager {
         }
         return nil
     }
-    
+    //MARK: Loading Entities
     func loadSearcher() {
         let searcher = Searcher(imageName: "player_test", entityManager: self)
         if let sNode = searcher.component(ofType: SpriteComponent.self)?.node {
@@ -115,7 +105,14 @@ class EntityManager {
         return nil
     }
     
-    private func loadGame() {
-    //TODO:
+    func loadWander() {
+        let wander = Wander(interaction: false, entityManager: self)
+        if let sNode = wander.component(ofType: SpriteComponent.self)?.node {
+            sNode.position =  CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
+            sNode.zRotation = CGFloat.random(in: 0...360)
+            sNode.zPosition = 3
+            self.add(entity: wander)
+        }
     }
+    
 }

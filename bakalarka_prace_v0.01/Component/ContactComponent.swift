@@ -11,11 +11,12 @@ import GameplayKit
 
 class ContactComponent: GKComponent {
     
-    init(entity : GKEntity , bitmask: UInt32 , dynamicObject dynamic: Bool,canRotate rotation: Bool, alphaMaskPhysics: Bool=false) {
+    init(entity : GKEntity , bitmask: UInt32 , dynamicObject dynamic: Bool,canRotate rotation: Bool, pathBody: SKPhysicsBody? = nil, mass: CGFloat=0) {
         if let spriteNode = entity.component(ofType: SpriteComponent.self) {
             var physicsBody = SKPhysicsBody(circleOfRadius: spriteNode.node.size.width / 2)
-            if alphaMaskPhysics {
-                physicsBody = SKPhysicsBody(texture: spriteNode.node.texture! , size: spriteNode.node.size)
+            
+            if (pathBody != nil) {
+                physicsBody = pathBody!
             }
             physicsBody.categoryBitMask = bitmask
             // přidá kolize se všemi entitami které reagují na kontakt
@@ -26,6 +27,9 @@ class ContactComponent: GKComponent {
             physicsBody.isDynamic = dynamic
             physicsBody.allowsRotation = rotation
             
+            if mass != 0{
+                physicsBody.mass = mass
+            }
             physicsBody.friction = 0.2
             physicsBody.restitution = 1
             physicsBody.linearDamping = 1

@@ -28,8 +28,6 @@ class Level1 : GameScene{
         // ACTIVE BACKGROUND SETUP
         activeBack = entityManager.loadActiveBackground()!
         
-        //goals.append(activeBack)
-        
         // Bubble effect
         let bubblesback = SKEmitterNode(fileNamed: "BubbleEffect")!
         let bubblesfront = SKEmitterNode(fileNamed: "BubbleEffect")!
@@ -39,8 +37,17 @@ class Level1 : GameScene{
         self.addChild(bubblesfront)
         self.addChild(bubblesback)
         
-        //GOAL SETUP
-        updateGoalText(with: "TEST \n TEST \n TESTING", around: playerNode!)
+        //TEXT SETUP
+        updateGoalText(with: "MULTIPLE \n WANDER \n TESTING", around: playerNode!)
+        
+        //WANDER SETUP
+        entityManager.loadWander()
+        entityManager.loadWander()
+        entityManager.loadWander()
+        entityManager.loadWander()
+        entityManager.loadWander()
+
+
     }
     
     //MARK: - TOUCHES
@@ -79,8 +86,7 @@ class Level1 : GameScene{
             
         }
 
-        if contact.bodyA.node?.physicsBody?.categoryBitMask == bitmasks.searcher.rawValue ||
-            contact.bodyB.node?.physicsBody?.categoryBitMask == bitmasks.searcher.rawValue {
+        if otherNode.node?.physicsBody?.categoryBitMask == bitmasks.searcher.rawValue {
             gameOver()
         }
     }

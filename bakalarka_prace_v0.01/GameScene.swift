@@ -10,6 +10,8 @@ import SpriteKit
 import GameplayKit
 
 protocol GameSceneProtocol {
+    // implementace bude nutná u každého levelu solo
+    //MARK: - GameOver, každý lvl handle sám
     func gameOver()
     func didBegin(_ contact: SKPhysicsContact)
 }
@@ -38,8 +40,8 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     var lastUpdateTimeInterval: TimeInterval = 0
     
     // MARK: - DIDMOVE
+    
     override func didMove(to view: SKView) {
-        
         //nastavení fyziky
         physicsWorld.contactDelegate = self
 
@@ -51,7 +53,6 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         joystickFrame?.addChild(joystickNode!)
         joystickFrame?.zPosition = 5
         
-        
         // ENTITY SETUP
         entityManager = EntityManager(scene: self.scene!)
         
@@ -59,7 +60,6 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         if playerSpawnPosition == nil {
             playerSpawnPosition = CGPoint(x: (background?.frame.minX)! + 10,y: (self.scene?.position.y)!)
         }
-
         playerNode = entityManager.loadPlayer(position: playerSpawnPosition!)
         
         //CAMERA SETUP
@@ -80,6 +80,7 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     }
 
     //MARK: - DISPLAY TEXT
+    
     func updateGoalText(with text: String, around: SKNode) {
         addChild(goalText)
         updateText(with: text, label: &goalText, around: around, alligment: .rightTop)
@@ -148,10 +149,8 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         joystick.touch = CGPoint(x: 0, y: 0)
     }
     
-    // implementace bude nutná u každého levelu solo
-    //MARK: - GameOver, každý lvl handle sám
-    
     //MARK: - UPDATE
+    
     override func update(_ currentTime: TimeInterval) {
         let deltaTime = currentTime - lastUpdateTimeInterval
         lastUpdateTimeInterval = currentTime

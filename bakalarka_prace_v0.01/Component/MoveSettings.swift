@@ -11,6 +11,7 @@ import GameplayKit
 
 class MoveSettings: GKBehavior {
     
+    // SEARCH FOR PLAYER NPC
     init(npc: GKEntity,targetSpeed: Float, searchFor: GKAgent, avoid: [GKAgent], player: GKEntity) {
         super.init()
         // kontrola stealth módu
@@ -44,6 +45,15 @@ class MoveSettings: GKBehavior {
             setWeight(60, for: GKGoal(toAvoid: avoidWithPlayer, maxPredictionTime: 25))
             setWeight(0, for: GKGoal(toSeekAgent: searchFor))
         }
+    }
+    
+    // NON-INTERACTION NPC
+    init(avoid: [GKAgent]) {
+        super.init()
+        setWeight(60, for: GKGoal(toAvoid: avoid, maxPredictionTime: 10))
+        setWeight(50, for: GKGoal(toWander: 12389))
+        
+        
     }
     
 }
