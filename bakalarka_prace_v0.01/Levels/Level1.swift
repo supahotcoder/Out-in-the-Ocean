@@ -38,16 +38,20 @@ class Level1 : GameScene{
         self.addChild(bubblesback)
         
         //TEXT SETUP
-        updateGoalText(with: "MULTIPLE \n WANDER \n TESTING", around: playerNode!)
+        updateGoalText(with: "FIND \n THEM \n TESTING", around: playerNode!)
         
         //WANDER SETUP
-        entityManager.loadWander()
-        entityManager.loadWander()
-        entityManager.loadWander()
-        entityManager.loadWander()
+        let msgs = ["Hi" , "...", "Hello stranger" ,"It's getting greener", "Welcome Traveler", "Something,\n is not right in there" ,"Not me", "Did you found\n what you've been looking for?", "Don't bother me"]
+        let warning = ["Get out", "Beware","Watch out", "Booo"]
+        entityManager.loadWander(messages: msgs, loopOn: 5, warningMsgs: warning)
+        entityManager.loadWander(messages: msgs, warningMsgs: warning)
+        entityManager.loadWander(messages: msgs, loopOn: 5, warningMsgs: warning)
+        entityManager.loadWander(warningMsgs: warning)
         entityManager.loadWander()
 
 
+//        let backgroundSound = SKAudioNode(fileNamed: "level1_jungleVibes - 24.12.18 16.03.wav")
+        self.run(SKAction.playSoundFileNamed("level1_jungleVibes - 24.12.18 16.03.wav", waitForCompletion: false))
     }
     
     //MARK: - TOUCHES
@@ -90,17 +94,32 @@ class Level1 : GameScene{
             gameOver()
         }
     }
-    override func willMove(from view: SKView) {
-        print("cleanUP")
-    }
     
     //MARK: - GAMEOVER
      func gameOver() {
-        if let scene = SKScene(fileNamed: "Level1") {
-            self.removeAllActions()
-            self.removeAllChildren()
-            view!.presentScene(scene, transition: SKTransition.fade(with: .black, duration: 1.2))
+        //
+        playerNode?.physicsBody?.categoryBitMask = 0b0
+        playerNode?.physicsBody?.contactTestBitMask = 0b0
+        playerNode?.physicsBody?.collisionBitMask = 0b0
+        playerNode?.run(SKAction.fadeOut(withDuration: 2))
+        let end = SKEmitterNode(fileNamed: "Ending")!
+        end.position = (playerNode?.position)!
+        end.zPosition = 6
+        self.addChild(end)
+        let seconds = CGFloat(end.numParticlesToEmit) / end.particleBirthRate + end.particleLifetime + end.particleLifetimeRange / 2
+        self.scene?.run(SKAction.fadeOut(withDuration: TimeInterval(seconds)))
+        //zrušení pohybu a zpráv
+        joystickFrame?.removeFromParent()
+        entityManager.gameOver = true
+        //přepnutí scény po End scene
+        DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(seconds)) {
+            if let scene = SKScene(fileNamed: "Level1") {
+                self.removeAllActions()
+                self.removeAllChildren()
+                self.view?.presentScene(scene)
+            }
         }
+     
     }
     
     override func update(_ currentTime: TimeInterval) {

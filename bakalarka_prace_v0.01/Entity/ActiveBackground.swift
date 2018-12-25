@@ -14,7 +14,7 @@ class ActiveBackground: GKEntity {
     init(imageName: String, entityManager: EntityManager) {
         super.init()
         let texture = SKTexture(imageNamed: imageName)
-        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 150, height: 100))
+        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 70, height: 70))
         addComponent(spriteComponent)
         
         let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false)

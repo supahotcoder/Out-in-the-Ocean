@@ -53,7 +53,9 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
         // player se defaultně vyřazuje protože ho ovládá hráč
         // nevyhledává hráče, brouzdá po mapě
         if entity?.component(ofType: AvoidCollisionComponent.self) != nil && entity?.component(ofType: PlayerComponent.self) == nil{
-            behavior = MoveSettings(avoid: avoidOthers)
+            let player = entityManager.player
+            //behavior = MoveSettings(npc: entity!, avoid: avoidOthers, player: player!)
+            behavior = MoveSettings(npc: entity!, avoid: avoidOthers, player: player!, enemy: entityManager.enemy())
         }
         //vyhledávání hráče
         else if entity?.component(ofType: PlayerComponent.self) == nil && entity?.component(ofType: AvoidCollisionComponent.self) == nil{

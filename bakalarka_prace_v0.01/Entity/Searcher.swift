@@ -12,7 +12,7 @@ import SpriteKit
 
 class Searcher: GKEntity {
     
-    let entityManager : EntityManager
+    private let entityManager : EntityManager
     
     init(imageName: String, entityManager: EntityManager) {
         self.entityManager = entityManager
@@ -27,6 +27,9 @@ class Searcher: GKEntity {
         
         let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.searcher.rawValue, dynamicObject: true, canRotate: true)
         addComponent(contactComponent)
+        
+        let enemyComponent = EnemyComponent()
+        addComponent(enemyComponent)
     }
     
     required init?(coder aDecoder: NSCoder) {

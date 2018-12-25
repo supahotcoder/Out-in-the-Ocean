@@ -47,13 +47,48 @@ class MoveSettings: GKBehavior {
         }
     }
     
-    // NON-INTERACTION NPC
-    init(avoid: [GKAgent]) {
+    // INTERACT NPC (MSG)
+    init(npc: GKEntity,avoid: [GKAgent],player: GKEntity) {
         super.init()
-        setWeight(60, for: GKGoal(toAvoid: avoid, maxPredictionTime: 10))
+        let playerSprite = player.component(ofType: SpriteComponent.self)?.node
+        let npcSprite = npc.component(ofType: SpriteComponent.self)?.node
+        let distance = ((playerSprite?.position)! - (npcSprite?.position)!).length()
+        
+        var av = avoid
+        av.append(player.component(ofType: MoveComponent.self)!)
+        
+        if distance < 190, let msg = npc.component(ofType: MessageComponent.self) {
+                msg.showMsg()
+            }
+        
+        setWeight(60, for: GKGoal(toAvoid: av, maxPredictionTime: 10))
         setWeight(50, for: GKGoal(toWander: 12389))
+    }
+    
+    // INTERACT NPC (MSG, WARNING)
+    init(npc: GKEntity,avoid: [GKAgent],player: GKEntity, enemy: GKEntity) {
+        super.init()
+        let enemySprite = enemy.component(ofType: SpriteComponent.self)!.node
+        let playerSprite = player.component(ofType: SpriteComponent.self)?.node
+        let npcSprite = npc.component(ofType: SpriteComponent.self)?.node
         
+        let playerDistance = ((playerSprite?.position)! - (npcSprite?.position)!).length()
+        let enemyDistance = (enemySprite.position - (npcSprite?.position)!).length()
         
+        var av = avoid
+        av.append(player.component(ofType: MoveComponent.self)!)
+        
+        if let msg = npc.component(ofType: MessageComponent.self){
+            if enemyDistance < 400{
+                msg.showWarningMsg()
+            }
+                
+            else if playerDistance < 190 {
+                msg.showMsg()
+            }
+        }
+        setWeight(60, for: GKGoal(toAvoid: av, maxPredictionTime: 10))
+        setWeight(50, for: GKGoal(toWander: 12389))
     }
     
 }

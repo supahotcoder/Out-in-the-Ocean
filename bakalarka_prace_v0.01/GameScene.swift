@@ -84,26 +84,21 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     func updateGoalText(with text: String, around: SKNode) {
         addChild(goalText)
         updateText(with: text, label: &goalText, around: around, alligment: .rightTop)
-        displayText(displayIn: 1, fadeOut: 2, label: &goalText)
+        displayText(displayIn: 1, fadeOut: 2, label: goalText)
     }
     
     func updateStoryText(with text: String, around: SKNode) {
         addChild(storyText)
         updateText(with: text, label: &storyText, around: around, alligment: .rightTop)
-        displayText(displayIn: 1, fadeOut: 2, label: &goalText)
+        displayText(displayIn: 1, fadeOut: 2, label: goalText)
     }
     
     func updateWarningText(with text: String, around: SKNode) {
         addChild(warningText)
         updateText(with: text, label: &warningText, around: around, alligment: .rightTop)
-        displayText(displayIn: 1, fadeOut: 2, label: &goalText)
+        displayText(displayIn: 1, fadeOut: 2, label: goalText)
     }
-    
-    
-    private func displayText(displayIn: TimeInterval,fadeOut: TimeInterval, label: inout SKLabelNode) {
-        label.run(SKAction.sequence([SKAction.wait(forDuration: displayIn),SKAction.fadeIn(withDuration: displayIn / 2),
-                                     SKAction.wait(forDuration: TimeInterval((label.text?.count)! / 5)),SKAction.fadeOut(withDuration: fadeOut), SKAction.removeFromParent()]))
-    }
+
 
     private func updateText(with text: String, label: inout SKLabelNode, around: SKNode, alligment: position) {
         label.text = text

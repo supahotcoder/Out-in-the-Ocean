@@ -19,7 +19,7 @@ class Joystick {
 
     let speed : CGFloat = 4
     let touchRadius : CGFloat = 100
-    let maxVelocity : CGFloat = 150
+    let maxVelocity : CGFloat = 100
     
     init() {
         let texture = SKTexture(imageNamed: "joystick")

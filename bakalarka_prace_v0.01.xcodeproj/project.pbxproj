@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		980BDAFB21BAF1C90079C355 /* Ending.sks in Resources */ = {isa = PBXBuildFile; fileRef = 980BDAFA21BAF1C90079C355 /* Ending.sks */; };
 		982234512182216D00634AF5 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982234502182216D00634AF5 /* Camera.swift */; };
+		983D5E8121CC0A7D00D11A6E /* EnemyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983D5E8021CC0A7D00D11A6E /* EnemyComponent.swift */; };
 		98441F3921C82A0000B542F8 /* Wander.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98441F3821C82A0000B542F8 /* Wander.swift */; };
+		98441F3B21C96CD300B542F8 /* MessageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98441F3A21C96CD300B542F8 /* MessageComponent.swift */; };
 		984A084721997BDF00AEB709 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984A084621997BDF00AEB709 /* Extensions.swift */; };
 		984A084921998E4B00AEB709 /* PlayerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984A084821998E4B00AEB709 /* PlayerComponent.swift */; };
 		9859130921A1BA160039A253 /* BubbleEffect.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9859130721A1BA160039A253 /* BubbleEffect.sks */; };
@@ -39,7 +41,9 @@
 /* Begin PBXFileReference section */
 		980BDAFA21BAF1C90079C355 /* Ending.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Ending.sks; sourceTree = "<group>"; };
 		982234502182216D00634AF5 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		983D5E8021CC0A7D00D11A6E /* EnemyComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyComponent.swift; sourceTree = "<group>"; };
 		98441F3821C82A0000B542F8 /* Wander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wander.swift; sourceTree = "<group>"; };
+		98441F3A21C96CD300B542F8 /* MessageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComponent.swift; sourceTree = "<group>"; };
 		984A084621997BDF00AEB709 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		984A084821998E4B00AEB709 /* PlayerComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerComponent.swift; sourceTree = "<group>"; };
 		9859130721A1BA160039A253 /* BubbleEffect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BubbleEffect.sks; sourceTree = "<group>"; };
@@ -132,6 +136,8 @@
 				987BAE622194AAFC00EA1243 /* MoveComponent.swift */,
 				984A084821998E4B00AEB709 /* PlayerComponent.swift */,
 				98966C86219A01E600EBC0CE /* AvoidCollisionComponent.swift */,
+				98441F3A21C96CD300B542F8 /* MessageComponent.swift */,
+				983D5E8021CC0A7D00D11A6E /* EnemyComponent.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -257,6 +263,7 @@
 				98B12BA0216FAE36008D7D7B /* ContactComponent.swift in Sources */,
 				98E79B82216BE39B005B3BEC /* Joystick.swift in Sources */,
 				98EAF1A221525AF500A707A9 /* GameScene.swift in Sources */,
+				983D5E8121CC0A7D00D11A6E /* EnemyComponent.swift in Sources */,
 				985B559121958DF700E0B866 /* MoveSettings.swift in Sources */,
 				9882A74E216ACF54005F0AEE /* SpriteComponent.swift in Sources */,
 				98B12BA3216FAFAA008D7D7B /* Constants.swift in Sources */,
@@ -265,6 +272,7 @@
 				987BAE612194A65E00EA1243 /* Searcher.swift in Sources */,
 				98966C87219A01E600EBC0CE /* AvoidCollisionComponent.swift in Sources */,
 				984A084921998E4B00AEB709 /* PlayerComponent.swift in Sources */,
+				98441F3B21C96CD300B542F8 /* MessageComponent.swift in Sources */,
 				98E79B7E216BD5C0005B3BEC /* Player.swift in Sources */,
 				98B7E70F2174A6D50071DC84 /* JoystickFrame.swift in Sources */,
 				987BAE632194AAFC00EA1243 /* MoveComponent.swift in Sources */,

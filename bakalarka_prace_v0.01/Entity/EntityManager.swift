@@ -17,8 +17,18 @@ class EntityManager {
     
     private(set) var player: GKEntity? = nil
     
+    private(set) var enemies = Set<GKEntity>()
+    
+    var gameOver = false
+    
      init(scene : SKScene) {
         self.scene = scene
+    }
+    
+    func addMsg(msgLabel: SKLabelNode) {
+        if !gameOver {
+            scene?.addChild(msgLabel)
+        }
     }
     
     private func addPlayer(player: GKEntity) {
@@ -41,6 +51,12 @@ class EntityManager {
     }
     
     //MARK: - MOVECOMPONENT UTILITIES
+    
+    func enemy() -> GKEntity {
+        // promíchá protivníky
+        enemies = Set(enemies.shuffled().map{$0})
+        return enemies.first!
+    }
     
     func entitiesWithMoveComponent() -> [MoveComponent] {
         var moveComponents = [MoveComponent]()
@@ -85,16 +101,17 @@ class EntityManager {
     }
     //MARK: Loading Entities
     func loadSearcher() {
-        let searcher = Searcher(imageName: "player_test", entityManager: self)
+        let searcher = Searcher(imageName: "evil_player1", entityManager: self)
         if let sNode = searcher.component(ofType: SpriteComponent.self)?.node {
-            sNode.position = CGPoint(x: 100 , y: 200)
+            sNode.position = CGPoint(x: 300 , y: 300)
             sNode.zPosition = 3
             self.add(entity: searcher)
         }
+        enemies.insert(searcher)
     }
     
     func loadActiveBackground() -> ActiveBackground? {
-        let activeBack = ActiveBackground(imageName: "rucka",entityManager: self)
+        let activeBack = ActiveBackground(imageName: "spin",entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
             acNode.position = CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
             acNode.zRotation = CGFloat.random(in: 0...360)
@@ -105,8 +122,14 @@ class EntityManager {
         return nil
     }
     
-    func loadWander() {
-        let wander = Wander(interaction: false, entityManager: self)
+    func loadWander(messages: [String] = [""], loopOn: Int = -1, warningMsgs: [String] = [""]) {
+        let wander: Wander
+        if messages == [""]{
+            wander = Wander(entityManager: self)
+        }
+        else{
+            wander = Wander(entityManager: self, messages: messages, loopMessagesOn: loopOn,warningMsgs: warningMsgs)
+        }
         if let sNode = wander.component(ofType: SpriteComponent.self)?.node {
             sNode.position =  CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
             sNode.zRotation = CGFloat.random(in: 0...360)

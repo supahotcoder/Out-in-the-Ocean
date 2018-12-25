@@ -38,6 +38,11 @@ enum position  {
     }
 }
 
+func displayText(displayIn: TimeInterval,fadeOut: TimeInterval, label: SKLabelNode){
+    label.run(SKAction.sequence([SKAction.wait(forDuration: displayIn),SKAction.fadeIn(withDuration: displayIn / 2),
+                                 SKAction.wait(forDuration: TimeInterval((label.text?.count)! / 5)),SKAction.fadeOut(withDuration: fadeOut), SKAction.removeFromParent()]))
+}
+
 let playerTexture = SKTexture(imageNamed: "player_test")
 
 func wanderBody(node: SKSpriteNode) -> SKPhysicsBody {
