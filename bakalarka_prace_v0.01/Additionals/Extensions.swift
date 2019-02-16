@@ -19,10 +19,17 @@ extension SKLabelNode{
     
 }
 
-
-// TODO: - Add camera extension
-
 extension CGVector{
+    static prefix func -(left: CGVector) -> CGVector{
+        return CGVector(dx: -left.dx, dy: -left.dy)
+    }
+    
+    func speed() -> CGFloat{
+        return sqrt(dx * dx + dy * dy)
+    }
+    func angle() -> CGFloat {
+        return atan2(dy, dx)
+    }
     static func >(left: CGVector ,right: CGVector) -> Bool {
         if left.dx <= right.dx , left.dy <= right.dy {
             return false
@@ -79,6 +86,11 @@ extension float2{
 }
 
 extension CGPoint{
+    
+    static func randomPosition(x: ClosedRange<Int>,y: ClosedRange<Int>) -> CGPoint {
+        return CGPoint(x: Int.random(in: x) - Int.random(in: x), y: Int.random(in: y) - Int.random(in: y))
+    }
+    
     init(tuple: (x: Double,y: Double)) {
         self.init()
         self.x = CGFloat(tuple.x)

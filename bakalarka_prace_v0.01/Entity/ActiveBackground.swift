@@ -14,10 +14,12 @@ class ActiveBackground: GKEntity {
     init(imageName: String, entityManager: EntityManager) {
         super.init()
         let texture = SKTexture(imageNamed: imageName)
-        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 70, height: 70))
+        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 300, height: 300))
         addComponent(spriteComponent)
         
-        let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false)
+        //let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false)
+        // Contact bude jenom na střední kruh
+        let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false, pathBody: SKPhysicsBody.init(circleOfRadius: 60))
         addComponent(contactComponent)
         
         let moveComponent = MoveComponent(maxSpeed: 0, maxAcceleration: 0, effectiveRadius: Float(spriteComponent.node.size.width / 2), entityManager: entityManager)

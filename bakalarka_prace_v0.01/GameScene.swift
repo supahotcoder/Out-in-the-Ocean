@@ -8,6 +8,9 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
+
+var backgroundMusicPlayer: AVAudioPlayer? = nil
 
 protocol GameSceneProtocol {
     // implementace bude nutná u každého levelu solo
@@ -68,7 +71,6 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         self.camera = cameraNode
         addChild(cameraNode)
         camera!.movementWithin(Within: background!, CameraFocusOn: playerNode! , durationOfMovement: 0)
-        
         //DISPLAY TEXT SETUP
         goalText.fontName = "Futura-CondensedExtraBold"
         goalText.numberOfLines = 3
@@ -144,6 +146,24 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         joystick.touch = CGPoint(x: 0, y: 0)
     }
     
+    //MARK: - SOUNDS
+    
+    func backgroundMusic(fileName: String ,extension ex: String){
+        do {
+            if backgroundMusicPlayer == nil {
+                try backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: fileName, withExtension: ex)!)
+                backgroundMusicPlayer!.numberOfLoops = 10
+                backgroundMusicPlayer!.prepareToPlay()
+                backgroundMusicPlayer!.play()
+            }
+        } catch {
+        }
+    }
+    
+    func soundEffect(filename: String) {
+        self.run(SKAction.playSoundFileNamed(filename, waitForCompletion: false))
+    }
+    
     //MARK: - UPDATE
     
     override func update(_ currentTime: TimeInterval) {
@@ -154,8 +174,5 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         camera?.movementWithin(Within: background!, CameraFocusOn: playerNode! , durationOfMovement: 0.3)
         entityManager.update(deltaTime)
         
-        if (activeBack == nil){
-            activeBack = entityManager.loadActiveBackground()
-        }
     }
 }

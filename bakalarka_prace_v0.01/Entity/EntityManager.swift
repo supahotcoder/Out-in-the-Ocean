@@ -75,6 +75,16 @@ class EntityManager {
         }
     }
     
+    func protectEntities() -> [MoveComponent] {
+        var guards = [MoveComponent]()
+        for entity in gameEntities{
+            if entity.component(ofType: ProtectComponent.self) != nil{
+                guards.append(entity.component(ofType: MoveComponent.self)!)
+            }
+        }
+        return guards
+    }
+    
     func avoidEntities() -> [MoveComponent] {
         var avoid = [MoveComponent]()
         for entity in gameEntities{
@@ -103,19 +113,33 @@ class EntityManager {
     func loadSearcher() {
         let searcher = Searcher(imageName: "evil_player1", entityManager: self)
         if let sNode = searcher.component(ofType: SpriteComponent.self)?.node {
-            sNode.position = CGPoint(x: 300 , y: 300)
+            sNode.position = CGPoint.randomPosition(x: 0...500,y: 0...640)
             sNode.zPosition = 3
             self.add(entity: searcher)
         }
         enemies.insert(searcher)
     }
     
-    func loadActiveBackground() -> ActiveBackground? {
-        let activeBack = ActiveBackground(imageName: "spin",entityManager: self)
+    func loadActiveBackground(imageName: String) -> ActiveBackground? {
+        let activeBack = ActiveBackground(imageName: imageName,entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
-            acNode.position = CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
+            acNode.position = CGPoint.randomPosition(x: 0...840,y: 0...640)
+            //CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
             acNode.zRotation = CGFloat.random(in: 0...360)
             acNode.zPosition = 3
+            self.add(entity: activeBack)
+            return activeBack
+        }
+        return nil
+    }
+    
+    func loadWarper() -> ActiveBackground? {
+        let activeBack = ActiveBackground(imageName: "spin",entityManager: self)
+        if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
+            acNode.position = CGPoint.randomPosition(x: 0...840,y: 0...640)
+            acNode.zRotation = CGFloat.random(in: 0...360)
+            acNode.zPosition = 3
+            acNode.run(SKAction.rotate(byAngle: 30, duration: 100))
             self.add(entity: activeBack)
             return activeBack
         }
@@ -131,7 +155,7 @@ class EntityManager {
             wander = Wander(entityManager: self, messages: messages, loopMessagesOn: loopOn,warningMsgs: warningMsgs)
         }
         if let sNode = wander.component(ofType: SpriteComponent.self)?.node {
-            sNode.position =  CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
+            sNode.position = CGPoint.randomPosition(x: 0...840,y: 0...640)
             sNode.zRotation = CGFloat.random(in: 0...360)
             sNode.zPosition = 3
             self.add(entity: wander)

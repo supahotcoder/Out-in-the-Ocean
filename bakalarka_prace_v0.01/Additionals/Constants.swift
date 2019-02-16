@@ -16,6 +16,7 @@ enum bitmasks : UInt32 , CaseIterable {
     case camera = 0b100
     case searcher = 0b101
     case wander = 0b110
+    case collectible = 0b111
 }
 
 enum position  {

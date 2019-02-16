@@ -37,7 +37,7 @@ class ContactComponent: GKComponent {
             
             //defeaultně bude false
             physicsBody.affectedByGravity = false
-            //nastaví vytovřený physics body do raálného physics body
+            //nastaví vytovřený physics body do reálného physics body
             spriteNode.node.physicsBody = physicsBody
         }
          super.init()
