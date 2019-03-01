@@ -18,10 +18,24 @@ class Joystick {
     var turnAngle : CGFloat = 0
 
     let speed : CGFloat = 4
-    let touchRadius : CGFloat = 100
+    let touchRadius : CGFloat
     let maxVelocity : CGFloat = 100
     
-    init() {
+    init(screen: CGRect,device: UIUserInterfaceIdiom) {
+        var size : CGFloat = 1
+        switch device {
+        case .pad:
+            size = 2
+        case .phone:
+            if (screen.width + screen.height) < 2000{
+                size = 2.3
+            }
+        default:
+            break
+        }
+        self.touchRadius = (screen.width + screen.height) * 0.05 * size
+
+        
         let texture = SKTexture(imageNamed: "joystick")
         node = SKSpriteNode(texture: texture, color: .white, size: CGSize(width: touchRadius, height: touchRadius))
         node?.position = CGPoint(x: 0,y: 0)

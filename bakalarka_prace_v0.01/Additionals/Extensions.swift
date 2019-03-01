@@ -88,7 +88,7 @@ extension float2{
 extension CGPoint{
     
     static func randomPosition(x: ClosedRange<Int>,y: ClosedRange<Int>) -> CGPoint {
-        return CGPoint(x: Int.random(in: x) - Int.random(in: x), y: Int.random(in: y) - Int.random(in: y))
+        return CGPoint(x: Int.random(in: x), y: Int.random(in: y))
     }
     
     init(tuple: (x: Double,y: Double)) {

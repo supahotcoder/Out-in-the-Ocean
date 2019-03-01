@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		980BDAFB21BAF1C90079C355 /* Ending.sks in Resources */ = {isa = PBXBuildFile; fileRef = 980BDAFA21BAF1C90079C355 /* Ending.sks */; };
+		981329772218407600336040 /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = 981329762218407600336040 /* MainMenu.sks */; };
+		981329792218492F00336040 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981329782218492F00336040 /* MainMenu.swift */; };
 		982234512182216D00634AF5 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982234502182216D00634AF5 /* Camera.swift */; };
 		983D5E8121CC0A7D00D11A6E /* EnemyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983D5E8021CC0A7D00D11A6E /* EnemyComponent.swift */; };
 		98441F3921C82A0000B542F8 /* Wander.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98441F3821C82A0000B542F8 /* Wander.swift */; };
@@ -20,9 +22,14 @@
 		987BAE612194A65E00EA1243 /* Searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987BAE602194A65E00EA1243 /* Searcher.swift */; };
 		987BAE632194AAFC00EA1243 /* MoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987BAE622194AAFC00EA1243 /* MoveComponent.swift */; };
 		987F97FF21A5A564006CFAD0 /* Level1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987F97FE21A5A564006CFAD0 /* Level1.swift */; };
+		9881866E2223640900DA2E3C /* PauseScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9881866D2223640900DA2E3C /* PauseScene.sks */; };
 		9882A74C216AC9B1005F0AEE /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9882A74B216AC9B1005F0AEE /* EntityManager.swift */; };
 		9882A74E216ACF54005F0AEE /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9882A74D216ACF54005F0AEE /* SpriteComponent.swift */; };
+		988ED9752219BB98005AE26D /* Level2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988ED9742219BB98005AE26D /* Level2.swift */; };
+		988ED9772219BBFB005AE26D /* Level2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 988ED9762219BBFB005AE26D /* Level2.sks */; };
 		98966C87219A01E600EBC0CE /* AvoidCollisionComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98966C86219A01E600EBC0CE /* AvoidCollisionComponent.swift */; };
+		9896FAC0221ED773009B05E3 /* CrystalEffect.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9896FABF221ED773009B05E3 /* CrystalEffect.sks */; };
+		98ABD48422234E4D00011D9D /* Thumbstick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98ABD48322234E4D00011D9D /* Thumbstick.swift */; };
 		98B12BA0216FAE36008D7D7B /* ContactComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B12B9F216FAE36008D7D7B /* ContactComponent.swift */; };
 		98B12BA3216FAFAA008D7D7B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B12BA2216FAFAA008D7D7B /* Constants.swift */; };
 		98B12BA5216FBB97008D7D7B /* ActiveBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B12BA4216FBB97008D7D7B /* ActiveBackground.swift */; };
@@ -45,6 +52,8 @@
 
 /* Begin PBXFileReference section */
 		980BDAFA21BAF1C90079C355 /* Ending.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Ending.sks; sourceTree = "<group>"; };
+		981329762218407600336040 /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
+		981329782218492F00336040 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		982234502182216D00634AF5 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		983D5E8021CC0A7D00D11A6E /* EnemyComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyComponent.swift; sourceTree = "<group>"; };
 		98441F3821C82A0000B542F8 /* Wander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wander.swift; sourceTree = "<group>"; };
@@ -57,9 +66,14 @@
 		987BAE602194A65E00EA1243 /* Searcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searcher.swift; sourceTree = "<group>"; };
 		987BAE622194AAFC00EA1243 /* MoveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveComponent.swift; sourceTree = "<group>"; };
 		987F97FE21A5A564006CFAD0 /* Level1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1.swift; sourceTree = "<group>"; };
+		9881866D2223640900DA2E3C /* PauseScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PauseScene.sks; sourceTree = "<group>"; };
 		9882A74B216AC9B1005F0AEE /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
 		9882A74D216ACF54005F0AEE /* SpriteComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
+		988ED9742219BB98005AE26D /* Level2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level2.swift; sourceTree = "<group>"; };
+		988ED9762219BBFB005AE26D /* Level2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level2.sks; sourceTree = "<group>"; };
 		98966C86219A01E600EBC0CE /* AvoidCollisionComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvoidCollisionComponent.swift; sourceTree = "<group>"; };
+		9896FABF221ED773009B05E3 /* CrystalEffect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CrystalEffect.sks; sourceTree = "<group>"; };
+		98ABD48322234E4D00011D9D /* Thumbstick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thumbstick.swift; sourceTree = "<group>"; };
 		98B12B9F216FAE36008D7D7B /* ContactComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactComponent.swift; sourceTree = "<group>"; };
 		98B12BA2216FAFAA008D7D7B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		98B12BA4216FBB97008D7D7B /* ActiveBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveBackground.swift; sourceTree = "<group>"; };
@@ -96,11 +110,20 @@
 		980A33A4216A414A00FF5385 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				98EAF19B21525AF500A707A9 /* AppDelegate.swift */,
 				98EAF1A521525AF500A707A9 /* Main.storyboard */,
 				98EAF1AA21525AF600A707A9 /* LaunchScreen.storyboard */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		98607676222970300009877D /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				98EAF1A121525AF500A707A9 /* GameScene.swift */,
+				98EAF1A321525AF500A707A9 /* GameViewController.swift */,
+				98EAF19B21525AF500A707A9 /* AppDelegate.swift */,
+			);
+			path = Engine;
 			sourceTree = "<group>";
 		};
 		987F97FD21A5A54B006CFAD0 /* Levels */ = {
@@ -108,6 +131,8 @@
 			children = (
 				987F97FE21A5A564006CFAD0 /* Level1.swift */,
 				98EAF19D21525AF500A707A9 /* Level1.sks */,
+				988ED9742219BB98005AE26D /* Level2.swift */,
+				988ED9762219BBFB005AE26D /* Level2.sks */,
 			);
 			path = Levels;
 			sourceTree = "<group>";
@@ -122,6 +147,7 @@
 				9859130821A1BA160039A253 /* Assets.xcassets */,
 				980BDAFA21BAF1C90079C355 /* Ending.sks */,
 				98F2862C2215AB8200264C76 /* Warping.sks */,
+				9896FABF221ED773009B05E3 /* CrystalEffect.sks */,
 			);
 			path = Additionals;
 			sourceTree = "<group>";
@@ -169,6 +195,7 @@
 			children = (
 				98E79B81216BE39B005B3BEC /* Joystick.swift */,
 				98B7E70E2174A6D50071DC84 /* JoystickFrame.swift */,
+				98ABD48322234E4D00011D9D /* Thumbstick.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -197,9 +224,11 @@
 				98CC13442165135600C36501 /* Component */,
 				98CC13432165134000C36501 /* Entity */,
 				987F97FD21A5A54B006CFAD0 /* Levels */,
-				98EAF1A121525AF500A707A9 /* GameScene.swift */,
+				98607676222970300009877D /* Engine */,
+				9881866D2223640900DA2E3C /* PauseScene.sks */,
+				981329782218492F00336040 /* MainMenu.swift */,
+				981329762218407600336040 /* MainMenu.sks */,
 				98B1A17D220C7079000324D4 /* Assets.xcassets */,
-				98EAF1A321525AF500A707A9 /* GameViewController.swift */,
 				98EAF1AD21525AF600A707A9 /* Info.plist */,
 				98B1A181220C736E000324D4 /* Sounds */,
 				980A33A4216A414A00FF5385 /* Helpers */,
@@ -268,8 +297,12 @@
 				98EAF1A721525AF500A707A9 /* Main.storyboard in Resources */,
 				98EAF19E21525AF500A707A9 /* Level1.sks in Resources */,
 				98EAF1AC21525AF600A707A9 /* LaunchScreen.storyboard in Resources */,
+				981329772218407600336040 /* MainMenu.sks in Resources */,
+				988ED9772219BBFB005AE26D /* Level2.sks in Resources */,
 				9859130A21A1BA160039A253 /* Assets.xcassets in Resources */,
+				9881866E2223640900DA2E3C /* PauseScene.sks in Resources */,
 				98B1A180220C735F000324D4 /* level1_back_sound.wav in Resources */,
+				9896FAC0221ED773009B05E3 /* CrystalEffect.sks in Resources */,
 				98B1A17E220C7079000324D4 /* Assets.xcassets in Resources */,
 				980BDAFB21BAF1C90079C355 /* Ending.sks in Resources */,
 				9859130921A1BA160039A253 /* BubbleEffect.sks in Resources */,
@@ -293,12 +326,15 @@
 				985B559121958DF700E0B866 /* MoveSettings.swift in Sources */,
 				9882A74E216ACF54005F0AEE /* SpriteComponent.swift in Sources */,
 				98B12BA3216FAFAA008D7D7B /* Constants.swift in Sources */,
+				988ED9752219BB98005AE26D /* Level2.swift in Sources */,
 				98EAF1A421525AF500A707A9 /* GameViewController.swift in Sources */,
 				98441F3921C82A0000B542F8 /* Wander.swift in Sources */,
 				987BAE612194A65E00EA1243 /* Searcher.swift in Sources */,
 				98966C87219A01E600EBC0CE /* AvoidCollisionComponent.swift in Sources */,
+				981329792218492F00336040 /* MainMenu.swift in Sources */,
 				984A084921998E4B00AEB709 /* PlayerComponent.swift in Sources */,
 				98441F3B21C96CD300B542F8 /* MessageComponent.swift in Sources */,
+				98ABD48422234E4D00011D9D /* Thumbstick.swift in Sources */,
 				98F2862F2215D64400264C76 /* Collectible.swift in Sources */,
 				98E79B7E216BD5C0005B3BEC /* Player.swift in Sources */,
 				98B7E70F2174A6D50071DC84 /* JoystickFrame.swift in Sources */,

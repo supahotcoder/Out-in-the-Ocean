@@ -10,10 +10,10 @@ import Foundation
 import SpriteKit
 
 extension SKCameraNode {
-    func movementWithin(Within boundaries: SKSpriteNode,CameraFocusOn focusedNode: SKSpriteNode, durationOfMovement duration: TimeInterval) {
-        let left : CGFloat = -boundaries.frame.width / 2 + self.scene!.size.width / 2
+    func movement(within boundaries: SKSpriteNode,cameraFocusOn focusedNode: SKSpriteNode, durationOfMovement duration: TimeInterval) {
+        let left : CGFloat = -boundaries.frame.width / 2 + (self.scene!.size.width / 2) * self.xScale
         let right : CGFloat = -left
-        let bottom : CGFloat = -boundaries.frame.height / 2 + self.scene!.size.height / 2
+        let bottom : CGFloat = -boundaries.frame.height / 2 + (self.scene!.size.height / 2) * self.yScale
         let top : CGFloat = -bottom
         
         var position : CGPoint = focusedNode.position
@@ -31,5 +31,16 @@ extension SKCameraNode {
             position.y = bottom
         }
         self.run(SKAction.move(to: position, duration: duration))
+    }
+    
+    func scaleFor(device: UIUserInterfaceIdiom) {
+        switch device {
+        case .phone:
+            self.setScale(1)
+        case .pad:
+            self.setScale(0.5)
+        default:
+            break
+        }
     }
 }

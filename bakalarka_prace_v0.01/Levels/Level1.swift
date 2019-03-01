@@ -10,7 +10,7 @@ import Foundation
 import SpriteKit
 import AVFoundation
 
-class Level1 : GameScene{
+final class Level1 : GameScene{
     
     let effectNode = SKEffectNode()
     
@@ -19,9 +19,12 @@ class Level1 : GameScene{
     var c3 : Collectible!
     var c4 : Collectible!
     
+    var warperNode: SKSpriteNode!
+    
     var collectibleCount = 0
     
     override func didMove(to view: SKView) {
+        self.name = "Level1"
         // BACKGROUND BOUNDARY
         background = childNode(withName: "pozadi") as? SKSpriteNode
         let edgePhysicsBody = SKPhysicsBody(edgeLoopFrom: (background?.frame)!)
@@ -36,8 +39,12 @@ class Level1 : GameScene{
         //SEARCHER SETUP
         entityManager.loadSearcher()
         entityManager.loadSearcher()
-        // ACTIVE BACKGROUND SETUP
-        activeBack = entityManager.loadWarper()
+        // SPINNER SETUP
+        let warper = ActiveBackground(imageName: "spin", entityManager: entityManager)
+        warperNode = warper.component(ofType: SpriteComponent.self)!.node
+        warperNode.run(SKAction.rotate(byAngle: 90, duration: 300))
+        self.addChild(warperNode)
+        
 
         // Bubble effect
         let bubblesback = SKEmitterNode(fileNamed: "BubbleEffect")!
@@ -54,37 +61,36 @@ class Level1 : GameScene{
         //TODO: - TODO: ADD Text file story strings
         
         //WANDER SETUP
-        let msgs = ["Hi" , "...", "Hello stranger" ,"It's getting greener", "Welcome Traveler", "Something,\n is not right in there" ,"Not me", "Did you found\n what you've been looking for?", "Don't bother me"]
+        let msgs = ["Hi" , "...", "Hello stranger" ,"It's getting greener", "Welcome Traveler",
+                    "Something,\n is not right in there" ,"Not me", "Did you found\n what you've been looking for?", "Don't bother me"]
         let warning = ["Get out", "Beware","Watch out", "Booo"]
         entityManager.loadWander(messages: msgs, loopOn: 5, warningMsgs: warning)
         entityManager.loadWander(messages: msgs, warningMsgs: warning)
         entityManager.loadWander(messages: msgs, loopOn: 5, warningMsgs: warning)
         entityManager.loadWander(warningMsgs: warning)
         entityManager.loadWander(messages: msgs, loopOn: 0, warningMsgs: warning)
-
+        entityManager.loadWander(messages: msgs, loopOn: 2, warningMsgs: warning)
+        entityManager.loadWander(messages: msgs, loopOn: 4, warningMsgs: warning)
         //MUSIC SETUP
         backgroundMusic(fileName: "level1_back_sound", extension: "wav")
         
         
         //TESTING - HUE EFFECT for collectible later
-        
         effectNode.shouldRasterize = true
         playerNode?.removeFromParent()
-        //playerNode?.addChild(effectNode)
         effectNode.zPosition = 3
         effectNode.addChild(playerNode!)
         effectNode.shouldEnableEffects = true
-        //effectNode.filter = CIFilter(name: "CIHueAdjust", parameters: ["inputAngle": Int.random(in: 1...500)])
-        //effectNode.filter = CIFilter(name: "CIHoleDistortion", parameters: ["inputRadius": 20])
         self.addChild(effectNode)
         
         //TESTING - spawning collectible and that effect
-        //TODO: - set Searcher to protect
+        #warning("searcher protect collectible")
         // nízké hodnoty zvětšení pro rozeznání
-        c1 = Collectible(texture: "rucka", size: CGSize(width: 60, height: 60), id: "c1",protectable: true,entityManager: entityManager)
-        c2 = Collectible(texture: "rucka", size: CGSize(width: 60, height: 60), id: "c2",protectable: true,entityManager: entityManager)
-        c3 = Collectible(texture: "rucka", size: CGSize(width: 60, height: 60), id: "c3",protectable: true,entityManager: entityManager)
-        c4 = Collectible(texture: "rucka", size: CGSize(width: 60, height: 60), id: "c4",protectable: true,entityManager: entityManager)
+        c1 = Collectible(texture: "donut", size: CGSize(width: 60, height: 60), id: "c1",protectable: true,entityManager: entityManager)
+        c2 = Collectible(texture: "donut", size: CGSize(width: 60, height: 60), id: "c2",protectable: true,entityManager: entityManager)
+        c3 = Collectible(texture: "donut", size: CGSize(width: 60, height: 60), id: "c3",protectable: true,entityManager: entityManager)
+        c4 = Collectible(texture: "donut", size: CGSize(width: 60, height: 60), id: "c4",protectable: true,entityManager: entityManager)
+
         entityManager.add(entity: c1)
         entityManager.add(entity: c2)
         entityManager.add(entity: c3)
@@ -177,20 +183,31 @@ class Level1 : GameScene{
     
     func warp(contact: SKPhysicsContact, otherNode: SKNode? = nil) {
         let warp = SKEmitterNode(fileNamed: "Warping")!
+        let removeWarp = SKAction.sequence([SKAction.wait(forDuration: 5), SKAction.removeFromParent()])
         warp.position = contact.contactPoint
         warp.zPosition = 3
         self.addChild(warp)
+        warp.run(removeWarp)
 
         if otherNode != nil{
             let warped = warp
-            warped.position = CGPoint.randomPosition(x: 0...840,y: 0...640)
+            warped.position = CGPoint.randomPosition(x: -840...840,y: -640...640)
             let pos = warped.position
-            otherNode?.run(SKAction.move(to: pos, duration: 0))
+            
+            // první se vynoří animace a až za 1.5s teleportovaný objekt
+            var teleport = SKAction.move(to: pos, duration: 0)
+            if otherNode?.physicsBody?.categoryBitMask != bitmasks.player.rawValue{
+                let void = CGPoint(x: 5000, y: 5000)
+                teleport = SKAction.sequence([SKAction.move(to: void, duration: 0),SKAction.wait(forDuration: 1.5),SKAction.move(to: pos, duration: 0)])
+            }
+            otherNode?.run(teleport)
         }
-        if activeBack != nil{
-            entityManager.remove(entity: activeBack)
-            activeBack = nil
-        }
+        //warperNode.position = CGPoint.randomPosition(x: 840...840,y: -640...640)
+        //print(warperNode)
+        let tel = CGPoint.randomPosition(x: -840...840,y: -640...640)
+
+        warperNode.run(SKAction.move(to: tel, duration: 0))
+
     }
     
     //MARK: - GAMEOVER
@@ -220,16 +237,21 @@ class Level1 : GameScene{
     }
     
     func nextLevel(){
-        print("Wow you did it")
+        if let scene = SKScene(fileNamed: "Level2") {
+            self.removeAllActions()
+            self.removeAllChildren()
+            saveLevel(levelName: "Level2")
+            self.view?.presentScene(scene)
+        }
     }
     
     override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)
         
         //respawn warper
-        if (activeBack == nil){
-            activeBack = entityManager.loadWarper()
-        }
+//        if (activeBack == nil){
+//            activeBack = entityManager.loadWarper()
+//        }
 //        super.camera?.movementWithin(Within: background!, CameraFocusOn: searcher.component(ofType: SpriteComponent.self)!.node, durationOfMovement: 0.1)
     }
 }

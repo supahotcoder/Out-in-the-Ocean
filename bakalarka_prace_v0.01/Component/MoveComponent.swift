@@ -14,6 +14,10 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
     
     let entityManager : EntityManager
     
+    func resetAgentDelegate() {
+        self.delegate = self
+    }
+    
     init(maxSpeed: Float, maxAcceleration: Float, effectiveRadius: Float, entityManager: EntityManager) {
         self.entityManager = entityManager
         super.init()
@@ -74,9 +78,9 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
         else if (entity?.component(ofType: GuardComponent.self)) != nil{
             let player = entityManager.player // nalezení hráče
             let target = player?.component(ofType: MoveComponent.self)
-            let protect = entityManager.protectEntities()
+            let protect = entityManager.closestProtectionComponent(from: CGPoint(tuple: position.doubleConvetor()))
             
-            behavior = MoveSettings(npc: entity!,targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!,protectEntities: protect)
+            behavior = MoveSettings(npc: entity!,targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!,protectEntity: protect)
         }
         //Typ 3: vyhledávání hráče
             //TODO: - změnit na ENemyComponent check

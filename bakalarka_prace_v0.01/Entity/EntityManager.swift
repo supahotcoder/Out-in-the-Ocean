@@ -95,6 +95,20 @@ class EntityManager {
         return avoid
     }
     
+    func closestProtectionComponent(from: CGPoint) -> GKAgent2D? {
+        var closestEntity: MoveComponent? = nil
+        var closestDistance = CGFloat(0)
+        let protect = protectEntities()
+        for entity in protect{
+            let distance = (from - CGPoint(tuple: entity.position.doubleConvetor())).length()
+            if closestEntity == nil || distance < closestDistance{
+                closestEntity = entity
+                closestDistance = distance
+            }
+        }
+        return closestEntity
+    }
+    
     //MARK: - SETUPS
     
     func loadPlayer(position: CGPoint) -> SKSpriteNode? {
@@ -110,10 +124,10 @@ class EntityManager {
         return nil
     }
     //MARK: Loading Entities
-    func loadSearcher() {
+    func loadSearcher(){
         let searcher = Searcher(imageName: "evil_player1", entityManager: self)
         if let sNode = searcher.component(ofType: SpriteComponent.self)?.node {
-            sNode.position = CGPoint.randomPosition(x: 0...500,y: 0...640)
+            sNode.position = CGPoint.randomPosition(x: 100...840,y: -640...640)
             sNode.zPosition = 3
             self.add(entity: searcher)
         }
@@ -123,7 +137,7 @@ class EntityManager {
     func loadActiveBackground(imageName: String) -> ActiveBackground? {
         let activeBack = ActiveBackground(imageName: imageName,entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
-            acNode.position = CGPoint.randomPosition(x: 0...840,y: 0...640)
+            acNode.position = CGPoint.randomPosition(x: -840...840,y: -640...640)
             //CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
             acNode.zRotation = CGFloat.random(in: 0...360)
             acNode.zPosition = 3
@@ -133,13 +147,16 @@ class EntityManager {
         return nil
     }
     
+
+    
+    // NEPOUŽÍVAT !!!!
     func loadWarper() -> ActiveBackground? {
         let activeBack = ActiveBackground(imageName: "spin",entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
-            acNode.position = CGPoint.randomPosition(x: 0...840,y: 0...640)
+            acNode.position = CGPoint.randomPosition(x: -840...840,y: -640...640)
             acNode.zRotation = CGFloat.random(in: 0...360)
             acNode.zPosition = 3
-            acNode.run(SKAction.rotate(byAngle: 30, duration: 100))
+            //acNode.run(SKAction.rotate(byAngle: 30, duration: 100))
             self.add(entity: activeBack)
             return activeBack
         }
@@ -155,7 +172,7 @@ class EntityManager {
             wander = Wander(entityManager: self, messages: messages, loopMessagesOn: loopOn,warningMsgs: warningMsgs)
         }
         if let sNode = wander.component(ofType: SpriteComponent.self)?.node {
-            sNode.position = CGPoint.randomPosition(x: 0...840,y: 0...640)
+            sNode.position = CGPoint.randomPosition(x: -840...840,y: -640...640)
             sNode.zRotation = CGFloat.random(in: 0...360)
             sNode.zPosition = 3
             self.add(entity: wander)

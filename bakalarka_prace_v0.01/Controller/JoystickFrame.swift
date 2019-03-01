@@ -12,11 +12,25 @@ class JoystickFrame {
     
     let node : SKSpriteNode?
     
-    private let touchRadius = CGFloat(100)
+    private let touchRadius : CGFloat
     
-    init() {
+    init(screen: CGRect,device: UIUserInterfaceIdiom) {
+        var size : CGFloat = 1
+        switch device {
+        case .pad:
+            size = 2
+//        case .phone:
+////            if (screen.width + screen.height) < 2000{
+////                size = 2.3
+////            }
+        default:
+            break
+        }
+        self.touchRadius = (screen.width + screen.height) * 0.05 * size
         let texture = SKTexture(imageNamed: "transp")
         node = SKSpriteNode(texture: texture, color: .white, size: CGSize(width: touchRadius, height: touchRadius))
-        node?.position = CGPoint(x: -180,y: -90)
+        // 1334 750
+            node?.position = CGPoint(x: Double(screen.width) * -0.3, y: Double(screen.height) *  -0.3)
+        //node?.position = CGPoint(x: -180,y: -90)
     }
 }

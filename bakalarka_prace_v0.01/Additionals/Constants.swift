@@ -10,6 +10,7 @@ import Foundation
 import SpriteKit
 
 enum bitmasks : UInt32 , CaseIterable {
+   // case boundaries = 0b0
     case player = 0b1
     case activeBackground = 0b10
     case frame = 0b11
