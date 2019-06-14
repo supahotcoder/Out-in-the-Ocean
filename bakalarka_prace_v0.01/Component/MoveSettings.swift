@@ -107,6 +107,8 @@ class MoveSettings: GKBehavior {
             }
         }
         setWeight(60, for: GKGoal(toAvoid: av, maxPredictionTime: 10))
+        //Due to very poor documentation GKBehavoir, I've decided to use this magic constant
+        //as it was producing the best(for my game) results
         setWeight(50, for: GKGoal(toWander: 12389))
     }
     

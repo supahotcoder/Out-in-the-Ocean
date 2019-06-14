@@ -19,12 +19,16 @@
 		9859130921A1BA160039A253 /* BubbleEffect.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9859130721A1BA160039A253 /* BubbleEffect.sks */; };
 		9859130A21A1BA160039A253 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9859130821A1BA160039A253 /* Assets.xcassets */; };
 		985B559121958DF700E0B866 /* MoveSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985B559021958DF700E0B866 /* MoveSettings.swift */; };
+		985C26EC22568B7A00120CF9 /* Level1_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C26EB22568B7A00120CF9 /* Level1_3.swift */; };
+		986978192251006700F42FBE /* Level1_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986978182251006700F42FBE /* Level1_1.swift */; };
+		9869781B2251007F00F42FBE /* Level1_1.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9869781A2251007F00F42FBE /* Level1_1.sks */; };
 		987BAE612194A65E00EA1243 /* Searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987BAE602194A65E00EA1243 /* Searcher.swift */; };
 		987BAE632194AAFC00EA1243 /* MoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987BAE622194AAFC00EA1243 /* MoveComponent.swift */; };
 		987F97FF21A5A564006CFAD0 /* Level1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987F97FE21A5A564006CFAD0 /* Level1.swift */; };
 		9881866E2223640900DA2E3C /* PauseScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9881866D2223640900DA2E3C /* PauseScene.sks */; };
 		9882A74C216AC9B1005F0AEE /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9882A74B216AC9B1005F0AEE /* EntityManager.swift */; };
 		9882A74E216ACF54005F0AEE /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9882A74D216ACF54005F0AEE /* SpriteComponent.swift */; };
+		988E165C222C9024009F6A88 /* FluidEffect.sks in Resources */ = {isa = PBXBuildFile; fileRef = 988E165B222C9024009F6A88 /* FluidEffect.sks */; };
 		988ED9752219BB98005AE26D /* Level2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988ED9742219BB98005AE26D /* Level2.swift */; };
 		988ED9772219BBFB005AE26D /* Level2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 988ED9762219BBFB005AE26D /* Level2.sks */; };
 		98966C87219A01E600EBC0CE /* AvoidCollisionComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98966C86219A01E600EBC0CE /* AvoidCollisionComponent.swift */; };
@@ -35,11 +39,10 @@
 		98B12BA5216FBB97008D7D7B /* ActiveBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B12BA4216FBB97008D7D7B /* ActiveBackground.swift */; };
 		98B1A17E220C7079000324D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98B1A17D220C7079000324D4 /* Assets.xcassets */; };
 		98B1A180220C735F000324D4 /* level1_back_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 98B1A17F220C735F000324D4 /* level1_back_sound.wav */; };
-		98B7E70F2174A6D50071DC84 /* JoystickFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B7E70E2174A6D50071DC84 /* JoystickFrame.swift */; };
 		98E79B7E216BD5C0005B3BEC /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E79B7D216BD5C0005B3BEC /* Player.swift */; };
 		98E79B82216BE39B005B3BEC /* Joystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E79B81216BE39B005B3BEC /* Joystick.swift */; };
 		98EAF19C21525AF500A707A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EAF19B21525AF500A707A9 /* AppDelegate.swift */; };
-		98EAF19E21525AF500A707A9 /* Level1.sks in Resources */ = {isa = PBXBuildFile; fileRef = 98EAF19D21525AF500A707A9 /* Level1.sks */; };
+		98EAF19E21525AF500A707A9 /* Level1_3.sks in Resources */ = {isa = PBXBuildFile; fileRef = 98EAF19D21525AF500A707A9 /* Level1_3.sks */; };
 		98EAF1A221525AF500A707A9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EAF1A121525AF500A707A9 /* GameScene.swift */; };
 		98EAF1A421525AF500A707A9 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EAF1A321525AF500A707A9 /* GameViewController.swift */; };
 		98EAF1A721525AF500A707A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98EAF1A521525AF500A707A9 /* Main.storyboard */; };
@@ -63,12 +66,16 @@
 		9859130721A1BA160039A253 /* BubbleEffect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BubbleEffect.sks; sourceTree = "<group>"; };
 		9859130821A1BA160039A253 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		985B559021958DF700E0B866 /* MoveSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveSettings.swift; sourceTree = "<group>"; };
+		985C26EB22568B7A00120CF9 /* Level1_3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1_3.swift; sourceTree = "<group>"; };
+		986978182251006700F42FBE /* Level1_1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1_1.swift; sourceTree = "<group>"; };
+		9869781A2251007F00F42FBE /* Level1_1.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1_1.sks; sourceTree = "<group>"; };
 		987BAE602194A65E00EA1243 /* Searcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searcher.swift; sourceTree = "<group>"; };
 		987BAE622194AAFC00EA1243 /* MoveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveComponent.swift; sourceTree = "<group>"; };
 		987F97FE21A5A564006CFAD0 /* Level1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1.swift; sourceTree = "<group>"; };
 		9881866D2223640900DA2E3C /* PauseScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PauseScene.sks; sourceTree = "<group>"; };
 		9882A74B216AC9B1005F0AEE /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
 		9882A74D216ACF54005F0AEE /* SpriteComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
+		988E165B222C9024009F6A88 /* FluidEffect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FluidEffect.sks; sourceTree = "<group>"; };
 		988ED9742219BB98005AE26D /* Level2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level2.swift; sourceTree = "<group>"; };
 		988ED9762219BBFB005AE26D /* Level2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level2.sks; sourceTree = "<group>"; };
 		98966C86219A01E600EBC0CE /* AvoidCollisionComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvoidCollisionComponent.swift; sourceTree = "<group>"; };
@@ -79,12 +86,11 @@
 		98B12BA4216FBB97008D7D7B /* ActiveBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveBackground.swift; sourceTree = "<group>"; };
 		98B1A17D220C7079000324D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		98B1A17F220C735F000324D4 /* level1_back_sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = level1_back_sound.wav; sourceTree = "<group>"; };
-		98B7E70E2174A6D50071DC84 /* JoystickFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoystickFrame.swift; sourceTree = "<group>"; };
 		98E79B7D216BD5C0005B3BEC /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		98E79B81216BE39B005B3BEC /* Joystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Joystick.swift; sourceTree = "<group>"; };
 		98EAF19821525AF500A707A9 /* bakalarka_prace_v0.01.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bakalarka_prace_v0.01.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		98EAF19B21525AF500A707A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		98EAF19D21525AF500A707A9 /* Level1.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1.sks; sourceTree = "<group>"; };
+		98EAF19D21525AF500A707A9 /* Level1_3.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1_3.sks; sourceTree = "<group>"; };
 		98EAF1A121525AF500A707A9 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		98EAF1A321525AF500A707A9 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		98EAF1A621525AF500A707A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -116,6 +122,15 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		985C26EA2256653F00120CF9 /* Purple */ = {
+			isa = PBXGroup;
+			children = (
+				988ED9742219BB98005AE26D /* Level2.swift */,
+				988ED9762219BBFB005AE26D /* Level2.sks */,
+			);
+			path = Purple;
+			sourceTree = "<group>";
+		};
 		98607676222970300009877D /* Engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,13 +141,23 @@
 			path = Engine;
 			sourceTree = "<group>";
 		};
-		987F97FD21A5A54B006CFAD0 /* Levels */ = {
+		9869781C2251008A00F42FBE /* Green */ = {
 			isa = PBXGroup;
 			children = (
 				987F97FE21A5A564006CFAD0 /* Level1.swift */,
-				98EAF19D21525AF500A707A9 /* Level1.sks */,
-				988ED9742219BB98005AE26D /* Level2.swift */,
-				988ED9762219BBFB005AE26D /* Level2.sks */,
+				98EAF19D21525AF500A707A9 /* Level1_3.sks */,
+				986978182251006700F42FBE /* Level1_1.swift */,
+				9869781A2251007F00F42FBE /* Level1_1.sks */,
+				985C26EB22568B7A00120CF9 /* Level1_3.swift */,
+			);
+			path = Green;
+			sourceTree = "<group>";
+		};
+		987F97FD21A5A54B006CFAD0 /* Levels */ = {
+			isa = PBXGroup;
+			children = (
+				985C26EA2256653F00120CF9 /* Purple */,
+				9869781C2251008A00F42FBE /* Green */,
 			);
 			path = Levels;
 			sourceTree = "<group>";
@@ -148,6 +173,7 @@
 				980BDAFA21BAF1C90079C355 /* Ending.sks */,
 				98F2862C2215AB8200264C76 /* Warping.sks */,
 				9896FABF221ED773009B05E3 /* CrystalEffect.sks */,
+				988E165B222C9024009F6A88 /* FluidEffect.sks */,
 			);
 			path = Additionals;
 			sourceTree = "<group>";
@@ -194,7 +220,6 @@
 			isa = PBXGroup;
 			children = (
 				98E79B81216BE39B005B3BEC /* Joystick.swift */,
-				98B7E70E2174A6D50071DC84 /* JoystickFrame.swift */,
 				98ABD48322234E4D00011D9D /* Thumbstick.swift */,
 			);
 			path = Controller;
@@ -268,6 +293,7 @@
 				TargetAttributes = {
 					98EAF19721525AF500A707A9 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
@@ -295,7 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				98EAF1A721525AF500A707A9 /* Main.storyboard in Resources */,
-				98EAF19E21525AF500A707A9 /* Level1.sks in Resources */,
+				98EAF19E21525AF500A707A9 /* Level1_3.sks in Resources */,
 				98EAF1AC21525AF600A707A9 /* LaunchScreen.storyboard in Resources */,
 				981329772218407600336040 /* MainMenu.sks in Resources */,
 				988ED9772219BBFB005AE26D /* Level2.sks in Resources */,
@@ -304,7 +330,9 @@
 				98B1A180220C735F000324D4 /* level1_back_sound.wav in Resources */,
 				9896FAC0221ED773009B05E3 /* CrystalEffect.sks in Resources */,
 				98B1A17E220C7079000324D4 /* Assets.xcassets in Resources */,
+				9869781B2251007F00F42FBE /* Level1_1.sks in Resources */,
 				980BDAFB21BAF1C90079C355 /* Ending.sks in Resources */,
+				988E165C222C9024009F6A88 /* FluidEffect.sks in Resources */,
 				9859130921A1BA160039A253 /* BubbleEffect.sks in Resources */,
 				98F2862D2215AB8200264C76 /* Warping.sks in Resources */,
 			);
@@ -333,11 +361,11 @@
 				98966C87219A01E600EBC0CE /* AvoidCollisionComponent.swift in Sources */,
 				981329792218492F00336040 /* MainMenu.swift in Sources */,
 				984A084921998E4B00AEB709 /* PlayerComponent.swift in Sources */,
+				986978192251006700F42FBE /* Level1_1.swift in Sources */,
 				98441F3B21C96CD300B542F8 /* MessageComponent.swift in Sources */,
 				98ABD48422234E4D00011D9D /* Thumbstick.swift in Sources */,
 				98F2862F2215D64400264C76 /* Collectible.swift in Sources */,
 				98E79B7E216BD5C0005B3BEC /* Player.swift in Sources */,
-				98B7E70F2174A6D50071DC84 /* JoystickFrame.swift in Sources */,
 				987BAE632194AAFC00EA1243 /* MoveComponent.swift in Sources */,
 				982234512182216D00634AF5 /* Camera.swift in Sources */,
 				984A084721997BDF00AEB709 /* Extensions.swift in Sources */,
@@ -345,6 +373,7 @@
 				98F2863122174C5400264C76 /* GuardComponent.swift in Sources */,
 				9882A74C216AC9B1005F0AEE /* EntityManager.swift in Sources */,
 				987F97FF21A5A564006CFAD0 /* Level1.swift in Sources */,
+				985C26EC22568B7A00120CF9 /* Level1_3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,7 +530,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.czernyjan.bakalarka-prace-v0-01";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -521,7 +550,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.czernyjan.bakalarka-prace-v0-01";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

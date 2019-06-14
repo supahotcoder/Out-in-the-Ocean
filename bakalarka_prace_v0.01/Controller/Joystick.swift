@@ -14,31 +14,19 @@ class Joystick {
     private(set) var node : SKSpriteNode?
     private(set) var insideFrame : Bool
     
-    var touch  = CGPoint(x: 0, y: 0)
-    var turnAngle : CGFloat = 0
-
-    let speed : CGFloat = 4
-    let touchRadius : CGFloat
-    let maxVelocity : CGFloat = 100
+    private let maxVelocity : CGFloat = 100
+    private let speed : CGFloat = 4
     
-    init(screen: CGRect,device: UIUserInterfaceIdiom) {
-        var size : CGFloat = 1
-        switch device {
-        case .pad:
-            size = 2
-        case .phone:
-            if (screen.width + screen.height) < 2000{
-                size = 2.3
-            }
-        default:
-            break
-        }
-        self.touchRadius = (screen.width + screen.height) * 0.05 * size
-
-        
+    var touch  = CGPoint(x: 0, y: 0)
+    let touchRadius : CGFloat
+    var turnAngle : CGFloat = 0
+    
+    init(screen: CGRect,adjustment: CGFloat) {
+        self.touchRadius = (screen.width + screen.height) * 0.05 * adjustment
+		
         let texture = SKTexture(imageNamed: "joystick")
         node = SKSpriteNode(texture: texture, color: .white, size: CGSize(width: touchRadius, height: touchRadius))
-        node?.position = CGPoint(x: 0,y: 0)
+        node?.position = CGPoint(x: Double(screen.width) * -0.3, y: Double(screen.height) *  -0.3)
         insideFrame = false
     }
     
@@ -52,7 +40,7 @@ class Joystick {
         insideFrame = false
     }
     
-    //konec pohybu
+    //zpomalení
     func stealthMode(playerNode: SKSpriteNode){
         insideFrame = false
         var playerVel = playerNode.physicsBody?.velocity
@@ -85,6 +73,7 @@ class Joystick {
         node.physicsBody?.velocity = velocity
     }
     
+    //pohyb s hráčem
     func movement(moveWith node: SKSpriteNode) {
         if insideFrame{
             let movement = CGVector(dx: (touch.x * speed)/100, dy:  (touch.y * speed)/100)

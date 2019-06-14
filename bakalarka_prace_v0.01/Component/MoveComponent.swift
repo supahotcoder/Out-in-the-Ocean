@@ -44,7 +44,7 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
         }
         let pos = CGPoint(tuple: position.doubleConvetor())
         
-        //sprite facing where it's heading (rotation)
+        //sprite je otočený směrem kde se pohybuje
         if spriteComponent.node.physicsBody?.categoryBitMask == bitmasks.searcher.rawValue{
             let direction = spriteComponent.node.position - pos
             let angle = atan2(direction.y , direction.x) + CGFloat.pi / 2 + 1.5

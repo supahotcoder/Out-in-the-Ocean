@@ -11,6 +11,7 @@ import GameplayKit
 import SpriteKit
 
 extension SKLabelNode{
+    // pro zobrazování textu poblíž node
     func trackNode(node: SKNode,labelAlligment: CGPoint = CGPoint(x: 0, y: 0)) {
         let randPos  = CGPoint(x: Int.random(in: 0...30) - Int.random(in: 0...30),
                                y: Int.random(in: 0...30) - Int.random(in: 0...30)) + labelAlligment
@@ -19,6 +20,7 @@ extension SKLabelNode{
     
 }
 
+// Převody a pár funkcí pro práci s automaticky navigovanými NPC
 extension CGVector{
     static prefix func -(left: CGVector) -> CGVector{
         return CGVector(dx: -left.dx, dy: -left.dy)
@@ -72,6 +74,8 @@ extension CGVector{
         }
     }
 }
+
+
 
 extension float2{
     func doubleConvetor() -> (x: Double,y: Double){

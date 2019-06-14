@@ -25,16 +25,19 @@ class EntityManager {
         self.scene = scene
     }
     
+    //Přidání zprávy(label) pokud není gameOver
     func addMsg(msgLabel: SKLabelNode) {
         if !gameOver {
             scene?.addChild(msgLabel)
         }
     }
     
-    private func addPlayer(player: GKEntity) {
+    //Uložení hráče do proměnné (Optimalizace na výkon)
+    private func setPlayer(player: GKEntity) {
         self.player = player
     }
     
+    //Přidání entity do EntityManager systému a do Scény (úrovně)
     func add(entity: GKEntity){
         gameEntities.insert(entity)
         // přistupování k vlastonsti SpriteComponent (SKSpriteNode)
@@ -42,7 +45,8 @@ class EntityManager {
             scene?.addChild(spriteNode)
         }
     }
-
+    
+    //Odstranění entity z EntityManager systému a ze Scény (úrovně)
     func remove(entity: GKEntity) {
         if let spriteNode = entity.component(ofType: SpriteComponent.self)?.node {
             spriteNode.removeFromParent()
@@ -68,7 +72,7 @@ class EntityManager {
         return moveComponents
     }
     
-    
+    //Aktualizace pohybu (více ve třídě MoveComponent)
     func update(_ deltaTime: CFTimeInterval) {
         for up in entitiesWithMoveComponent(){
             up.update(deltaTime: deltaTime)
@@ -113,7 +117,7 @@ class EntityManager {
     
     func loadPlayer(position: CGPoint) -> SKSpriteNode? {
         let player = Player(imageName: "player_test", entityManager: self)
-        addPlayer(player: player)
+        setPlayer(player: player)
         if let pNode = player.component(ofType: SpriteComponent.self)?.node {
             pNode.position =  position
             // nastavení Z pozice
@@ -150,6 +154,7 @@ class EntityManager {
 
     
     // NEPOUŽÍVAT !!!!
+    // Todo: - change or delete
     func loadWarper() -> ActiveBackground? {
         let activeBack = ActiveBackground(imageName: "spin",entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {

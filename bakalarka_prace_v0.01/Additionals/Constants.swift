@@ -45,8 +45,22 @@ func displayText(displayIn: TimeInterval,fadeOut: TimeInterval, label: SKLabelNo
                                  SKAction.wait(forDuration: TimeInterval((label.text?.count)! / 5)),SKAction.fadeOut(withDuration: fadeOut), SKAction.removeFromParent()]))
 }
 
-let playerTexture = SKTexture(imageNamed: "player_test")
+func deviceAdjustments(_ device: UIUserInterfaceIdiom, _ screen: CGRect) -> CGFloat {
+    var size: CGFloat = 1
+    switch device {
+    case .pad:
+        size = 2
+    case .phone:
+        if (screen.width + screen.height) < 2000{
+            size = 2.3
+        }
+    default:
+        break
+    }
+    return size
+}
 
+#warning("Put wander body into Wander class as method")
 func wanderBody(node: SKSpriteNode) -> SKPhysicsBody {
     let sprite = node
     let offsetX = sprite.size.width * sprite.anchorPoint.x

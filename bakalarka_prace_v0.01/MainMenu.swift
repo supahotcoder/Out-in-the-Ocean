@@ -11,20 +11,19 @@ import SpriteKit
 
 class MainMenu: SKScene {
     
-    var playButton: SKSpriteNode!
-    var playGameButton: SKNode!
+    private var playButton: SKSpriteNode!
+    private var playGameButton: SKNode!
     
-    var resetProgress: SKSpriteNode!
-
+    private var resetProgress: SKSpriteNode!
     
-    var level: String!
+    private var level: String!
     
     override func didMove(to view: SKView) {
-        //Getting last saved level
-        level = "Level1"
-        
+        level = "Level1_1"
+        //Načtení posledního uloženého levelu
         if let lastLevel = UserDefaults.standard.string(forKey: "LastLevel"){
-            level = lastLevel
+            //TESTING Level1_1
+            level = "Level1_1"
         }
         
         playButton = childNode(withName: "playGame") as? SKSpriteNode
@@ -35,9 +34,8 @@ class MainMenu: SKScene {
         
         resetProgress = childNode(withName: "resetProgress") as? SKSpriteNode
     }
-
     
-    func touchAnimation(position: CGPoint) {
+    private func touchAnimation(position: CGPoint) {
         let warp = SKEmitterNode(fileNamed: "Warping")
         warp?.zPosition = 4
         warp?.position = position
@@ -51,6 +49,7 @@ class MainMenu: SKScene {
         touchAnimation(position: (touches.first?.location(in: playGameButton))!)
         if playButton.frame.contains(t!){
                 buttonPressed(node: playButton)
+            print("Launching Level \(String(describing: level))")
                 if let scene = SKScene(fileNamed: level) {
                     self.removeAllActions()
                     self.removeAllChildren()
@@ -58,15 +57,16 @@ class MainMenu: SKScene {
                     self.view?.presentScene(scene, transition: transition)
                 }
             }
+        //TODO: - Po testování nahodit zpátky na Level1_1
         if resetProgress.frame.contains(t!){
             buttonPressed(node: resetProgress)
             UserDefaults.standard.removeObject(forKey: "LastLevel")
-            level = "Level1"
+            level = "Level1_3"
             
         }
     }
     
-    func buttonPressed(node: SKSpriteNode) {
+    private func buttonPressed(node: SKSpriteNode) {
         let fadeOut = SKAction.fadeOut(withDuration: 0.3)
         let fadeIn = SKAction.fadeIn(withDuration: 0.3)
         node.run(SKAction.sequence([fadeOut,fadeIn]))

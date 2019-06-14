@@ -13,32 +13,22 @@ class Thumbstick{
     
     private(set) var node: SKSpriteNode
     
-    let radius: CGFloat 
+    let radius: CGFloat
     
-    init(image: String,screen: CGRect,device: UIUserInterfaceIdiom){
-        var size : CGFloat = 1
-        switch device {
-        case .pad:
-            size = 2
-        case .phone:
-            if (screen.width + screen.height) < 2000{
-                size = 2.3
-            }
-        default:
-            break
-        }
-        self.radius = (screen.width + screen.height) * 0.025 * size
-        let texture = SKTexture(imageNamed: image)
+    init(screen: CGRect , adjustment: CGFloat){
+        self.radius = (screen.width + screen.height) * 0.025 * adjustment
+        let texture = SKTexture(imageNamed: "thumbstick")
         node = SKSpriteNode(texture: texture, color: .white, size: CGSize(width: radius, height: radius))
     }
     
+    //pohyb páčky joysticku
     func moveTo(position: CGPoint) {
         node.position = position
     }
     
+    //uvedení páčky do středu joysticku
     func resetThumbstick() {
         let moveBack = SKAction.move(to: CGPoint(x: 0, y: 0), duration: 0.1)
         node.run(moveBack)
     }
-    
 }

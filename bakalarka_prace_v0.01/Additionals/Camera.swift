@@ -9,6 +9,8 @@
 import Foundation
 import SpriteKit
 
+// Camera focusing on Node and following it within defined boundaries
+//
 extension SKCameraNode {
     func movement(within boundaries: SKSpriteNode,cameraFocusOn focusedNode: SKSpriteNode, durationOfMovement duration: TimeInterval) {
         let left : CGFloat = -boundaries.frame.width / 2 + (self.scene!.size.width / 2) * self.xScale
@@ -33,6 +35,7 @@ extension SKCameraNode {
         self.run(SKAction.move(to: position, duration: duration))
     }
     
+    //Scaling
     func scaleFor(device: UIUserInterfaceIdiom) {
         switch device {
         case .phone:

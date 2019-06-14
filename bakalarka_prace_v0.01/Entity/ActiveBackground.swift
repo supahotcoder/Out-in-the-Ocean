@@ -18,6 +18,7 @@ class ActiveBackground: GKEntity {
         addComponent(spriteComponent)
         
         //let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false)
+        
         // Contact bude jenom na střední kruh
         let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false, pathBody: SKPhysicsBody.init(circleOfRadius: 60))
         addComponent(contactComponent)

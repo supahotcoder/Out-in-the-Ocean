@@ -27,10 +27,9 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     weak var playerNode : SKSpriteNode?
     private var joystick : Joystick!
     private var thumbstick : Thumbstick!
-    private weak var joystickNode :SKSpriteNode?
+    weak var joystickNode :SKSpriteNode?
     var entityManager : EntityManager!
     
-    var joystickFrame: SKNode?
     weak var background : SKSpriteNode?
     var goals : [ActiveBackground] = [ActiveBackground]()
     
@@ -42,12 +41,11 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     
     var lastUpdateTimeInterval: TimeInterval = 0
     
-    //TESTING
-    var pauseButton: SKSpriteNode?
-    var resumeButton: SKSpriteNode?
-    var restartButton: SKSpriteNode?
-    var menuButton: SKSpriteNode?
-    var pauseBackground: SKSpriteNode?
+    private var pauseButton: SKSpriteNode?
+    private var resumeButton: SKSpriteNode?
+    private var restartButton: SKSpriteNode?
+    private var menuButton: SKSpriteNode?
+    private var pauseBackground: SKSpriteNode?
     
     
     // MARK: - DIDMOVE
@@ -59,17 +57,19 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         
         //PHYSICS SETUP
         physicsWorld.contactDelegate = self
-
-        #warning("joystick setup je úplně cancer PŘEDĚLAT")
+        
+        //Device adjustments -> (iPhone,iPad)
+        let device = UIDevice.current.userInterfaceIdiom
+        let screen = UIScreen.main.bounds
+        let adjustment = deviceAdjustments(device, screen)
+        
+        #warning("joystick setup PŘEDĚLAT")
         //JOYSTICK SETUP
-        thumbstick = Thumbstick(image: "thumbstick", screen: UIScreen.main.bounds,device: UIDevice.current.userInterfaceIdiom)
-        joystick = Joystick(screen: UIScreen.main.bounds,device: UIDevice.current.userInterfaceIdiom)
+        thumbstick = Thumbstick(screen: screen, adjustment: adjustment)
+        joystick = Joystick(screen: screen, adjustment: adjustment)
         joystickNode = joystick.node
         joystickNode?.addChild(thumbstick.node)
-//        joystickNode?.alpha = CGFloat(0.4)
-        joystickFrame = JoystickFrame(screen: UIScreen.main.bounds,device: UIDevice.current.userInterfaceIdiom).node
-        joystickFrame?.addChild(joystickNode!)
-        joystickFrame?.zPosition = 10
+        joystickNode?.zPosition = 10
         
         // ENTITY SETUP
         entityManager = EntityManager(scene: self.scene!)
@@ -82,11 +82,12 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         
         //CAMERA SETUP
         let cameraNode = SKCameraNode()
-        cameraNode.addChild(joystickFrame!)
+        cameraNode.addChild(joystickNode!)
         self.camera = cameraNode
         addChild(cameraNode)
         camera!.movement(within: background!, cameraFocusOn: playerNode! , durationOfMovement: 0)
-        camera?.scaleFor(device: UIDevice.current.userInterfaceIdiom)
+        camera?.scaleFor(device: device)
+        
         //DISPLAY TEXT SETUP
         goalText.fontName = "Futura-CondensedExtraBold"
         goalText.numberOfLines = 3
@@ -97,8 +98,8 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         storyText.numberOfLines = 5
         
         //Pause-menu setup
-        pauseButton = SKSpriteNode(texture: SKTexture(imageNamed: "mainMenu"), color: .white, size: CGSize(width: UIScreen.main.bounds.size.width * 0.12, height: UIScreen.main.bounds.size.height * 0.15))
-        pauseButton!.position = CGPoint(x: UIScreen.main.bounds.size.width / 2 - (pauseButton?.size.width)! / 2, y: UIScreen.main.bounds.size.height / 2 - (pauseButton?.size.height)! / 2)
+        pauseButton = SKSpriteNode(texture: SKTexture(imageNamed: "mainMenu"), color: .white, size: CGSize(width: screen.width * 0.12, height: screen.height * 0.15))
+        pauseButton!.position = CGPoint(x: screen.width / 2 - (pauseButton?.size.width)! / 2, y: screen.height / 2 - (pauseButton?.size.height)! / 2)
         pauseButton!.zPosition = 10
         let lbl = SKLabelNode(text: "| |")
         lbl.position = CGPoint(x: 0, y: -5)
@@ -176,12 +177,9 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
                     self.view?.presentScene(scene)
                 }
             }
-            if let joystickNode = joystickNode {
-                let loc = touch.location(in: joystickNode)
-                joystick.didTouchJoystick(location: loc)
-                if touch.tapCount == 2 && joystick.insideFrame{
-                    joystick.stealthMode(playerNode: playerNode!)
-                }
+            joystick.didTouchJoystick(location: t!)
+            if touch.tapCount == 2 && joystick.insideFrame{
+                joystick.stealthMode(playerNode: playerNode!)
             }
         }
     }
@@ -189,12 +187,11 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let position = touch.location(in: joystickNode!)
-            //FIXME: - 45 degree too fast
-            let length = position.length()//sqrt(pow(position.y, 2) + pow(position.x, 2))
+            let length = position.length()
             let angle = atan2(position.y, position.x)
             joystick.turnAngle = angle
             //TESTING
-            if  thumbstick.radius > length, joystick.insideFrame{//joystick.touchRadius > length {
+            if  thumbstick.radius > length, joystick.insideFrame{
                 joystick.touch = position
                 thumbstick.moveTo(position: position)
             }
@@ -238,7 +235,6 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         lastUpdateTimeInterval = currentTime
         
         if (view?.isPaused)! {
-            print("pauza")
             pauseGame()
         }
         
@@ -313,11 +309,12 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         scene?.isPaused = false
     }
     
+    //MARK: - Saving latest Level
+    
     func saveLevel(levelName: String) {
         UserDefaults.standard.set(levelName, forKey: "LastLevel")
         UserDefaults.standard.synchronize()
     }
-    
     
     //MARK: - Interruption handling
     @objc func applicationWillResignActive() {
