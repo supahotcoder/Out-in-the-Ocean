@@ -1,6 +1,9 @@
 ##Project-wide
 .DS_STORE
 
+##Custom for my own Work
+Sounds/
+Assets.xcassets/
 
 ## Build generated
 build/
