@@ -10,7 +10,6 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
-var backgroundMusicPlayer: AVAudioPlayer? = nil
 
 protocol GameSceneProtocol {
     // implementace bude nutná u každého levelu solo
@@ -22,24 +21,32 @@ protocol GameSceneProtocol {
 typealias GameScene = GameSceneClass & GameSceneProtocol
 
 class GameSceneClass: SKScene , SKPhysicsContactDelegate {
+
     
     // MARK: - GLOBAL VARS
     weak var playerNode : SKSpriteNode?
     private var joystick : Joystick!
-    private var thumbstick : Thumbstick!
     weak var joystickNode :SKSpriteNode?
     var entityManager : EntityManager!
-    
+    // static kvuli tomu at nemame vice instantci audioPrehravacu
+    private static var backgroundMusicPlayer: AVAudioPlayer? = nil
+
     weak var background : SKSpriteNode?
     var goals : [ActiveBackground] = [ActiveBackground]()
     
     var goalText = SKLabelNode()
+    #warning("Delete or reimplement StoryComponent")
+    //#error("When story text is about to be selected: pause, focus etc.")
     var storyText = SKLabelNode()
     var warningText = SKLabelNode()
     
     var playerSpawnPosition: CGPoint? = nil
     
     var lastUpdateTimeInterval: TimeInterval = 0
+    var focusNodes: Queue<SKSpriteNode?> = Queue<SKSpriteNode?>()
+    var focusTimes: Queue<TimeInterval> = Queue<TimeInterval>()
+
+    static var haveDied = false
     
     private var pauseButton: SKSpriteNode?
     private var resumeButton: SKSpriteNode?
@@ -47,6 +54,16 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     private var menuButton: SKSpriteNode?
     private var pauseBackground: SKSpriteNode?
     
+    required init?(coder aDecoder: NSCoder) {
+        //RESET MUSIC
+        GameSceneClass.backgroundMusicPlayer?.pause()
+        print(GameSceneClass.haveDied)
+        if !GameSceneClass.haveDied{
+            GameSceneClass.backgroundMusicPlayer?.stop()
+            GameSceneClass.backgroundMusicPlayer = nil
+        }
+        super.init(coder: aDecoder)
+    }
     
     // MARK: - DIDMOVE
     
@@ -63,15 +80,13 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         let screen = UIScreen.main.bounds
         let adjustment = deviceAdjustments(device, screen)
         
-        #warning("joystick setup PŘEDĚLAT")
         //JOYSTICK SETUP
-        thumbstick = Thumbstick(screen: screen, adjustment: adjustment)
         joystick = Joystick(screen: screen, adjustment: adjustment)
         joystickNode = joystick.node
-        joystickNode?.addChild(thumbstick.node)
+        joystickNode?.addChild(joystick.thumbstick.node)
         joystickNode?.zPosition = 10
         
-        // ENTITY SETUP
+        //ENTITY SETUP
         entityManager = EntityManager(scene: self.scene!)
         
         //PLAYER SETUP
@@ -96,7 +111,7 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         
         storyText.fontName = "Futura-CondensedExtraBold"
         storyText.numberOfLines = 5
-        
+
         //Pause-menu setup
         pauseButton = SKSpriteNode(texture: SKTexture(imageNamed: "mainMenu"), color: .white, size: CGSize(width: screen.width * 0.12, height: screen.height * 0.15))
         pauseButton!.position = CGPoint(x: screen.width / 2 - (pauseButton?.size.width)! / 2, y: screen.height / 2 - (pauseButton?.size.height)! / 2)
@@ -113,34 +128,92 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         pauseGameSetup()
         print(UIScreen.main.bounds)
 
+        if (GameSceneClass.haveDied) {
+            if let feedback = loadFeedback() {
+                updateFeedbackText(with: feedback)
+            }
+        }
+        // RESETING DUE TO ALIVE CONDITION
+        GameSceneClass.haveDied = false
+    }
+
+    //MARK: - MOVEMENT FUNCTIONS
+
+    func moveInDirection(direction: CGPoint, pulseForce: CGVector, with: SKSpriteNode) {
+        with.physicsBody?.applyImpulse(pulseForce, at: direction)
+    }
+
+    func changeLevelGravity(gravity: CGVector) {
+        self.physicsWorld.gravity = gravity
+    }
+
+    func move(with: SKSpriteNode,towards: SKSpriteNode, pulseForce: CGVector) {
+        with.physicsBody?.applyImpulse(pulseForce, at: towards.position)
     }
 
     //MARK: - DISPLAY TEXT
     
-    func updateGoalText(with text: String, around: SKNode) {
-        addChild(goalText)
-        updateText(with: text, label: &goalText, around: around, alligment: .rightTop)
-        displayText(displayIn: 1, fadeOut: 2, label: goalText)
+    func updateGoalText(with text: String, around: SKNode, displayIn: Double=1, fadeOut: Double=2) {
+        var textNode = goalText.copy() as! SKLabelNode
+        updateText(with: text, label: &textNode)
+        if (focusTimes.isEmpty) {
+            displayText(displayIn: displayIn, fadeOut: fadeOut, label: textNode, around: around, alligment: .rightTop)
+        }
+        else{
+            let timeToWait = focusTimes.front! - Date().timeIntervalSince1970
+            print(timeToWait)
+            displayText(displayIn: displayIn + timeToWait, fadeOut: fadeOut + timeToWait, label: textNode, around: around, alligment: .rightTop)
+        }
+    }
+
+    func updateFeedbackText(with text: String) {
+        var textNode = goalText.copy() as! SKLabelNode
+        updateText(with: text, label: &textNode)
+        displayText(displayIn: 0.1, fadeOut: 0.5, label: textNode, around: playerNode!, alligment: .onEntity)
+    }
+
+    @discardableResult
+    func updateStoryText(with text: String, around: SKNode, displayIn: Double=1, fadeOut: Double=2, timeToFocusOn: Double?=nil) -> SKLabelNode {
+        var textNode = storyText.copy() as! SKLabelNode
+        updateText(with: text, label: &textNode)
+        displayText(displayIn: displayIn, fadeOut: fadeOut, label: textNode, around: around, alligment: .rightBottom)
+        focusOnNode(node: around, timeToFocusOn: timeToFocusOn ?? TimeInterval(text.count / 6))
+        disableMovement()
+        return textNode
     }
     
-    func updateStoryText(with text: String, around: SKNode) {
-        addChild(storyText)
-        updateText(with: text, label: &storyText, around: around, alligment: .rightTop)
-        displayText(displayIn: 1, fadeOut: 2, label: goalText)
+    func updateWarningText(with text: String, around: SKNode, displayIn: Double=0.5, fadeOut: Double=1) {
+        var textNode = warningText.copy() as! SKLabelNode
+        updateText(with: text, label: &textNode)
+        displayText(displayIn: displayIn, fadeOut: fadeOut, label: textNode, around: around, alligment: .leftBottom)
     }
     
-    func updateWarningText(with text: String, around: SKNode) {
-        addChild(warningText)
-        updateText(with: text, label: &warningText, around: around, alligment: .rightTop)
-        displayText(displayIn: 1, fadeOut: 2, label: goalText)
+    func focusOnNode(node: SKNode, timeToFocusOn: TimeInterval) {
+        focusNodes.enqueue(node as? SKSpriteNode)
+        if (focusTimes.isEmpty){
+            focusTimes.enqueue(Date().timeIntervalSince1970 + timeToFocusOn)
+        }
+        else {
+            let timeOffset = abs(Date().timeIntervalSince1970 - focusTimes.last!)
+            focusTimes.enqueue(Date().timeIntervalSince1970 + timeToFocusOn + timeOffset)
+        }
+    }
+    
+    func focusOnNodes(nodes: [SKNode], timesToFocusOn: [TimeInterval]) {
+        if (nodes.count == timesToFocusOn.count){
+            for (node, timeToFocusOn) in zip(nodes, timesToFocusOn) {
+                focusNodes.enqueue(node as? SKSpriteNode)
+                focusTimes.enqueue(Date().timeIntervalSince1970 + timeToFocusOn)
+            }
+        }
     }
 
 
-    private func updateText(with text: String, label: inout SKLabelNode, around: SKNode, alligment: position) {
+    private func updateText(with text: String, label: inout SKLabelNode) {
+        addChild(label as SKNode)
         label.text = text
         label.fontSize = 10
         label.zPosition = 5
-        label.trackNode(node: around,labelAlligment: alligment.toCGPoint)
         label.alpha = 0
     }
 
@@ -190,35 +263,47 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
             let length = position.length()
             let angle = atan2(position.y, position.x)
             joystick.turnAngle = angle
-            //TESTING
-            if  thumbstick.radius > length, joystick.insideFrame{
+            
+            if  joystick.thumbstick.radius > length, joystick.insideFrame{
                 joystick.touch = position
-                thumbstick.moveTo(position: position)
             }
             else if joystick.insideFrame {
                 let pos = CGPoint(x: cos(angle) * joystick.touchRadius, y: sin(angle) * joystick.touchRadius)
-                let thumb = CGPoint(x: cos(angle) * thumbstick.radius, y: sin(angle) * thumbstick.radius)
                 joystick.touch  = pos
-                thumbstick.moveTo(position: thumb)
             }
         }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         joystick.stopMovement()
-        thumbstick.resetThumbstick()
-        joystick.touch = CGPoint(x: 0, y: 0)
+    }
+    
+    func disableMovement(){
+        joystick.stopMovement()
+        joystickNode?.isPaused = true
+        joystickNode?.isHidden = true
+        joystickNode?.removeFromParent()
+    }
+    
+    func enableMovement(){
+        joystickNode?.isPaused = true
+        joystickNode?.isHidden = false
+        camera?.addChild(joystickNode!)
     }
     
     //MARK: - SOUNDS
     
     func backgroundMusic(fileName: String ,extension ex: String){
         do {
-            if backgroundMusicPlayer == nil {
-                try backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: fileName, withExtension: ex)!)
-                backgroundMusicPlayer!.numberOfLoops = 10
-                backgroundMusicPlayer!.prepareToPlay()
-                backgroundMusicPlayer!.play()
+            if GameSceneClass.backgroundMusicPlayer == nil {
+                try GameSceneClass.backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: fileName, withExtension: ex)!)
+                GameSceneClass.backgroundMusicPlayer!.numberOfLoops = -1
+                GameSceneClass.backgroundMusicPlayer!.prepareToPlay()
+                GameSceneClass.backgroundMusicPlayer!.play()
+            }
+            else{
+                GameSceneClass.backgroundMusicPlayer!.prepareToPlay()
+                GameSceneClass.backgroundMusicPlayer!.play()
             }
         } catch {
         }
@@ -239,7 +324,20 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         }
         
         joystick.movement(moveWith: playerNode!)
-        camera?.movement(within: background!, cameraFocusOn: playerNode! , durationOfMovement: 0.3)
+        if (!focusTimes.isEmpty && Date().timeIntervalSince1970 >= focusTimes.front!){
+            focusTimes.dequeue()
+            focusNodes.dequeue()
+            if (focusNodes.isEmpty){
+                enableMovement()
+            }
+        }
+        
+        if (focusNodes.isEmpty){
+            camera?.movement(within: background!, cameraFocusOn: playerNode! , durationOfMovement: 0.3)
+        }
+        else{
+            camera?.movement(within: background!, cameraFocusOn: focusNodes.front!! , durationOfMovement: 0.3)
+        }
         entityManager.update(deltaTime)
         
     }
@@ -277,6 +375,7 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     }
     
      func pauseGame() {
+         GameSceneClass.backgroundMusicPlayer?.pause();
         pauseButton?.isHidden = true
         restartButton?.isHidden = false
         resumeButton?.isHidden = false
@@ -292,6 +391,7 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     }
     
     func unPauseGame() {
+        GameSceneClass.backgroundMusicPlayer?.play();
         pauseButton?.isHidden = false
         restartButton?.isHidden = true
         resumeButton?.isHidden = true
@@ -309,11 +409,20 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         scene?.isPaused = false
     }
     
-    //MARK: - Saving latest Level
+    //MARK: - Saving/Loading from device app-memory
     
     func saveLevel(levelName: String) {
         UserDefaults.standard.set(levelName, forKey: "LastLevel")
         UserDefaults.standard.synchronize()
+    }
+
+    func saveFeedback(feedback: String) {
+        UserDefaults.standard.set(feedback, forKey: "Feedback")
+        UserDefaults.standard.synchronize()
+    }
+
+    func loadFeedback() -> String? {
+        return UserDefaults.standard.string(forKey: "Feedback")
     }
     
     //MARK: - Interruption handling

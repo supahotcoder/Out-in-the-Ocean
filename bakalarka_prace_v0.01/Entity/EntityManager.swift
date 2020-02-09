@@ -31,7 +31,25 @@ class EntityManager {
             scene?.addChild(msgLabel)
         }
     }
-    
+
+    func addComponentToPlayer(component: GKComponent) {
+        player?.addComponent(component)
+    }
+
+    func tellStory(text: String, around: SKNode,fadeIn: TimeInterval, fadeOut: TimeInterval) -> SKLabelNode? {
+        if !gameOver{
+            if let scn = scene as? GameSceneClass  {
+                let timeUntilNextText = TimeInterval(text.count / 3) + fadeIn + fadeOut - 0.5
+                return scn.updateStoryText(with: text, around: around, displayIn: fadeIn, fadeOut: fadeOut, timeToFocusOn: timeUntilNextText)
+            }
+        }
+        return nil
+    }
+
+//    func getEntityFromNode(SKNode: node) -> [GKEntity]{
+//        gameEntities.filter { entity in entity.component(ofType: SpriteComponent.self)!.node. }
+//    }
+
     //Uložení hráče do proměnné (Optimalizace na výkon)
     private func setPlayer(player: GKEntity) {
         self.player = player
@@ -56,10 +74,10 @@ class EntityManager {
     
     //MARK: - MOVECOMPONENT UTILITIES
     
-    func enemy() -> GKEntity {
+    func enemy() -> GKEntity? {
         // promíchá protivníky
         enemies = Set(enemies.shuffled().map{$0})
-        return enemies.first!
+        return enemies.first ?? nil
     }
     
     func entitiesWithMoveComponent() -> [MoveComponent] {
@@ -114,7 +132,7 @@ class EntityManager {
     }
     
     //MARK: - SETUPS
-    
+
     func loadPlayer(position: CGPoint) -> SKSpriteNode? {
         let player = Player(imageName: "player_test", entityManager: self)
         setPlayer(player: player)
@@ -128,14 +146,17 @@ class EntityManager {
         return nil
     }
     //MARK: Loading Entities
-    func loadSearcher(){
+    @discardableResult
+    func loadSearcher() -> SKNode?{
         let searcher = Searcher(imageName: "evil_player1", entityManager: self)
         if let sNode = searcher.component(ofType: SpriteComponent.self)?.node {
             sNode.position = CGPoint.randomPosition(x: 100...840,y: -640...640)
             sNode.zPosition = 3
             self.add(entity: searcher)
+            return sNode
         }
         enemies.insert(searcher)
+        return nil
     }
     
     func loadActiveBackground(imageName: String) -> ActiveBackground? {
@@ -167,8 +188,8 @@ class EntityManager {
         }
         return nil
     }
-    
-    func loadWander(messages: [String] = [""], loopOn: Int = -1, warningMsgs: [String] = [""]) {
+    @discardableResult
+    func loadWander(messages: [String] = [""], loopOn: Int = -1, warningMsgs: [String] = [""]) -> SKNode? {
         let wander: Wander
         if messages == [""]{
             wander = Wander(entityManager: self)
@@ -181,7 +202,24 @@ class EntityManager {
             sNode.zRotation = CGFloat.random(in: 0...360)
             sNode.zPosition = 3
             self.add(entity: wander)
+            return sNode
         }
+        return nil
+    }
+
+    @discardableResult
+    func loadStoryTeller(storyToTell: [String]) -> SKNode?{
+        let storyTeller: StoryTeller
+        // STATIC UNIT
+        storyTeller = StoryTeller(entityManager: self, storyToTell: storyToTell)
+        if let sNode = storyTeller.component(ofType: SpriteComponent.self)?.node{
+            sNode.position = CGPoint.randomPosition(x: -10...10,y: -10...10)
+            sNode.zRotation = CGFloat(0)
+            sNode.zPosition = 3
+            self.add(entity: storyTeller)
+            return sNode
+        }
+        return nil
     }
     
 }

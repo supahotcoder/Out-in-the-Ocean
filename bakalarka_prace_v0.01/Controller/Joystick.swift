@@ -17,9 +17,25 @@ class Joystick {
     private let maxVelocity : CGFloat = 100
     private let speed : CGFloat = 4
     
-    var touch  = CGPoint(x: 0, y: 0)
+    var touch : CGPoint = CGPoint(x: 0, y: 0){
+        // až při nastavování místa doteku v joysticku se počítá přesný pohyb páčky
+        // hlavní důvod tohohle je přehlednost v GameScene
+        willSet (position){
+            if  thumbstick.radius < position.length(){
+                let startPosition = CGPoint(x: (position.x / touchRadius) , y: (position.y / touchRadius))
+                let thumb = CGPoint(x: startPosition.x * thumbstick.radius, y: startPosition.y * thumbstick.radius)
+                thumbstick.moveTo(position: thumb)
+            }
+            else{
+                thumbstick.moveTo(position: position)
+            }
+        }
+    }
+    
     let touchRadius : CGFloat
     var turnAngle : CGFloat = 0
+    
+    let thumbstick : Thumbstick
     
     init(screen: CGRect,adjustment: CGFloat) {
         self.touchRadius = (screen.width + screen.height) * 0.05 * adjustment
@@ -28,6 +44,9 @@ class Joystick {
         node = SKSpriteNode(texture: texture, color: .white, size: CGSize(width: touchRadius, height: touchRadius))
         node?.position = CGPoint(x: Double(screen.width) * -0.3, y: Double(screen.height) *  -0.3)
         insideFrame = false
+        
+        //inicializace páčky v joysticku
+        thumbstick = Thumbstick(screen: screen, adjustment: adjustment)
     }
     
     //kontrola kliknutí do joysticku
@@ -38,6 +57,7 @@ class Joystick {
     //konec pohybu
     func stopMovement(){
         insideFrame = false
+        touch = CGPoint(x: 0, y: 0)
     }
     
     //zpomalení

@@ -25,10 +25,4 @@ class Thumbstick{
     func moveTo(position: CGPoint) {
         node.position = position
     }
-    
-    //uvedení páčky do středu joysticku
-    func resetThumbstick() {
-        let moveBack = SKAction.move(to: CGPoint(x: 0, y: 0), duration: 0.1)
-        node.run(moveBack)
-    }
 }

@@ -10,6 +10,43 @@ import Foundation
 import GameplayKit
 import SpriteKit
 
+public struct Queue<T> {
+    fileprivate var array = [T]()
+    
+    public var count: Int {
+        return array.count
+    }
+    
+    public var isEmpty: Bool {
+        return array.isEmpty
+    }
+    
+    public func asArray() -> [T]{
+        return array
+    }
+    
+    public var last: T? {
+        return array.last
+    }
+    
+    public mutating func enqueue(_ element: T) {
+        array.append(element)
+    }
+    
+    @discardableResult
+    public mutating func dequeue() -> T? {
+        if isEmpty {
+            return nil
+        } else {
+            return array.removeFirst()
+        }
+    }
+    
+    public var front: T? {
+        return array.first
+    }
+}
+
 extension SKLabelNode{
     // pro zobrazování textu poblíž node
     func trackNode(node: SKNode,labelAlligment: CGPoint = CGPoint(x: 0, y: 0)) {

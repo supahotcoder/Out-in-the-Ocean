@@ -28,7 +28,7 @@ class MessageComponent: GKComponent {
         self.entityManager = entityManager
         entityNode = node
         msgs = messages
-        loop = loopOn
+        loop = loopOn >= msgs.count ? msgs.count - 1 : loopOn
         warning = warningMsgs
         super.init()
 
@@ -57,7 +57,7 @@ class MessageComponent: GKComponent {
     }
     
     func showWarningMsg() {
-        if msg.parent == nil{
+        if msg.parent == nil && warning.count != 0{
             let i = Int.random(in: 0..<warning.count)
             prepareMsg(with: warning[i],fadeIn: 0, fadeOut: 1)
         }
@@ -65,9 +65,8 @@ class MessageComponent: GKComponent {
     
     private func prepareMsg(with text: String,fadeIn: TimeInterval, fadeOut: TimeInterval) {
         msg.text = text
-        msg.trackNode(node: entityNode,labelAlligment: position.rightBottom.toCGPoint)
         entityManager.addMsg(msgLabel: msg)
-        displayText(displayIn: fadeIn, fadeOut: fadeOut, label: msg)
+        displayText(displayIn: fadeIn, fadeOut: fadeOut, label: msg, around: entityNode, alligment: position.rightBottom)
     }
 
     

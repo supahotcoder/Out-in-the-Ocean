@@ -35,7 +35,7 @@ class ContactComponent: GKComponent {
             physicsBody.linearDamping = 1
             physicsBody.angularDamping = 0.7
             
-            //defeaultně bude false
+            //defaultně bude false
             physicsBody.affectedByGravity = false
             //nastaví vytovřený physics body do reálného physics body
             spriteNode.node.physicsBody = physicsBody

@@ -64,6 +64,13 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
     //MARK: - UPDATE
     override func update(deltaTime seconds: TimeInterval) {
         super.update(deltaTime: seconds)
+        let player = entityManager.player
+        let playerDistance = ((player?.component(ofType: SpriteComponent.self)?.node.position)! - (entity?.component(ofType: SpriteComponent.self)?.node.position)!).length()
+        if (entity?.component(ofType: StoryComponent.self) != nil){
+//            TUTAJ NASETUJ BEHAVIOR PRO STORY COMPONNENT
+//        TODO: - DELEJ SPINKO ALE
+//            print("story" ,"test ", playerDistance)
+        }
         
         let avoidOthers = entityManager.avoidEntities()
         // player se defaultně vyřazuje protože ho ovládá hráč
@@ -72,14 +79,16 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
         if entity?.component(ofType: AvoidCollisionComponent.self) != nil && entity?.component(ofType: PlayerComponent.self) == nil{
             let player = entityManager.player
             //behavior = MoveSettings(npc: entity!, avoid: avoidOthers, player: player!)
-            behavior = MoveSettings(npc: entity!, avoid: avoidOthers, player: player!, enemy: entityManager.enemy())
+//            if (entity?.component(ofType: StoryComponent.self) != nil){print("type 1")}
+            behavior = MoveSettings(npc: entity!, avoid: avoidOthers, player: player!, enemy: entityManager.enemy() ?? nil)
         }
         //Typ 2: Ochraňuje entitu a napadá hráče
         else if (entity?.component(ofType: GuardComponent.self)) != nil{
             let player = entityManager.player // nalezení hráče
             let target = player?.component(ofType: MoveComponent.self)
             let protect = entityManager.closestProtectionComponent(from: CGPoint(tuple: position.doubleConvetor()))
-            
+//            if (entity?.component(ofType: StoryComponent.self) != nil){print("type 2")}
+
             behavior = MoveSettings(npc: entity!,targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!,protectEntity: protect)
         }
         //Typ 3: vyhledávání hráče
@@ -87,6 +96,8 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
         else if entity?.component(ofType: PlayerComponent.self) == nil && entity?.component(ofType: AvoidCollisionComponent.self) == nil{
             let player = entityManager.player // nalezení hráče
             let target = player?.component(ofType: MoveComponent.self)
+//            if (entity?.component(ofType: StoryComponent.self) != nil){print("type 3")}
+
             behavior = MoveSettings(npc: entity!,targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!)
         }
         // Zabraňování kolizí z okrajem mapy

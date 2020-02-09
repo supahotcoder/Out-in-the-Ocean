@@ -17,6 +17,7 @@ class SpriteComponent: GKComponent{
     
     init(entity: GKEntity,texture: SKTexture,size: CGSize) {
         node = SKSpriteNode(texture: texture, color: .white, size: size)
+        node.entity = entity
         super.init()
     }
     

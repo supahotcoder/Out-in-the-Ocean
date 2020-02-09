@@ -79,34 +79,50 @@ class MoveSettings: GKBehavior {
         if distance < 190, let msg = npc.component(ofType: MessageComponent.self) {
                 msg.showMsg()
             }
-        
+        // story teller
+        if let msg = npc.component(ofType: StoryComponent.self), distance < 290{
+            msg.tellStory()
+        }
+
         setWeight(60, for: GKGoal(toAvoid: av, maxPredictionTime: 10))
         setWeight(50, for: GKGoal(toWander: 12389))
     }
     
     //MARK: - INTERACT NPC (MSG, WARNING)
-    init(npc: GKEntity,avoid: [GKAgent],player: GKEntity, enemy: GKEntity) {
+    init(npc: GKEntity,avoid: [GKAgent],player: GKEntity, enemy: GKEntity?) {
         super.init()
-        let enemySprite = enemy.component(ofType: SpriteComponent.self)!.node
+
         let playerSprite = player.component(ofType: SpriteComponent.self)?.node
         let npcSprite = npc.component(ofType: SpriteComponent.self)?.node
-        
+
         let playerDistance = ((playerSprite?.position)! - (npcSprite?.position)!).length()
-        let enemyDistance = (enemySprite.position - (npcSprite?.position)!).length()
-        
+
         var av = avoid
         av.append(player.component(ofType: MoveComponent.self)!)
-        
-        if let msg = npc.component(ofType: MessageComponent.self),playerDistance < 190{
-            if enemyDistance < 400{
-                msg.showWarningMsg()
+
+        // story teller
+        if let msg = npc.component(ofType: StoryComponent.self), playerDistance < 290{
+            msg.tellStory()
+        }
+
+        setWeight(60, for: GKGoal(toAvoid: av, maxPredictionTime: 10))
+//         TODO: - SEARCH FOR IF LET SO I CAN SEE IF I AIN'T IGNORING SMT
+        if let enemySprite = enemy?.component(ofType: SpriteComponent.self)!.node{
+            let enemyDistance = (enemySprite.position - (npcSprite?.position)!).length()
+            if let msg = npc.component(ofType: MessageComponent.self),playerDistance < 190{
+                if enemyDistance < 400 {
+                    msg.showWarningMsg()
+                }
+                else{
+                    msg.showMsg()
+                }
             }
-                
-            else{
+        }
+        else {
+            if let msg = npc.component(ofType: MessageComponent.self),playerDistance < 190 {
                 msg.showMsg()
             }
         }
-        setWeight(60, for: GKGoal(toAvoid: av, maxPredictionTime: 10))
         //Due to very poor documentation GKBehavoir, I've decided to use this magic constant
         //as it was producing the best(for my game) results
         setWeight(50, for: GKGoal(toWander: 12389))
