@@ -31,7 +31,7 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     // static kvuli tomu at nemame vice instantci audioPrehravacu
     private static var backgroundMusicPlayer: AVAudioPlayer? = nil
 
-    weak var background : SKSpriteNode?
+    var background : SKSpriteNode?
     var goals : [ActiveBackground] = [ActiveBackground]()
     
     var goalText = SKLabelNode()
@@ -340,6 +340,16 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         }
         entityManager.update(deltaTime)
         
+    }
+    
+    func runInBackground<T>(delay: Double, function: @escaping () -> T, completion: (() -> T)? = nil){
+        DispatchQueue.global(qos: .background).async {
+            function()
+            if let afterFunc = completion{
+                let wrapedFunc: () -> Void = {() in afterFunc()}
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: wrapedFunc)
+            }
+        }
     }
     
     private func pauseGameSetup() {

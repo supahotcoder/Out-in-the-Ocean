@@ -19,11 +19,11 @@ class MainMenu: SKScene {
     private var level: String!
     
     override func didMove(to view: SKView) {
-        level = "Level1_1"
+        level = "Level0"
         //Načtení posledního uloženého levelu
         if let lastLevel = UserDefaults.standard.string(forKey: "LastLevel"){
             //TESTING Level1_1
-            level = "Level1_1"
+            level = "Level0"
         }
         
         playButton = childNode(withName: "playGame") as? SKSpriteNode

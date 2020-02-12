@@ -25,16 +25,16 @@ class Level1_1: Level1 {
         let storyToTell = ["Teeest","Teeeest1","TEeeeST3"]
         let storyTeller = entityManager.loadStoryTeller(storyToTell: storyToTell)!
 
-//        updateStoryText(with: "Biiiioiiiiiiiig test", around: storyTeller)
+        updateStoryText(with: "Biiiioiiiiiiiig test", around: storyTeller)
 
         // WANDER SETUP
-//        updateStoryText(with: "Find out what is this realm about\n", around: entityManager.loadWander()!, displayIn: 2)
+        updateStoryText(with: "Find out what is this realm about\n", around: entityManager.loadWander()!, displayIn: 2)
         let msgs = ["Hi" , "...",]
         let warning = ["Get out", "Beware","Watch out", "Booo"]
 
         let wander = entityManager.loadWander(messages: msgs, loopOn: 3, warningMsgs: warning)!
 
-//        updateStoryText(with: "Testing ", around: wander, displayIn: 2)
+        updateStoryText(with: "Testing ", around: wander, displayIn: 2)
 
         //      FEEDBACK SETUP
 //        TODO: - zamyslet se nad novymi vecmi co pridat do programming casti, jinak vytvorit dalsi urven
