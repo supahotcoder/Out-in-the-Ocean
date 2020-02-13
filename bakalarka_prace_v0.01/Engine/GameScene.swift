@@ -122,6 +122,7 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         lbl.fontName = "HelveticaNeue-CondensedBlack"
         lbl.fontSize = (pauseButton?.size.height)! / 2
         
+        pauseButton!.run(SKAction.colorize(with: .black, colorBlendFactor: 1, duration: 0))
         pauseButton!.addChild(lbl)
         camera?.addChild(pauseButton!)
         
@@ -173,19 +174,19 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     }
 
     @discardableResult
-    func updateStoryText(with text: String, around: SKNode, displayIn: Double=1, fadeOut: Double=2, timeToFocusOn: Double?=nil) -> SKLabelNode {
+    func updateStoryText(with text: String, around: SKNode, displayIn: Double=1, fadeOut: Double=2, timeToFocusOn: Double?=nil, forDuration: TimeInterval?=nil) -> SKLabelNode {
         var textNode = storyText.copy() as! SKLabelNode
         updateText(with: text, label: &textNode)
-        displayText(displayIn: displayIn, fadeOut: fadeOut, label: textNode, around: around, alligment: .rightBottom)
+        displayText(displayIn: displayIn, fadeOut: fadeOut, label: textNode, around: around, alligment: .rightBottom, forDuration: forDuration)
         focusOnNode(node: around, timeToFocusOn: timeToFocusOn ?? TimeInterval(text.count / 6))
         disableMovement()
         return textNode
     }
     
-    func updateWarningText(with text: String, around: SKNode, displayIn: Double=0.5, fadeOut: Double=1) {
+    func updateWarningText(with text: String, around: SKNode, displayIn: Double=0.5, fadeOut: Double=1, forDuration: TimeInterval?=nil) {
         var textNode = warningText.copy() as! SKLabelNode
         updateText(with: text, label: &textNode)
-        displayText(displayIn: displayIn, fadeOut: fadeOut, label: textNode, around: around, alligment: .leftBottom)
+        displayText(displayIn: displayIn, fadeOut: fadeOut, label: textNode, around: around, alligment: .leftBottom, forDuration: forDuration)
     }
     
     func focusOnNode(node: SKNode, timeToFocusOn: TimeInterval) {
@@ -350,6 +351,11 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: wrapedFunc)
             }
         }
+    }
+    
+    func waitAndRun<T>(delay: Double, function: @escaping () -> T){
+        let wrapedFunc: () -> Void = {() in function()}
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: wrapedFunc)
     }
     
     private func pauseGameSetup() {

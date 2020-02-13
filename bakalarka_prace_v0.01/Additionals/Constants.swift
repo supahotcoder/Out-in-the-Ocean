@@ -44,9 +44,10 @@ enum position  {
     }
 }
 
-func displayText(displayIn: TimeInterval,fadeOut: TimeInterval, label: SKLabelNode, around: SKNode, alligment: position=position.leftBottom){
+func displayText(displayIn: TimeInterval,fadeOut: TimeInterval, label: SKLabelNode, around: SKNode, alligment: position=position.leftBottom, forDuration: TimeInterval?=nil){
+    let showForDur = forDuration ?? TimeInterval((label.text?.count)! / 5)
     label.run(SKAction.sequence([SKAction.wait(forDuration: displayIn),SKAction.run{label.trackNode(node: around,labelAlligment: alligment.toCGPoint)},SKAction.fadeIn(withDuration: 0.3),
-                                 SKAction.wait(forDuration: TimeInterval((label.text?.count)! / 5)),SKAction.fadeOut(withDuration: fadeOut), SKAction.removeFromParent()]))
+                                 SKAction.wait(forDuration: showForDur),SKAction.fadeOut(withDuration: fadeOut), SKAction.removeFromParent()]))
 }
 
 func deviceAdjustments(_ device: UIUserInterfaceIdiom, _ screen: CGRect) -> CGFloat {

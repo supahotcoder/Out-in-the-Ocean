@@ -10,6 +10,9 @@
 		2B6C0CE18C016E280AFA14FF /* FeedbackComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6C0B341C9410A8EC32A5DE /* FeedbackComponent.swift */; };
 		2B6C0DCA7DA9B9CDB543795A /* HealthComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6C0F9BAED3ECD3026CE1FF /* HealthComponent.swift */; };
 		2B6C0E9A0D3691D2DAA957B3 /* DamageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6C087BEF11583082E3E468 /* DamageComponent.swift */; };
+		912678B523F4887B000C816C /* Level0.sks in Resources */ = {isa = PBXBuildFile; fileRef = 912678B423F4887B000C816C /* Level0.sks */; };
+		912678B723F48880000C816C /* Level0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912678B623F48880000C816C /* Level0.swift */; };
+		912678B923F494F5000C816C /* SmogEffect.sks in Resources */ = {isa = PBXBuildFile; fileRef = 912678B823F494F5000C816C /* SmogEffect.sks */; };
 		980BDAFB21BAF1C90079C355 /* Ending.sks in Resources */ = {isa = PBXBuildFile; fileRef = 980BDAFA21BAF1C90079C355 /* Ending.sks */; };
 		981329772218407600336040 /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = 981329762218407600336040 /* MainMenu.sks */; };
 		981329792218492F00336040 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981329782218492F00336040 /* MainMenu.swift */; };
@@ -62,6 +65,9 @@
 		2B6C087BEF11583082E3E468 /* DamageComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DamageComponent.swift; sourceTree = "<group>"; };
 		2B6C0B341C9410A8EC32A5DE /* FeedbackComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackComponent.swift; sourceTree = "<group>"; };
 		2B6C0F9BAED3ECD3026CE1FF /* HealthComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthComponent.swift; sourceTree = "<group>"; };
+		912678B423F4887B000C816C /* Level0.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level0.sks; sourceTree = "<group>"; };
+		912678B623F48880000C816C /* Level0.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level0.swift; sourceTree = "<group>"; };
+		912678B823F494F5000C816C /* SmogEffect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SmogEffect.sks; sourceTree = "<group>"; };
 		980BDAFA21BAF1C90079C355 /* Ending.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Ending.sks; sourceTree = "<group>"; };
 		981329762218407600336040 /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
 		981329782218492F00336040 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
@@ -154,6 +160,8 @@
 		9869781C2251008A00F42FBE /* Green */ = {
 			isa = PBXGroup;
 			children = (
+				912678B623F48880000C816C /* Level0.swift */,
+				912678B423F4887B000C816C /* Level0.sks */,
 				987F97FE21A5A564006CFAD0 /* Level1.swift */,
 				98EAF19D21525AF500A707A9 /* Level1_3.sks */,
 				986978182251006700F42FBE /* Level1_1.swift */,
@@ -184,6 +192,7 @@
 				98F2862C2215AB8200264C76 /* Warping.sks */,
 				9896FABF221ED773009B05E3 /* CrystalEffect.sks */,
 				988E165B222C9024009F6A88 /* FluidEffect.sks */,
+				912678B823F494F5000C816C /* SmogEffect.sks */,
 			);
 			path = Additionals;
 			sourceTree = "<group>";
@@ -336,11 +345,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				98EAF1A721525AF500A707A9 /* Main.storyboard in Resources */,
+				912678B523F4887B000C816C /* Level0.sks in Resources */,
 				98EAF19E21525AF500A707A9 /* Level1_3.sks in Resources */,
 				98EAF1AC21525AF600A707A9 /* LaunchScreen.storyboard in Resources */,
 				981329772218407600336040 /* MainMenu.sks in Resources */,
 				988ED9772219BBFB005AE26D /* Level2.sks in Resources */,
 				9859130A21A1BA160039A253 /* Assets.xcassets in Resources */,
+				912678B923F494F5000C816C /* SmogEffect.sks in Resources */,
 				9881866E2223640900DA2E3C /* PauseScene.sks in Resources */,
 				98B1A180220C735F000324D4 /* level1_back_sound.wav in Resources */,
 				9896FAC0221ED773009B05E3 /* CrystalEffect.sks in Resources */,
@@ -390,6 +401,7 @@
 				98F2863122174C5400264C76 /* GuardComponent.swift in Sources */,
 				9882A74C216AC9B1005F0AEE /* EntityManager.swift in Sources */,
 				987F97FF21A5A564006CFAD0 /* Level1.swift in Sources */,
+				912678B723F48880000C816C /* Level0.swift in Sources */,
 				985C26EC22568B7A00120CF9 /* Level1_3.swift in Sources */,
 				2B6C0DCA7DA9B9CDB543795A /* HealthComponent.swift in Sources */,
 				2B6C0E9A0D3691D2DAA957B3 /* DamageComponent.swift in Sources */,
