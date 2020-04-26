@@ -35,7 +35,6 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
     var goals : [ActiveBackground] = [ActiveBackground]()
     
     var goalText = SKLabelNode()
-    #warning("Delete or reimplement StoryComponent")
     //#error("When story text is about to be selected: pause, focus etc.")
     var storyText = SKLabelNode()
     var warningText = SKLabelNode()
@@ -122,7 +121,6 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         lbl.fontName = "HelveticaNeue-CondensedBlack"
         lbl.fontSize = (pauseButton?.size.height)! / 2
         
-        pauseButton!.run(SKAction.colorize(with: .black, colorBlendFactor: 1, duration: 0))
         pauseButton!.addChild(lbl)
         camera?.addChild(pauseButton!)
         
@@ -342,6 +340,7 @@ class GameSceneClass: SKScene , SKPhysicsContactDelegate {
         entityManager.update(deltaTime)
         
     }
+    
     
     func runInBackground<T>(delay: Double, function: @escaping () -> T, completion: (() -> T)? = nil){
         DispatchQueue.global(qos: .background).async {

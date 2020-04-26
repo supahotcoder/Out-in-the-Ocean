@@ -22,26 +22,26 @@ class Level1_1: Level1 {
         #warning("Level1_1 setup missing")
 
         // STORYTELLER SETUP
-        let storyToTell = ["Teeest","Teeeest1","TEeeeST3"]
+        let storyToTell = ["Hello there am I supposed to tell you some wisdom?","Oh so you assume that, because that I have a huge eye ?!","You better watch yourself,\n your only luck is that these green waters are stupid friendly", "Get out of my face already"]
         let storyTeller = entityManager.loadStoryTeller(storyToTell: storyToTell)!
 
-        updateStoryText(with: "Biiiioiiiiiiiig test", around: storyTeller)
+        updateStoryText(with: "I ain't that big though", around: storyTeller,timeToFocusOn: 3.3, forDuration: 2)
 
         // WANDER SETUP
-        updateStoryText(with: "Find out what is this realm about\n", around: entityManager.loadWander()!, displayIn: 2)
+        waitAndRun(delay: 3, function: {() in self.updateStoryText(with: "Find out what is this realm about", around: self.entityManager.loadWander()!,timeToFocusOn: 2.2, forDuration: 1.5)})
+        
         let msgs = ["Hi" , "...",]
         let warning = ["Get out", "Beware","Watch out", "Booo"]
 
         let wander = entityManager.loadWander(messages: msgs, loopOn: 3, warningMsgs: warning)!
 
-        updateStoryText(with: "Testing ", around: wander, displayIn: 2)
+        waitAndRun(delay: 5, function:{() in self.updateStoryText(with: "...", around: wander,timeToFocusOn: 2, forDuration: 1)})
 
         //      FEEDBACK SETUP
-//        TODO: - zamyslet se nad novymi vecmi co pridat do programming casti, jinak vytvorit dalsi urven
 
         var touchF: Dictionary<bitmasks,[String]> = Dictionary<bitmasks,[String]>()
-        touchF[bitmasks.wander] = ["Test1_WANDER", "Test2_WANDER"]
-        touchF[bitmasks.storyTeller] = ["Test1_BT", "Test2_BT"]
+        touchF[bitmasks.wander] = ["Find the big boi", "Only he got the knowledge"]
+        touchF[bitmasks.storyTeller] = ["Wassap", "Oh yeah get as low as you can", "Did you find it?", "Go lower"]
 
         var hintF: Dictionary<GKEntity,[String]> = Dictionary<GKEntity,[String]>()
         hintF[wander.entity!] = ["Test hint wander"]

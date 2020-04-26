@@ -13,6 +13,11 @@
 		912678B523F4887B000C816C /* Level0.sks in Resources */ = {isa = PBXBuildFile; fileRef = 912678B423F4887B000C816C /* Level0.sks */; };
 		912678B723F48880000C816C /* Level0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912678B623F48880000C816C /* Level0.swift */; };
 		912678B923F494F5000C816C /* SmogEffect.sks in Resources */ = {isa = PBXBuildFile; fileRef = 912678B823F494F5000C816C /* SmogEffect.sks */; };
+		919CD5E2240159EE00CE4512 /* LevelSelect.sks in Resources */ = {isa = PBXBuildFile; fileRef = 919CD5E1240159EE00CE4512 /* LevelSelect.sks */; };
+		919CD5E42402F29300CE4512 /* LevelSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919CD5E32402F29300CE4512 /* LevelSelect.swift */; };
+		919CD5E724042C0500CE4512 /* MenuEssential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919CD5E624042C0500CE4512 /* MenuEssential.swift */; };
+		919CD5E92405006000CE4512 /* Level2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919CD5E82405006000CE4512 /* Level2.swift */; };
+		91AFCC9823FAF5880087E901 /* main_menu_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 91AFCC9723FAF5880087E901 /* main_menu_sound.wav */; };
 		980BDAFB21BAF1C90079C355 /* Ending.sks in Resources */ = {isa = PBXBuildFile; fileRef = 980BDAFA21BAF1C90079C355 /* Ending.sks */; };
 		981329772218407600336040 /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = 981329762218407600336040 /* MainMenu.sks */; };
 		981329792218492F00336040 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981329782218492F00336040 /* MainMenu.swift */; };
@@ -36,8 +41,8 @@
 		9882A74C216AC9B1005F0AEE /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9882A74B216AC9B1005F0AEE /* EntityManager.swift */; };
 		9882A74E216ACF54005F0AEE /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9882A74D216ACF54005F0AEE /* SpriteComponent.swift */; };
 		988E165C222C9024009F6A88 /* FluidEffect.sks in Resources */ = {isa = PBXBuildFile; fileRef = 988E165B222C9024009F6A88 /* FluidEffect.sks */; };
-		988ED9752219BB98005AE26D /* Level2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988ED9742219BB98005AE26D /* Level2.swift */; };
-		988ED9772219BBFB005AE26D /* Level2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 988ED9762219BBFB005AE26D /* Level2.sks */; };
+		988ED9752219BB98005AE26D /* Level2_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988ED9742219BB98005AE26D /* Level2_3.swift */; };
+		988ED9772219BBFB005AE26D /* Level2_3.sks in Resources */ = {isa = PBXBuildFile; fileRef = 988ED9762219BBFB005AE26D /* Level2_3.sks */; };
 		98966C87219A01E600EBC0CE /* AvoidCollisionComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98966C86219A01E600EBC0CE /* AvoidCollisionComponent.swift */; };
 		9896FAC0221ED773009B05E3 /* CrystalEffect.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9896FABF221ED773009B05E3 /* CrystalEffect.sks */; };
 		989C37E122CA4F7F0053B002 /* StoryTeller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989C37E022CA4F7F0053B002 /* StoryTeller.swift */; };
@@ -68,6 +73,11 @@
 		912678B423F4887B000C816C /* Level0.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level0.sks; sourceTree = "<group>"; };
 		912678B623F48880000C816C /* Level0.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level0.swift; sourceTree = "<group>"; };
 		912678B823F494F5000C816C /* SmogEffect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SmogEffect.sks; sourceTree = "<group>"; };
+		919CD5E1240159EE00CE4512 /* LevelSelect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LevelSelect.sks; sourceTree = "<group>"; };
+		919CD5E32402F29300CE4512 /* LevelSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelect.swift; sourceTree = "<group>"; };
+		919CD5E624042C0500CE4512 /* MenuEssential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuEssential.swift; sourceTree = "<group>"; };
+		919CD5E82405006000CE4512 /* Level2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level2.swift; sourceTree = "<group>"; };
+		91AFCC9723FAF5880087E901 /* main_menu_sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = main_menu_sound.wav; path = ../../../../Downloads/main_menu_sound.wav; sourceTree = "<group>"; };
 		980BDAFA21BAF1C90079C355 /* Ending.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Ending.sks; sourceTree = "<group>"; };
 		981329762218407600336040 /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
 		981329782218492F00336040 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
@@ -91,8 +101,8 @@
 		9882A74B216AC9B1005F0AEE /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
 		9882A74D216ACF54005F0AEE /* SpriteComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
 		988E165B222C9024009F6A88 /* FluidEffect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FluidEffect.sks; sourceTree = "<group>"; };
-		988ED9742219BB98005AE26D /* Level2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level2.swift; sourceTree = "<group>"; };
-		988ED9762219BBFB005AE26D /* Level2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level2.sks; sourceTree = "<group>"; };
+		988ED9742219BB98005AE26D /* Level2_3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level2_3.swift; sourceTree = "<group>"; };
+		988ED9762219BBFB005AE26D /* Level2_3.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level2_3.sks; sourceTree = "<group>"; };
 		98966C86219A01E600EBC0CE /* AvoidCollisionComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvoidCollisionComponent.swift; sourceTree = "<group>"; };
 		9896FABF221ED773009B05E3 /* CrystalEffect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CrystalEffect.sks; sourceTree = "<group>"; };
 		989C37E022CA4F7F0053B002 /* StoryTeller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryTeller.swift; sourceTree = "<group>"; };
@@ -129,6 +139,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		912A849E23F59F36009AC805 /* Effects */ = {
+			isa = PBXGroup;
+			children = (
+				9859130721A1BA160039A253 /* BubbleEffect.sks */,
+				9859130821A1BA160039A253 /* Assets.xcassets */,
+				980BDAFA21BAF1C90079C355 /* Ending.sks */,
+				98F2862C2215AB8200264C76 /* Warping.sks */,
+				9896FABF221ED773009B05E3 /* CrystalEffect.sks */,
+				988E165B222C9024009F6A88 /* FluidEffect.sks */,
+				912678B823F494F5000C816C /* SmogEffect.sks */,
+			);
+			path = Effects;
+			sourceTree = "<group>";
+		};
+		919CD5E524042BD800CE4512 /* Menus */ = {
+			isa = PBXGroup;
+			children = (
+				9881866D2223640900DA2E3C /* PauseScene.sks */,
+				981329782218492F00336040 /* MainMenu.swift */,
+				981329762218407600336040 /* MainMenu.sks */,
+				919CD5E1240159EE00CE4512 /* LevelSelect.sks */,
+				919CD5E32402F29300CE4512 /* LevelSelect.swift */,
+				919CD5E624042C0500CE4512 /* MenuEssential.swift */,
+			);
+			path = Menus;
+			sourceTree = "<group>";
+		};
 		980A33A4216A414A00FF5385 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -141,8 +178,9 @@
 		985C26EA2256653F00120CF9 /* Purple */ = {
 			isa = PBXGroup;
 			children = (
-				988ED9742219BB98005AE26D /* Level2.swift */,
-				988ED9762219BBFB005AE26D /* Level2.sks */,
+				988ED9742219BB98005AE26D /* Level2_3.swift */,
+				988ED9762219BBFB005AE26D /* Level2_3.sks */,
+				919CD5E82405006000CE4512 /* Level2.swift */,
 			);
 			path = Purple;
 			sourceTree = "<group>";
@@ -186,13 +224,7 @@
 				98B12BA2216FAFAA008D7D7B /* Constants.swift */,
 				982234502182216D00634AF5 /* Camera.swift */,
 				984A084621997BDF00AEB709 /* Extensions.swift */,
-				9859130721A1BA160039A253 /* BubbleEffect.sks */,
-				9859130821A1BA160039A253 /* Assets.xcassets */,
-				980BDAFA21BAF1C90079C355 /* Ending.sks */,
-				98F2862C2215AB8200264C76 /* Warping.sks */,
-				9896FABF221ED773009B05E3 /* CrystalEffect.sks */,
-				988E165B222C9024009F6A88 /* FluidEffect.sks */,
-				912678B823F494F5000C816C /* SmogEffect.sks */,
+				912A849E23F59F36009AC805 /* Effects */,
 			);
 			path = Additionals;
 			sourceTree = "<group>";
@@ -200,6 +232,7 @@
 		98B1A181220C736E000324D4 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				91AFCC9723FAF5880087E901 /* main_menu_sound.wav */,
 				98B1A17F220C735F000324D4 /* level1_back_sound.wav */,
 			);
 			path = Sounds;
@@ -274,9 +307,7 @@
 				98CC13432165134000C36501 /* Entity */,
 				987F97FD21A5A54B006CFAD0 /* Stages */,
 				98607676222970300009877D /* Engine */,
-				9881866D2223640900DA2E3C /* PauseScene.sks */,
-				981329782218492F00336040 /* MainMenu.swift */,
-				981329762218407600336040 /* MainMenu.sks */,
+				919CD5E524042BD800CE4512 /* Menus */,
 				98B1A17D220C7079000324D4 /* Assets.xcassets */,
 				98EAF1AD21525AF600A707A9 /* Info.plist */,
 				98B1A181220C736E000324D4 /* Sounds */,
@@ -344,12 +375,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91AFCC9823FAF5880087E901 /* main_menu_sound.wav in Resources */,
 				98EAF1A721525AF500A707A9 /* Main.storyboard in Resources */,
 				912678B523F4887B000C816C /* Level0.sks in Resources */,
 				98EAF19E21525AF500A707A9 /* Level1_3.sks in Resources */,
 				98EAF1AC21525AF600A707A9 /* LaunchScreen.storyboard in Resources */,
 				981329772218407600336040 /* MainMenu.sks in Resources */,
-				988ED9772219BBFB005AE26D /* Level2.sks in Resources */,
+				988ED9772219BBFB005AE26D /* Level2_3.sks in Resources */,
+				919CD5E2240159EE00CE4512 /* LevelSelect.sks in Resources */,
 				9859130A21A1BA160039A253 /* Assets.xcassets in Resources */,
 				912678B923F494F5000C816C /* SmogEffect.sks in Resources */,
 				9881866E2223640900DA2E3C /* PauseScene.sks in Resources */,
@@ -377,11 +410,12 @@
 				98E79B82216BE39B005B3BEC /* Joystick.swift in Sources */,
 				98EAF1A221525AF500A707A9 /* GameScene.swift in Sources */,
 				983D5E8121CC0A7D00D11A6E /* EnemyComponent.swift in Sources */,
+				919CD5E724042C0500CE4512 /* MenuEssential.swift in Sources */,
 				98F28633221757D100264C76 /* ProtectComponent.swift in Sources */,
 				985B559121958DF700E0B866 /* MoveSettings.swift in Sources */,
 				9882A74E216ACF54005F0AEE /* SpriteComponent.swift in Sources */,
 				98B12BA3216FAFAA008D7D7B /* Constants.swift in Sources */,
-				988ED9752219BB98005AE26D /* Level2.swift in Sources */,
+				988ED9752219BB98005AE26D /* Level2_3.swift in Sources */,
 				98EAF1A421525AF500A707A9 /* GameViewController.swift in Sources */,
 				98441F3921C82A0000B542F8 /* Wander.swift in Sources */,
 				987BAE612194A65E00EA1243 /* Searcher.swift in Sources */,
@@ -395,6 +429,7 @@
 				98F2862F2215D64400264C76 /* Collectible.swift in Sources */,
 				98E79B7E216BD5C0005B3BEC /* Player.swift in Sources */,
 				987BAE632194AAFC00EA1243 /* MoveComponent.swift in Sources */,
+				919CD5E42402F29300CE4512 /* LevelSelect.swift in Sources */,
 				982234512182216D00634AF5 /* Camera.swift in Sources */,
 				984A084721997BDF00AEB709 /* Extensions.swift in Sources */,
 				98EAF19C21525AF500A707A9 /* AppDelegate.swift in Sources */,
@@ -406,6 +441,7 @@
 				2B6C0DCA7DA9B9CDB543795A /* HealthComponent.swift in Sources */,
 				2B6C0E9A0D3691D2DAA957B3 /* DamageComponent.swift in Sources */,
 				2B6C0CE18C016E280AFA14FF /* FeedbackComponent.swift in Sources */,
+				919CD5E92405006000CE4512 /* Level2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

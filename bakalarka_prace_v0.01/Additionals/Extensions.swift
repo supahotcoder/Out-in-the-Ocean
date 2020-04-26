@@ -138,6 +138,11 @@ extension CGPoint{
         self.y = CGFloat(tuple.y)
     }
     
+    func isInsideRange(position: CGPoint, rangeSize: CGFloat) -> Bool{
+           return self.x < position.x + rangeSize && self.x > position.x - rangeSize &&
+           self.y < position.y + rangeSize && self.y > position.y - rangeSize
+       }
+    
     static func - (left: CGPoint, right: CGPoint) -> CGPoint {
         return CGPoint(x: left.x - right.x, y: left.y - right.y)
     }
