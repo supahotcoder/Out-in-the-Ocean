@@ -13,15 +13,24 @@ import SpriteKit
 class Collectible: GKEntity {
     
     let entityManager: EntityManager
-    
-    init(texture tx: String, size: CGSize, id: String, protectable: Bool = false ,entityManager: EntityManager) {
+    private(set) var collected: Bool
+    private(set) var spriteComp: SpriteComponent
+
+    init(texture tx: String, size: CGSize, id: String, protectable: Bool = false ,entityManager: EntityManager, location: CGPoint? = nil) {
         self.entityManager = entityManager
+        collected = false
+//       using this approach to avoid using Optional as we are initializing spriteComp later on using self
+        spriteComp = SpriteComponent()
         super.init()
         let texture = SKTexture(imageNamed: tx)
-        let spriteComp = SpriteComponent(entity: self, texture: texture, size: size)
+        spriteComp = SpriteComponent(entity: self, texture: texture, size: size)
         self.addComponent(spriteComp)
-        
+
+        if location == nil{
         spriteComp.node.position = CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
+        }else{
+            spriteComp.node.position = location!
+        }
         
         //ID for later removal out of Scene
         spriteComp.node.name = id
@@ -36,7 +45,11 @@ class Collectible: GKEntity {
             let protectComp = ProtectComponent()
             addComponent(protectComp)
         }
-        
+    }
+
+    func collect(){
+        entityManager.remove(entity: self)
+        collected = true
     }
     
     required init?(coder aDecoder: NSCoder) {

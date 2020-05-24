@@ -21,6 +21,9 @@ class Level0: GameScene {
         
         super.didMove(to: view)
         
+        //        MUSIC SETUP
+        backgroundMusic(fileName: "level0-sound", extension: "wav")
+        
         // Smog effect
         let smogBack = SKEmitterNode(fileNamed: "SmogEffect")!
         let smogFront = SKEmitterNode(fileNamed: "SmogEffect")!

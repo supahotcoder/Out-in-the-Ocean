@@ -39,8 +39,9 @@ class EntityManager {
     func tellStory(text: String, around: SKNode,fadeIn: TimeInterval, fadeOut: TimeInterval) -> SKLabelNode? {
         if !gameOver{
             if let scn = scene as? GameSceneClass  {
-                let timeUntilNextText = TimeInterval(text.count / 3) + fadeIn + fadeOut - 0.5
-                return scn.updateStoryText(with: text, around: around, displayIn: fadeIn, fadeOut: fadeOut, timeToFocusOn: timeUntilNextText)
+                let timeUntilNextText = TimeInterval(text.count / 20) + fadeIn + fadeOut + 1.0
+                print(timeUntilNextText)
+                return scn.updateStoryText(with: text, around: around, displayIn: fadeIn, fadeOut: fadeOut, timeToFocusOn: timeUntilNextText,forDuration: timeUntilNextText - fadeIn - fadeOut - 0.5)
             }
         }
         return nil
@@ -71,7 +72,18 @@ class EntityManager {
         }
         gameEntities.remove(entity)
     }
-    
+
+    func remove(entityNodeName: String) {
+        let entity = findEntity(entityNodeName: entityNodeName)
+        if let ent =  entity{
+            remove(entity: ent)
+        }
+    }
+
+     func findEntity(entityNodeName: String) -> GKEntity? {
+        gameEntities.filter { (entity: GKEntity) -> Bool in entity.component(ofType: SpriteComponent.self)?.node.name == entityNodeName }.first
+    }
+
     //MARK: - MOVECOMPONENT UTILITIES
     
     func enemy() -> GKEntity? {
@@ -147,10 +159,14 @@ class EntityManager {
     }
     //MARK: Loading Entities
     @discardableResult
-    func loadSearcher() -> SKNode?{
+    func loadSearcher(positionTo: CGPoint? = nil) -> SKNode?{
         let searcher = Searcher(imageName: "evil_player1", entityManager: self)
         if let sNode = searcher.component(ofType: SpriteComponent.self)?.node {
+            if positionTo != nil{
+                sNode.position = positionTo!
+            }else{
             sNode.position = CGPoint.randomPosition(x: 100...840,y: -640...640)
+            }
             sNode.zPosition = 3
             self.add(entity: searcher)
             return sNode
@@ -176,8 +192,8 @@ class EntityManager {
     
     // NEPOUŽÍVAT !!!!
     // Todo: - change or delete
-    func loadWarper() -> ActiveBackground? {
-        let activeBack = ActiveBackground(imageName: "spin",entityManager: self)
+    func loadWarper(shouldSpin: Bool = true,customImage: String = "spin") -> ActiveBackground? {
+        let activeBack = ActiveBackground(imageName: customImage,entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
             acNode.position = CGPoint.randomPosition(x: -840...840,y: -640...640)
             acNode.zRotation = CGFloat.random(in: 0...360)

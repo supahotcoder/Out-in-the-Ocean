@@ -8,8 +8,12 @@
 
 import Foundation
 import SpriteKit
+import AVFoundation
 
 class MenuEssential: SKScene {
+    
+     var backgroundMusicPlayer: AVAudioPlayer?
+
     
     func touchAnimation(position: CGPoint) {
         let warp = SKEmitterNode(fileNamed: "Warping")

@@ -20,23 +20,21 @@ class MainMenu: MenuEssential {
     
     private var level: String!
     
-    private var backgroundMusicPlayer: AVAudioPlayer?
-    
     override func didMove(to view: SKView) {
         // MUSIC SETUP
         do {
-            try backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "main_menu_sound", withExtension: "wav")!)
+            try backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "main-menu", withExtension: "wav")!)
             backgroundMusicPlayer!.numberOfLoops = -1
             backgroundMusicPlayer!.prepareToPlay()
             backgroundMusicPlayer!.play()
         }
         catch{}
         
-        level = "Level1_1"
+        level = "Level0"
         //Načtení posledního uloženého levelu
         if let lastLevel = UserDefaults.standard.string(forKey: "LastLevel"){
             //TESTING Level1_1
-            level = "Level1_1"
+            level = "Level0"
         }
         
         playButton = childNode(withName: "playGame") as? SKSpriteNode
@@ -74,6 +72,7 @@ class MainMenu: MenuEssential {
             }
             if selectLevel.frame.contains(t){
                 buttonPressed(node: selectLevel)
+                backgroundMusicPlayer?.stop()
                 if let scene = SKScene(fileNamed: "LevelSelect") {
                     if UIDevice.current.userInterfaceIdiom == .pad{
                         scene.scaleMode = .resizeFill

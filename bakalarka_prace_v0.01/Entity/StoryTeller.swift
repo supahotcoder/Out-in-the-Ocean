@@ -13,9 +13,10 @@ import GameplayKit
 class StoryTeller: GKEntity {
 
     private let entityManager : EntityManager
+    private var storyComp: StoryComponent?
 
     // STATIC UNIT
-    init(entityManager: EntityManager, storyToTell: [String]) {
+    init(entityManager: EntityManager, storyToTell: [String],completion: (() -> Void)? = nil) {
         self.entityManager = entityManager
         super.init()
 
@@ -23,8 +24,8 @@ class StoryTeller: GKEntity {
         let spriteComp = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 200, height: 200))
         addComponent(spriteComp)
 
-        let storyComp = StoryComponent(node: spriteComp.node, story: storyToTell, entityManager: entityManager)
-        addComponent(storyComp)
+        storyComp = StoryComponent(node: spriteComp.node, story: storyToTell, entityManager: entityManager,completion: completion)
+        addComponent(storyComp!)
 
         let avoidComp = AvoidCollisionComponent()
         addComponent(avoidComp)
@@ -35,6 +36,12 @@ class StoryTeller: GKEntity {
         // DUE TO SOME UNEXPLAINABLE PROBLEMS EVEN STATIC ENTITY HAS TO MOVE SO IT WOULDN'T HAD POSITION (nal, nal)
         let moveComp = MoveComponent(maxSpeed: 1, maxAcceleration: 40, effectiveRadius: Float(spriteComp.node.size.width / 2), entityManager: self.entityManager)
         addComponent(moveComp)
+    }
+    
+    
+//    CAN BE USED TO TELL ADDITIONAL STORY AFTER SOME IN-GAME CONDITION
+    func addAnotherStory(story: [String],completion: (() -> Void)? = nil) {
+        storyComp?.addAnotherStory(story: story,completion: completion)
     }
 
     required init?(coder aDecoder: NSCoder) {

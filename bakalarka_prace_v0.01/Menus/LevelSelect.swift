@@ -8,6 +8,7 @@
 
 import Foundation
 import SpriteKit
+import AVFoundation
 
 class LevelSelect: MenuEssential {
     
@@ -25,6 +26,12 @@ class LevelSelect: MenuEssential {
     
     
     override func didMove(to view: SKView) {
+        do {
+              try backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "level-select", withExtension: "wav")!)
+              backgroundMusicPlayer!.numberOfLoops = -1
+              backgroundMusicPlayer!.prepareToPlay()
+              backgroundMusicPlayer!.play()
+        }catch{}
         Level1_1 = childNode(withName: "Level1_1") as? SKSpriteNode
         Level1_2 = childNode(withName: "Level1_2") as? SKSpriteNode
         Level1_3 = childNode(withName: "Level1_3") as? SKSpriteNode
@@ -73,6 +80,7 @@ class LevelSelect: MenuEssential {
     
     private func launchScene(_ levelName: String) {
         print("Launching \(levelName)")
+        backgroundMusicPlayer?.stop()
         if let scene = SKScene(fileNamed: levelName) {
             self.removeAllActions()
             self.removeAllChildren()

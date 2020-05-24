@@ -20,7 +20,13 @@ class SpriteComponent: GKComponent{
         node.entity = entity
         super.init()
     }
-    
+
+//    use this innit only in difficult situations with swift compiler
+    override init() {
+        node = SKSpriteNode(imageNamed: "transp")
+        super.init()
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
