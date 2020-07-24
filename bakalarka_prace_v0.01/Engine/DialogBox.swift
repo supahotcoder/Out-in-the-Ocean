@@ -20,6 +20,7 @@ class DialogController {
     private(set) var dialogOption2: SKSpriteNode
     private(set) var finished: Bool
     private(set) var resolution: Int?
+    private(set) var active: Bool
     let dialogBackground: SKSpriteNode
 
 
@@ -34,6 +35,7 @@ class DialogController {
         dialogBackground.isHidden = true
         dialogBackground.alpha = 0.5
         finished = false
+        active = false
         setUpNewDialogs(dialog1TextAndID: dialog1TextAndID, dialog2TextAndID: dialog2TextAndID)
     }
 
@@ -61,9 +63,11 @@ class DialogController {
         dialogOption2.isHidden = true
         finished = false
         resolution = nil
+        active = false
     }
 
     func showDialog(parentNode: SKNode) {
+        active = true
         dialogBackground.isHidden = false
         dialogOption1.isHidden = false
         dialogOption2.isHidden = false
@@ -76,20 +80,21 @@ class DialogController {
         dialogBackground.removeFromParent()
         dialogOption1.removeFromParent()
         dialogOption2.removeFromParent()
+        active = false
     }
 
 
     func dialogResolution(touches: Set<UITouch>, touchedIn: SKNode) -> Int? {
         if let t = touches.first?.location(in: touchedIn) {
             if !(dialogOption1.isHidden), dialogOption1.frame.contains(t) {
-                finished = true
                 resolution = Int(dialogOption1.name!)
                 removeDialog()
+                finished = true
                 return resolution
             } else if !(dialogOption2.isHidden), dialogOption2.frame.contains(t) {
-                finished = true
                 resolution = Int(dialogOption2.name!)
                 removeDialog()
+                finished = true
                 return resolution
             }
         }

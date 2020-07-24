@@ -136,15 +136,15 @@ class Level1_1: Level1 {
 //        2. PINK DONUT IS PUSHED
 //        3. GREEN DONUT IS EATEN
 //        4. GREEN DONUT IS PUSHED
-        if otherNode.node != lastTouched && dialogController?.finished ?? false {
+        if !(dialogController?.active ?? false) && otherNode.node != lastTouched && dialogController?.finished ?? false {
             if (dialogStoryResolution ?? 0) == 2 || (dialogStoryResolution ?? 0) == 4 && otherNode.node?.name == "-2" {
                 dialogController?.setUpNewDialogs(dialog1TextAndID: ("Eat it", 3), dialog2TextAndID: ("Push it", 4))
-            } else  {
+            } else {
                 dialogController?.setUpNewDialogs(dialog1TextAndID: ("Eat it", 1), dialog2TextAndID: ("Push it", 2))
             }
         }
-        if otherNode.categoryBitMask == bitmasks.collectible.rawValue, !(dialogController?.finished ?? false) {
-            if otherNode.node?.name == "1" || (dialogStoryResolution ?? 0) == 2 && otherNode.node?.name == "-2" {
+        if !(dialogController?.active ?? false) && otherNode.categoryBitMask == bitmasks.collectible.rawValue, !(dialogController?.finished ?? false) {
+            if  otherNode.node?.name == "1" || (dialogStoryResolution ?? 0) == 2 && otherNode.node?.name == "-2" {
                 wasStoryDialog = true
                 disableMovement()
                 dialogController?.showDialog(parentNode: camera!);
@@ -183,11 +183,12 @@ class Level1_1: Level1 {
                     enableMovement()
                     if dialogStoryResolution! == 1 {
 //                        DONUT IS COLLECTED
-                        print("collected")
+                        print("collected - player way")
                         donut?.collect()
                         storyTeller?.component(ofType: StoryComponent.self)?.addAnotherStory(story: ["Hey you ate it!", "Alright then find yourself a way out"])
                     } else if dialogStoryResolution! == 2 {
 //                        DONUT IS REMOVED NOT COLLECTED
+                        print("will be removed - story")
                         storyTeller?.component(ofType: StoryComponent.self)?.addAnotherStory(story:
                         ["Oh my gaaawd yes", "Now you need to find and eat green donut, then come back to me."],
                                 completion: { () in

@@ -23,7 +23,9 @@ class LevelSelect: MenuEssential {
     private var Level3_1: SKSpriteNode!
     private var Level3_2: SKSpriteNode!
     private var Level3_3: SKSpriteNode!
-    
+
+    private var BackButton: SKSpriteNode!
+
     
     override func didMove(to view: SKView) {
         do {
@@ -43,6 +45,9 @@ class LevelSelect: MenuEssential {
         Level3_1 = childNode(withName: "Level3_1") as? SKSpriteNode
         Level3_2 = childNode(withName: "Level3_2") as? SKSpriteNode
         Level3_3 = childNode(withName: "Level3_3") as? SKSpriteNode
+        
+        BackButton = childNode(withName: "Back") as? SKSpriteNode
+
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -74,6 +79,18 @@ class LevelSelect: MenuEssential {
             }
             else if Level3_3.frame.contains(t){
                 launchScene("Level3_3")
+            }
+            else if BackButton.frame.contains(t){
+                if let scene = SKScene(fileNamed: "MainMenu") {
+                    self.removeAllActions()
+                    self.removeAllChildren()
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        scene.scaleMode = .resizeFill
+                    } else {
+                        scene.scaleMode = .fill
+                    }
+                    self.view?.presentScene(scene)
+                }
             }
         }
     }
