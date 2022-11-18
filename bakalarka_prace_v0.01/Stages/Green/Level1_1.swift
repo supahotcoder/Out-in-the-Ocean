@@ -50,12 +50,12 @@ class Level1_1: Level1 {
             updateStoryText(with: "I ain't that big though", around: sNode, timeToFocusOn: 3.3, forDuration: 2)
         }
 
-        // WANDER SETUP
-        waitAndRun(delay: 3, function: { () in self.updateStoryText(with: "Find out what is this realm about", around: self.entityManager.loadWander(messages: ["Watch out", "No eye see the truth"])!, timeToFocusOn: 2.2, forDuration: 1.5) })
-
-        let wander = entityManager.loadWander(messages: ["Hi", "...", ], loopOn: 3)!
-
+        // WANDER SETUP & INITIAL TEXTS
+        waitAndRun(delay: 3, function: { () in self.updateStoryText(with: "Find out what is this realm about", around: self.entityManager.loadWander(messages: ["One is kinda tricky though", "No eye sees the truth"])!, timeToFocusOn: 2.2, forDuration: 1.5) })
+        let wander = entityManager.loadWander(messages: ["Hi", "Have you seen the donuts?","There are four of them"], loopOn: 3)!
         waitAndRun(delay: 5, function: { () in self.updateStoryText(with: "...", around: wander, timeToFocusOn: 2, forDuration: 1) })
+        waitAndRun(delay: 7, function: { () in self.updateStoryText(with: "Explore and interact", around: self.playerNode!, displayIn: 0.5, fadeOut: 0.5, timeToFocusOn: 2) })
+
 
         //      FEEDBACK SETUP
         var touchF: Dictionary<bitmasks, [String]> = Dictionary<bitmasks, [String]>()

@@ -28,9 +28,10 @@ class Level1_2: Level1 {
         entityManager.add(entity: boundaries!)
 
 //     INITIAL MESSAGES
-        waitAndRun(delay: 1, function: { () in self.updateStoryText(with: "Stay put and try to chill out through this passage", around: self.playerNode!, displayIn: 0.5, fadeOut: 1, timeToFocusOn: 3) })
-        waitAndRun(delay: 5, function: { () in self.updateGoalText(with: "Hey pshhh", around: self.playerNode!) })
-        waitAndRun(delay: 7, function: { () in self.updateGoalText(with: "Being still is what you looking for \n in some stressful situations", around: self.playerNode!) })
+        waitAndRun(delay: 1, function: { () in self.updateStoryText(with: "Find a way out!", around: self.playerNode!, displayIn: 0.2, fadeOut: 0.5, timeToFocusOn: 3) })
+        waitAndRun(delay: 3, function: { () in self.updateStoryText(with: "Stay put and try to chill out through this passage", around: self.playerNode!, displayIn: 0.5, fadeOut: 1, timeToFocusOn: 3) })
+        waitAndRun(delay: 7, function: { () in self.updateGoalText(with: "Hey pshhh", around: self.playerNode!) })
+        waitAndRun(delay: 9, function: { () in self.updateGoalText(with: "Being still is what you looking for \n in some stressful situations", around: self.playerNode!) })
 
 //       LOADING EXIT LEVEL WARPER
         endLevelWarper = ActiveBackground(imageName: "spin", entityManager: entityManager)
