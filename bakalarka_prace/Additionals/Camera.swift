@@ -50,7 +50,7 @@ extension SKCameraNode {
         case .phone:
             setScale(1)
         case .pad:
-            setScale(2)
+            setScale(0.5)
         default:
             break
         }
