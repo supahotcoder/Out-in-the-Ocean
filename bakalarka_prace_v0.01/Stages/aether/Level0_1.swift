@@ -26,8 +26,10 @@ class Level0_1: LevelStory {
         playerSpawnPosition = CGPoint(x: 200,y: 120)
         
         super.didMove(to: view)
+//        HELP SETUP
+        helpBox = HelpBox(levelName: "level0-1")
         // pokus otoceni hrace na pribehovou postavu
-        playerNode?.zRotation = playerNode?.zRotation ?? 0 + 90
+        playerNode?.zRotation = 0.7
 
 //       LOAD EXIT LEVEL WARPER
         let warper = ActiveBackground(imageName: "spin", entityManager: entityManager)
@@ -70,9 +72,9 @@ class Level0_1: LevelStory {
         updateStoryText(with: "In the deepest depths use your memories.\nGo as far into your memories as you can and remember.", around: mainStoryTellerNode!)
         updateStoryText(with: "Now you should be prepared.\nHead down to find a warper.", around: mainStoryTellerNode!)
 //      LOAD ENTITIES
-        entityManager.loadWander(messages: ["I hope for the good days"],imageName: "player_test", warningMsgs: [""], position: CGPoint.randomPosition(x: 120...130, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .systemPink, colorBlendFactor: 0.3, duration: 0))
-        entityManager.loadWander(messages: ["Please be careful"],imageName: "player_test", warningMsgs: [""], position: CGPoint.randomPosition(x: 50...120, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .orange, colorBlendFactor: 0.3, duration: 0))
-        entityManager.loadWander(messages: ["Can't talk"],imageName: "player_test", warningMsgs: [""], position: CGPoint.randomPosition(x: -120...120, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .blue, colorBlendFactor: 0.3, duration: 0))
+        entityManager.loadWander(messages: ["I hope for the good days"],imageName: "player_test", warningMsgs: [""], position: CGPoint.randomPosition(x: -120...130, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .systemPink, colorBlendFactor: 0.3, duration: 0))
+        entityManager.loadWander(messages: ["Please be careful"],imageName: "player_test", warningMsgs: [""], position: CGPoint.randomPosition(x: -250...320, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .orange, colorBlendFactor: 0.3, duration: 0))
+        entityManager.loadWander(messages: ["Can't talk"],imageName: "player_test", warningMsgs: [""], position: CGPoint.randomPosition(x: -120...280, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .blue, colorBlendFactor: 0.3, duration: 0))
         helpfulStoryNode = entityManager.loadStoryTeller(storyToTell: [""], imageNamed: "player_test", triggerable: false, position: CGPoint(x: 440, y: -320)).node
         helpfulStoryNode?.run(.colorize(with: .systemPink, colorBlendFactor: 0.7, duration: 0))
 //      LOAD SUB-STORY TELLER
@@ -126,30 +128,30 @@ class Level0_1: LevelStory {
     func nextLevel(){
         changingLevel = true
         let nextlevel = "Level1_1"
-        if let scene = SKScene(fileNamed: nextlevel) {
-            joystickNode?.removeAllChildren()
-            joystickNode?.removeFromParent()
-            playerNode?.removeAllActions()
-            saveLevel(levelName: nextlevel)
-            let warp = SKEmitterNode(fileNamed: "Warping")!
-            let removeWarp = SKAction.sequence([SKAction.wait(forDuration: 5), SKAction.removeFromParent()])
-            warp.position = playerNode!.position
-            warp.zPosition = 2
-            self.addChild(warp)
-            warp.run(removeWarp)
-            waitAndRun(delay: 0.5, function: {() in
-                self.playerNode?.run(SKAction.fadeOut(withDuration: 1), completion: {
-                    self.scene?.run(SKAction.colorize(with: UIColor.init(red: 110/255, green: 230/255, blue: 160/255, alpha: 1), colorBlendFactor: 0.9, duration: 3))
-                               self.scene?.run(SKAction.fadeOut(withDuration: 2.5), completion: {
-                                   self.removeAllActions()
-                                   self.removeAllChildren()
-                                   self.view?.presentScene(scene)
-                               })
+        joystickNode?.removeAllChildren()
+        joystickNode?.removeFromParent()
+        playerNode?.removeAllActions()
+        saveLevel(levelName: nextlevel)
+        let warp = SKEmitterNode(fileNamed: "Warping")!
+        let removeWarp = SKAction.sequence([SKAction.wait(forDuration: 5), SKAction.removeFromParent()])
+        warp.position = playerNode!.position
+        warp.zPosition = 2
+        self.addChild(warp)
+        warp.run(removeWarp)
+        waitAndRun(delay: 0.5, function: {() in
+            self.playerNode?.run(SKAction.fadeOut(withDuration: 1), completion: {
+                self.scene?.run(SKAction.colorize(with: UIColor.init(red: 110/255, green: 230/255, blue: 160/255, alpha: 1), colorBlendFactor: 0.9, duration: 3))
+                   self.scene?.run(SKAction.fadeOut(withDuration: 2.5), completion: {
+                       if let scene = SKScene(fileNamed: nextlevel) {
+                           self.removeAllActions()
+                           self.removeAllChildren()
+                           self.view?.presentScene(scene)
+                       }
+                   })
                 })
             })
-            
-        }
     }
+    
     override func update(_ currentTime: TimeInterval) {
 
         super.update(currentTime)

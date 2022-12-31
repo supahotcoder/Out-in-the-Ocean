@@ -39,6 +39,8 @@ class Level4_1: GameScene{
         playerSpawnPosition = CGPoint(x: -200, y: 0)
 
         super.didMove(to: view)
+        //        HELP SETUP
+        helpBox = HelpBox(levelName: "level4-1")
         // Smog effect
         let smogBack = SKEmitterNode(fileNamed: "SmogEffect")!
         let smogFront = SKEmitterNode(fileNamed: "SmogEffect")!

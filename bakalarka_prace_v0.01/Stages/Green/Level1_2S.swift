@@ -19,7 +19,8 @@ class Level1_2S: LevelStory {
 //      bigeyyy big_talk
         playerSpawnPosition = CGPoint(x: 0, y: 320.0)
         super.didMove(to: view)
-
+        //        HELP SETUP
+        helpBox = HelpBox(levelName: "level1-2S")
 //        BACKGROUND SOUND SETTING
         backgroundMusic(fileName: "level1-2S-sound", extension: "wav")
 //      SETUP STORY
@@ -48,9 +49,9 @@ class Level1_2S: LevelStory {
         updateStoryText(with: "When you are ready to go, bump into me.", around: mainStoryTellerNode!)
 
 
-        entityManager.loadWander(messages: ["Hello again traveler,\nI see that you're on a good track"], imageName: "bigeyyy", warningMsgs: [""], position: CGPoint.randomPosition(x: 120...130, y: -300...100), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .yellow, colorBlendFactor: 0.6, duration: 0))
-        entityManager.loadWander(messages: ["Have a good time.\nI mean this place is awesome!"], warningMsgs: [""], position: CGPoint.randomPosition(x: 50...120, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .orange, colorBlendFactor: 0.8, duration: 0))
-        entityManager.loadWander(messages: ["Stay here with us, nothing good is down there"], warningMsgs: [""], position: CGPoint.randomPosition(x: -120...120, y: -300...100), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .blue, colorBlendFactor: 0.9, duration: 0))
+        entityManager.loadWander(messages: ["Hello again traveler,\nI see that you're on a good track"], imageName: "bigeyyy", warningMsgs: [""], position: CGPoint.randomPosition(x: -220...330, y: -300...(-100)), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .yellow, colorBlendFactor: 0.6, duration: 0))
+        entityManager.loadWander(messages: ["Have a good time.\nI mean this place is awesome!"], warningMsgs: [""], position: CGPoint.randomPosition(x: -150...200, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .orange, colorBlendFactor: 0.8, duration: 0))
+        entityManager.loadWander(messages: ["Stay here with us, nothing good is down there"], warningMsgs: [""], position: CGPoint.randomPosition(x: -120...170, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .blue, colorBlendFactor: 0.9, duration: 0))
         entityManager.loadStoryTeller(storyToTell: ["Hello there! Say, have I got a story for you!",
                                                     "Well, the other night I was getting hungry, so I decided to have a few donuts.\nLittle did I know what I was getting myself into.",
                                                     "See, this one guy I know was telling me about this donut story.\nYou might have heard that but never mind.",
@@ -60,7 +61,7 @@ class Level1_2S: LevelStory {
                                                     "Next it was like I was suddenly transported to another dimension.",
                                                     "Everything around me was a strange, distorted mess and I was going faster and faster.",
                                                     "I know, it was pretty wild!",
-                                                    "I still feel the effects of that experience.\nI don’t remember much of what happened, but it was definitely one hell of a ride."], imageNamed: "big_talk", triggerable: false, position: CGPoint(x: -120, y: -350), rotation: CGFloat(0)).node
+                                                    "I still feel the effects of that experience.\nI don’t remember much of what happened, but it was definitely one hell of a ride."], imageNamed: "big_talk", triggerable: false, position: CGPoint(x: -120, y: -350), rotation: CGFloat(0))
 
         entityManager.loadStoryTeller(storyToTell: ["Wait stranger!\nYou remind me of one entity I've encountered.",
                                                     "It was like a white creature, or a spirit, I had never seen before.",
@@ -69,7 +70,7 @@ class Level1_2S: LevelStory {
                                                     "I could feel it in the air as it lingered,\nas if it was trying its best to communicate to me through mysterious and tender means.",
                                                     "I think that I have understood its plan,\nwhich was to protect this place and everything in it.",
                                                     "No matter what I was happy that I didn't move at all so it didn't change it's intentions.",
-                                                    "That's why we may never fully understand what lies beyond the veil."], imageNamed: "wander", triggerable: false, position: CGPoint(x: 450, y: 400), rotation: CGFloat(0))
+                                                    "That's why we may never fully understand what lies beyond the veil."], imageNamed: "wander", triggerable: false, position: CGPoint(x: 550, y: 400), rotation: CGFloat(0))
     }
 
     override func didBumpIntoStoryTeller() {

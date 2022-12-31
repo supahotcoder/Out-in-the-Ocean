@@ -33,6 +33,8 @@ class Level1_1: Level1 {
         self.name = "Level1_1"
         playerSpawnPosition = CGPoint(x: 0, y: 320.0)
         super.didMove(to: view)
+        //        HELP SETUP
+        helpBox = HelpBox(levelName: "level1-1")
 //        MUSIC SETUP
         backgroundMusic(fileName: "level1-1-sound", extension: "wav")
 
@@ -77,8 +79,6 @@ class Level1_1: Level1 {
 
 //        DIALOG SETUP
         dialogController = DialogController(gameScene: self)
-//        HELP SETUP
-        helpBox = HelpBox(levelName: "level1-1")
 
         corners.shuffle()
         spawnDecoyDonut(cornerNum: 0)

@@ -20,7 +20,8 @@ class Level1_3: Level1 {
         self.background = childNode(withName: "background") as? SKSpriteNode
         self.name = "Level1_3"
         super.didMove(to: view)
-
+        //        HELP SETUP
+        helpBox = HelpBox(levelName: "level1-3")
         //SEARCHER SETUP
         let searcher = entityManager.loadSearcher(imageNamed: "evil_player1")
         entityManager.loadSearcher(imageNamed: "evil_player1")

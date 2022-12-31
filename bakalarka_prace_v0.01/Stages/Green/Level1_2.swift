@@ -18,7 +18,8 @@ class Level1_2: Level1 {
         self.name = "Level1_2"
         playerSpawnPosition = CGPoint(x: -2880.0, y: 320.0)
         super.didMove(to: view)
-
+        //        HELP SETUP
+        helpBox = HelpBox(levelName: "level1-2")
 //      SETTING UP MAZE
         boundaries = StaticBackground(imageName: "boundaries1_2", entityManager: entityManager)
         boundaries?.spriteComp.node.zPosition = 4

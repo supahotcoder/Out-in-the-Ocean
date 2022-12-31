@@ -110,6 +110,7 @@ class MainMenu: MenuEssential {
                 UserDefaults.standard.removeObject(forKey: "finishedGame")
                 UserDefaults.standard.removeObject(forKey: "Feedback")
                 UserDefaults.standard.synchronize()
+                level = "Level0"
             }
             else if selectLevel.frame.contains(t){
                 buttonPressed(node: selectLevel)

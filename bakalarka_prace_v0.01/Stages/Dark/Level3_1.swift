@@ -29,7 +29,8 @@ class Level3_1: GameScene{
         playerSpawnPosition = CGPoint(x: 0, y: 0)
 
         super.didMove(to: view)
-
+        //        HELP SETUP
+        helpBox = HelpBox(levelName: "level3-1")
         updateStoryText(with: "All right let's do it", around: playerNode!)
 
         // Smog effect
@@ -161,7 +162,6 @@ class Level3_1: GameScene{
     func nextLevel(){
         changingLevel = true
         let nextlevel = "Level4_1"
-        if let scene = SKScene(fileNamed: nextlevel) {
             joystickNode?.removeAllChildren()
             joystickNode?.removeFromParent()
             playerNode?.removeAllActions()
@@ -176,12 +176,13 @@ class Level3_1: GameScene{
             self.scene?.run(SKAction.colorize(with: UIColor.init(red: 90 / 255, green: 50 / 255, blue: 120 / 255, alpha: 1), colorBlendFactor: 0.9, duration: 3))
             waitAndRun(delay: 2, function: { () in
                 self.scene?.run(SKAction.fadeOut(withDuration: 1), completion: {
-                    self.removeAllActions()
-                    self.removeAllChildren()
-                    self.view?.presentScene(scene)
+                    if let scene = SKScene(fileNamed: nextlevel) {
+                        self.removeAllActions()
+                        self.removeAllChildren()
+                        self.view?.presentScene(scene)
+                    }
                 })
             })
-        }
     }
 
     override func update(_ currentTime: TimeInterval) {

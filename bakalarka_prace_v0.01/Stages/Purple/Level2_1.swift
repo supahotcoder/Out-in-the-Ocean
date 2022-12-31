@@ -37,6 +37,8 @@ class Level2_1: Level2 {
         playerSpawnPosition = CGPoint(x: -800,y: 0)
 
         super.didMove(to: view)
+        //        HELP SETUP
+        helpBox = HelpBox(levelName: "level2-1")
         // EMITTER
         let fluidCrystals = SKEmitterNode(fileNamed: "FluidEffect")!
         fluidCrystals.position = CGPoint(x: 0, y: 0)

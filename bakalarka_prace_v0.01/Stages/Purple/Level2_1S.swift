@@ -20,6 +20,8 @@ class Level2_1S: LevelStory {
         //MUSIC SETUP
         backgroundMusic(fileName: "level2-1-story", extension: "wav")
         super.didMove(to: view)
+        //        HELP SETUP
+        helpBox = HelpBox(levelName: "level2-1S")
             
         mainStoryTellerNode = entityManager.loadStoryTeller(storyToTell: ["Greetings, traveler.\nI've heard you're looking for something special.",
                                                                           "I have a tale for that to tell.",
@@ -31,13 +33,13 @@ class Level2_1S: LevelStory {
                                                                           "I may be able to help you.\nI can also show you how to get to the crystal cave safely.",
                                                                           "If you give me the key,\nI will show you how to use it to travel anywhere you want.",
                                                                           "Very well, bump me when you will be done with wandering around."], imageNamed: "slime", triggerable: false, position: CGPoint(x: 150, y: 300), rotation: CGFloat(0)).node
-        entityManager.loadWander(messages: ["Oh you're heading for the unknown?"], warningMsgs: [""], position: CGPoint.randomPosition(x: 120...130, y: -300...300), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .systemPink, colorBlendFactor: 0.3, duration: 0))
-        entityManager.loadWander(messages: ["Be careful, but wait do I even care?"], warningMsgs: [""], position: CGPoint.randomPosition(x: 50...120, y: -300...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .orange, colorBlendFactor: 0.3, duration: 0))
-        entityManager.loadWander(messages: ["Mind your own business"], warningMsgs: [""], position: CGPoint.randomPosition(x: -120...120, y: -300...300), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .blue, colorBlendFactor: 0.3, duration: 0))
+        entityManager.loadWander(messages: ["Oh you're heading for the unknown?"], warningMsgs: [""], position: CGPoint.randomPosition(x: -100...330, y: -400...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .systemPink, colorBlendFactor: 0.3, duration: 0))
+        entityManager.loadWander(messages: ["Be careful, but wait do I even care?"], warningMsgs: [""], position: CGPoint.randomPosition(x: -100...330, y: -400...0), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .orange, colorBlendFactor: 0.3, duration: 0))
+        entityManager.loadWander(messages: ["Mind your own business"], warningMsgs: [""], position: CGPoint.randomPosition(x: -120...120, y: -100...330), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .blue, colorBlendFactor: 0.3, duration: 0))
         let helpfulStoryNode = entityManager.loadStoryTeller(storyToTell: ["Did you talk with the slimy face?",
                                                                            "Be careful I don't trust him.",
                                                                            "Somewhere within this cave is a key\nthat will grant you the power to travel anywhere you desire.",
-                                                                           "Many are seeking for this power...",
+                                                                           "Many are seeking this power...",
                                                                            "If you have clear mind you can just imagine a place you would like to visit",
                                                                            "Doubts will make you lose your mind.",
                                                                            "Just remember be ready, always."],completion: {self.sideStoryCompleted = true}, imageNamed: "wander", triggerable: false, position: CGPoint(x: -120, y: -350), rotation: CGFloat(0)).node
