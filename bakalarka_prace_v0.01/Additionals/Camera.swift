@@ -1,18 +1,17 @@
 //
 //  Camera.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 25/10/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
 import Foundation
 import SpriteKit
 
-// Camera focusing on Node and following it within defined boundaries
-//
+// Rozsireni kamery, ktera se pohybuje v nastavenem oraniceni a muze se zamerovat na ruzne uzly
 extension SKCameraNode {
-    func movement(within boundaries: SKSpriteNode,cameraFocusOn focusedNode: SKSpriteNode, durationOfMovement duration: TimeInterval) {
+
+    func generateMovementAction(within boundaries: SKSpriteNode,cameraFocusOn focusedNode: SKNode, durationOfMovement duration: TimeInterval, waitTime: TimeInterval = 0) -> SKAction {
+        //  generovani akci pro pohyb kamery
         let left : CGFloat = -boundaries.frame.width / 2 + (self.scene!.size.width / 2) * self.xScale
         let right : CGFloat = -left
         let bottom : CGFloat = -boundaries.frame.height / 2 + (self.scene!.size.height / 2) * self.yScale
@@ -32,16 +31,26 @@ extension SKCameraNode {
         else if position.y <= bottom {
             position.y = bottom
         }
-        self.run(SKAction.move(to: position, duration: duration))
+        if waitTime == 0{
+            return SKAction.move(to: position, duration: duration)
+        }else{
+            return SKAction.sequence([SKAction.move(to: position, duration: duration),SKAction.wait(forDuration: waitTime)])
+        }
     }
     
-    //Scaling
+    
+    func movement(within boundaries: SKSpriteNode,cameraFocusOn focusedNode: SKNode, durationOfMovement duration: TimeInterval, waitTime: TimeInterval = 0) {
+        //  pohyb kamery
+        self.run(generateMovementAction(within: boundaries, cameraFocusOn: focusedNode, durationOfMovement: duration, waitTime: waitTime))
+    }
+    
     func scaleFor(device: UIUserInterfaceIdiom) {
+    // skalovani kamery pro odlisne Apple zarizeni
         switch device {
         case .phone:
-            self.setScale(1)
+            setScale(1)
         case .pad:
-            self.setScale(0.5)
+            setScale(2)
         default:
             break
         }

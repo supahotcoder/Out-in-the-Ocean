@@ -1,8 +1,6 @@
 //
 //  DialogBox.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 29/04/2020.
 //  Copyright © 2020 Jan Czerny. All rights reserved.
 //
 
@@ -26,6 +24,18 @@ class DialogController {
 
     unowned let gameScene: GameScene
 
+    init(gameScene: GameScene) {
+        self.gameScene = gameScene
+        dialogOption1 = SKSpriteNode(color: .black, size: .zero);
+        dialogOption2 = SKSpriteNode(color: .black, size: .zero);
+        dialogBackground = SKSpriteNode(color: .darkGray, size: UIScreen.main.bounds.size)
+        dialogBackground.zPosition = 9
+        dialogBackground.isHidden = true
+        dialogBackground.alpha = 0.5
+        finished = true
+        active = false
+    }
+
     init(gameScene: GameScene, dialog1TextAndID: (String, Int), dialog2TextAndID: (String, Int)) {
         self.gameScene = gameScene
         dialogOption1 = SKSpriteNode(color: .black, size: .zero);
@@ -40,25 +50,27 @@ class DialogController {
     }
 
 
-    func setUpNewDialogs(dialog1TextAndID: (String, Int), dialog2TextAndID: (String, Int)) {
-        let buttonBlueprint = SKSpriteNode(texture: SKTexture(imageNamed: "mainMenu"), size: CGSize(width: 180, height: 70))
-        let labelBlueprint = SKLabelNode(text: "")
+    func setUpNewDialogs(dialog1TextAndID: (text: String,id: Int), dialog2TextAndID: (text: String,id: Int)) {
+        let buttonBlueprint = SKSpriteNode(texture: SKTexture(imageNamed: "mainMenu"), size: buttonSize.menuButton.toCGSize)
+        let labelBlueprint = SKLabelNode(text: dialog1TextAndID.text)
         labelBlueprint.position = CGPoint(x: 0, y: -5)
         labelBlueprint.color = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
         labelBlueprint.fontName = "HelveticaNeue-MediumItalic"
+        adjustLabelFontSizeToFitRect(labelNode: labelBlueprint, size: buttonBlueprint.size)
+        
         dialogOption1 = (buttonBlueprint.copy() as? SKSpriteNode)!
-        dialogOption1.name = String(dialog1TextAndID.1)
+        dialogOption1.name = String(dialog1TextAndID.id)
         dialogOption1.position = CGPoint(x: -UIScreen.main.bounds.width / 4, y: -UIScreen.main.bounds.height / 4)
         dialogOption1.zPosition = 10
-        labelBlueprint.text = dialog1TextAndID.0
+        labelBlueprint.text = dialog1TextAndID.text
         dialogOption1.addChild(labelBlueprint.copy() as! SKLabelNode)
         dialogOption1.isHidden = true
 
         dialogOption2 = (buttonBlueprint.copy() as? SKSpriteNode)!
-        dialogOption2.name = String(dialog2TextAndID.1)
+        dialogOption2.name = String(dialog2TextAndID.id)
         dialogOption2.position = CGPoint(x: UIScreen.main.bounds.width / 4, y: -UIScreen.main.bounds.height / 4)
         dialogOption2.zPosition = 10
-        labelBlueprint.text = dialog2TextAndID.0
+        labelBlueprint.text = dialog2TextAndID.text
         dialogOption2.addChild(labelBlueprint.copy() as! SKLabelNode)
         dialogOption2.isHidden = true
         finished = false

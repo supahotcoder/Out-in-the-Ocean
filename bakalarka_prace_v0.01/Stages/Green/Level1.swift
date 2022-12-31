@@ -1,8 +1,6 @@
 //
 //  Level1.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 21/11/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
@@ -22,6 +20,7 @@ class Level1: GameScene {
         // BACKGROUND BOUNDARY
         let edgePhysicsBody = SKPhysicsBody(edgeLoopFrom: (background?.frame)!)
         self.physicsBody = edgePhysicsBody
+        ContactComponent.addCollisions(physicsBody: physicsBody!, bitmask: bitmasks.frame.rawValue)
 
         //PLAYER POSITION
         playerSpawnPosition = CGPoint(x: (background?.frame.minX)! + 150, y: (self.scene?.position.y)!)
@@ -59,26 +58,7 @@ class Level1: GameScene {
 
     //MARK: - COLISIONS
     func didBegin(_ contact: SKPhysicsContact) {
-        let player: SKPhysicsBody
-        let otherNode: SKPhysicsBody
 
-        if contact.bodyA.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyA
-            otherNode = contact.bodyB
-        } else if contact.bodyB.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyB
-            otherNode = contact.bodyA
-        } else {
-            return
-        }
-        if let pl = entityManager.player?.component(ofType: FeedbackComponent.self) {
-            if let bMask = bitmasks(rawValue: otherNode.categoryBitMask) {
-                let fbText = pl.giveTouchFeedback(on: bMask)
-                if (fbText != "") {
-                    updateFeedbackText(with: fbText)
-                }
-            }
-        }
     }
 
     func warp(contact: SKPhysicsContact, otherNode: SKNode?, customWarper: SKNode? = nil, teleportTo: CGPoint? = nil) {
@@ -111,7 +91,6 @@ class Level1: GameScene {
         } else {
             warperNode.run(SKAction.move(to: tel, duration: 0))
         }
-
     }
 
     @discardableResult
@@ -152,19 +131,6 @@ class Level1: GameScene {
     }
 
     func nextLevel() {
-//        if let scene = SKScene(fileNamed: "Level2") {
-//            self.removeAllActions()
-//            self.removeAllChildren()
-//            saveLevel(levelName: "Level2")
-//            self.view?.presentScene(scene)
-//        }
     }
 
-    override func update(_ currentTime: TimeInterval) {
-        if ((playerNode?.physicsBody!.velocity)! == CGVector(dx: 0, dy: 0)) {
-//            TODO: ADD ANIMACI JAK SE ZAHRABE A VYHRABE
-//            playerNode?.run(SKAction.animate(with: <#T##[SKTexture]##[SpriteKit.SKTexture]#>, timePerFrame: <#T##TimeInterval##Foundation.TimeInterval#>, resize: <#T##Bool##Swift.Bool#>, restore: <#T##Bool##Swift.Bool#>)))
-        }
-        super.update(currentTime)
-    }
 }

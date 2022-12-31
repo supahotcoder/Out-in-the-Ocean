@@ -1,8 +1,6 @@
 //
 //  GuardComponent.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 15/02/2019.
 //  Copyright © 2019 Jan Czerny. All rights reserved.
 //
 

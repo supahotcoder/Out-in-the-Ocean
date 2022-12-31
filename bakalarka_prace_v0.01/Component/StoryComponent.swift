@@ -1,8 +1,6 @@
 //
 //  StoryComponent.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 01/07/2019.
 //  Copyright © 2019 Jan Czerny. All rights reserved.
 //
 
@@ -18,7 +16,7 @@ class StoryComponent: GKComponent {
     private let entityManager: EntityManager
     private let entityNode: SKSpriteNode
     private var completion: (() -> Void)?
-    private var finished = false
+    private(set) var finished = false
     
     init(node: SKSpriteNode, story: [String], entityManager: EntityManager,completion: (() -> Void)? = nil){
         self.story = story
@@ -29,14 +27,14 @@ class StoryComponent: GKComponent {
     }
     
     func tellStory() {
-            if msg.parent == nil && current < story.count {
-                prepareMsg(with: story[current], fadeIn: 0.3, fadeOut: 0.7)
-                current += 1
-                if current < story.count, !finished{
-                    completion?()
-                    finished = true
-                }
+        if msg.parent == nil && current < story.count {
+            prepareMsg(with: story[current], fadeIn: 0.2, fadeOut: 0.7)
+            current += 1
+            if current < story.count, !finished{
+                completion?()
+                finished = true
             }
+        }
     }
     
     private func prepareMsg(with text: String,fadeIn: TimeInterval, fadeOut: TimeInterval){
@@ -44,6 +42,7 @@ class StoryComponent: GKComponent {
     }
     
     func addAnotherStory(story: [String],completion: (() -> Void)? = nil) {
+        finished = false
         self.story = story
         self.completion = completion
         current = 0

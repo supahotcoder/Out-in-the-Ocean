@@ -1,8 +1,6 @@
 //
 //  MoveComponent.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 08/11/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
@@ -28,13 +26,14 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
         self.radius = effectiveRadius
         self.mass = 0.1
     }
+
     //MARK: - AGENTS
     func agentWillUpdate(_ agent: GKAgent) {
         guard let spriteComponent = entity?.component(ofType: SpriteComponent.self)
             else{
                 return
         }
-        position = float2(tuple: spriteComponent.node.position.floatConvetor())
+        position = vector_float2(tuple: spriteComponent.node.position.floatConvetor())
     }
     
     func agentDidUpdate(_ agent: GKAgent) {
@@ -46,7 +45,7 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
         
         //sprite je otočený směrem kde se pohybuje
         if spriteComponent.node.physicsBody?.categoryBitMask == bitmasks.searcher.rawValue{
-            let direction = spriteComponent.node.position - pos
+            let direction: CGPoint = spriteComponent.node.position - pos
             let angle = atan2(direction.y , direction.x) + CGFloat.pi / 2 + 1.5
             spriteComponent.node.run(SKAction.rotate(toAngle:angle, duration: 0.9, shortestUnitArc: true))
             //sprite.zRotation = angle
@@ -68,37 +67,52 @@ class MoveComponent : GKAgent2D, GKAgentDelegate{
         let playerDistance = ((player?.component(ofType: SpriteComponent.self)?.node.position)! - (entity?.component(ofType: SpriteComponent.self)?.node.position)!).length()
         if (entity?.component(ofType: StoryComponent.self) != nil){
 //            TUTAJ NASETUJ BEHAVIOR PRO STORY COMPONNENT
-//        TODO: - DELEJ SPINKO ALE
-//            print("story" ,"test ", playerDistance)
         }
         
         let avoidOthers = entityManager.avoidEntities()
         // player se defaultně vyřazuje protože ho ovládá hráč
         
         //Typ 1: nevyhledává hráče, brouzdá po mapě
-        if entity?.component(ofType: AvoidCollisionComponent.self) != nil && entity?.component(ofType: PlayerComponent.self) == nil{
+        if entity?.component(ofType: AvoidCollisionComponent.self) != nil && entity?.component(ofType: PlayerComponent.self) == nil && entity?.component(ofType: KamikazeComponent.self) == nil{
             let player = entityManager.player
             //behavior = MoveSettings(npc: entity!, avoid: avoidOthers, player: player!)
 //            if (entity?.component(ofType: StoryComponent.self) != nil){print("type 1")}
             behavior = MoveSettings(npc: entity!, avoid: avoidOthers, player: player!, enemy: entityManager.enemy() ?? nil)
         }
         //Typ 2: Ochraňuje entitu a napadá hráče
-        else if (entity?.component(ofType: GuardComponent.self)) != nil{
+        else if (entity?.component(ofType: GuardComponent.self)) != nil && entity?.component(ofType: KamikazeComponent.self) == nil{
             let player = entityManager.player // nalezení hráče
             let target = player?.component(ofType: MoveComponent.self)
             let protect = entityManager.closestProtectionComponent(from: CGPoint(tuple: position.doubleConvetor()))
 //            if (entity?.component(ofType: StoryComponent.self) != nil){print("type 2")}
-
             behavior = MoveSettings(npc: entity!,targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!,protectEntity: protect)
         }
         //Typ 3: vyhledávání hráče
             //TODO: - změnit na ENemyComponent check
-        else if entity?.component(ofType: PlayerComponent.self) == nil && entity?.component(ofType: AvoidCollisionComponent.self) == nil{
+        else if entity?.component(ofType: PlayerComponent.self) == nil && entity?.component(ofType: AvoidCollisionComponent.self) == nil && entity?.component(ofType: KamikazeComponent.self) == nil{
             let player = entityManager.player // nalezení hráče
             let target = player?.component(ofType: MoveComponent.self)
 //            if (entity?.component(ofType: StoryComponent.self) != nil){print("type 3")}
 
             behavior = MoveSettings(npc: entity!,targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!)
+        }
+        //Typ 4: vyhledávání hráče na kamikaze
+        else if entity?.component(ofType: KamikazeComponent.self) != nil && entity?.component(ofType: PlayerComponent.self) == nil{
+            let player = entityManager.player
+            let target = player?.component(ofType: MoveComponent.self)
+            let kamikazeComp = entity!.component(ofType: KamikazeComponent.self)!
+            //behavior = MoveSettings(npc: entity!, avoid: avoidOthers, player: player!)
+//            if (entity?.component(ofType: StoryComponent.self) != nil){print("type 1")}
+            behavior = MoveSettings(npc: entity!,targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!, kamikazeComp: kamikazeComp)
+        }
+        //Typ 5: Ochraňuje entitu a kamikaze na hráče
+        else if entity?.component(ofType: KamikazeComponent.self) != nil && (entity?.component(ofType: GuardComponent.self)) != nil && entity?.component(ofType: PlayerComponent.self) == nil{
+            let player = entityManager.player // nalezení hráče
+            let target = player?.component(ofType: MoveComponent.self)
+            let protect = entityManager.closestProtectionComponent(from: CGPoint(tuple: position.doubleConvetor()))
+            let kamikazeComp = entity!.component(ofType: KamikazeComponent.self)!
+//            if (entity?.component(ofType: StoryComponent.self) != nil){print("type 2")}
+            behavior = MoveSettings(npc: entity!,targetSpeed: maxSpeed, searchFor: target!, avoid: avoidOthers, player: player!,protectEntity: protect, kamikazeComp: kamikazeComp)
         }
         // Zabraňování kolizí z okrajem mapy
         let backgroundObstacle = SKNode.obstacles(fromNodePhysicsBodies: [(entityManager.scene?.physicsBody?.node)!])

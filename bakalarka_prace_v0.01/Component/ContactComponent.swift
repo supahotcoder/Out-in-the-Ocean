@@ -1,8 +1,6 @@
 //
 //  ContactComponent.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 11/10/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
@@ -18,12 +16,7 @@ class ContactComponent: GKComponent {
             if (pathBody != nil) {
                 physicsBody = pathBody!
             }
-            physicsBody.categoryBitMask = bitmask
-            // přidá kolize se všemi entitami které reagují na kontakt
-            for i in bitmasks.allCases{
-                physicsBody.contactTestBitMask |= i.rawValue
-                physicsBody.collisionBitMask |= i.rawValue
-            }
+            ContactComponent.addCollisions(physicsBody: physicsBody, bitmask: bitmask)
             physicsBody.isDynamic = dynamic
             physicsBody.allowsRotation = rotation
             
@@ -43,7 +36,16 @@ class ContactComponent: GKComponent {
          super.init()
   
     }
-    
+
+    static func addCollisions(physicsBody: SKPhysicsBody, bitmask: UInt32) {
+        physicsBody.categoryBitMask = bitmask
+        // přidá kolize se všemi entitami které reagují na kontakt
+        for i in bitmasks.allCases{
+            physicsBody.contactTestBitMask |= i.rawValue
+            physicsBody.collisionBitMask |= i.rawValue
+        }
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

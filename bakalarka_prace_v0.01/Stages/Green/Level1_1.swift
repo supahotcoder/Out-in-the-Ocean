@@ -1,8 +1,6 @@
 //
 //  Level1-1.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 31/03/2019.
 //  Copyright © 2019 Jan Czerny. All rights reserved.
 //
 
@@ -20,57 +18,68 @@ class Level1_1: Level1 {
     private var didInteractWithStoryTeller: Bool?
     private var corners = [CGPoint.randomPosition(x: -1300...(-1000), y: 600...700), CGPoint.randomPosition(x: -1300...(-1000), y: -700...(-600)),
                            CGPoint.randomPosition(x: 1000...1300, y: 600...700), CGPoint.randomPosition(x: 1000...1300, y: -700...(-600))]
-    private var wasStoryDialog = false
+    private var didDeliverPink = false
+    private var didEatGreen = false
     private var lastTouched: SKNode?
 
-    override func didMove(to view: SKView) {
-//        print(CGPoint.randomPosition(x: -1300...(-1000), y: 600...700))
-//        print(CGPoint.randomPosition(x: -1300...(-1000), y: -700...(-600)))
-//        print(CGPoint.randomPosition(x: 1000...1300, y: 600...700))
-//        print(CGPoint.randomPosition(x: 1000...1300, y: -700...(-600)))
-        // LEVEL FUNCTIONALITY
-        self.background = childNode(withName: "pozadi") as? SKSpriteNode
-        self.name = "Level1_1"
-        super.didMove(to: view)
-        playerNode?.position = CGPoint(x: 0, y: 320.0)
-        // TODO: - override name, background, start point, etc.
-        #warning("Level1_1 setup missing")
+    private var storyTellerNode: SKSpriteNode?
+    private var didStrangerToldStory: Bool = false
+    private var triggerComponent: TriggerComponent?
+    private let finalText: [String] = ["So you know next you will have to pass through a maze and find a warper.","You'll have to be careful the creatures down there are dangerous.","Take care and eat some donuts!","Just remember one more thing.\nSome creatures don't find you not interesting when you stay still"]
 
+    override func didMove(to view: SKView) {
+        // LEVEL FUNCTIONALITY
+        self.background = childNode(withName: "background") as? SKSpriteNode
+        self.name = "Level1_1"
+        playerSpawnPosition = CGPoint(x: 0, y: 320.0)
+        super.didMove(to: view)
 //        MUSIC SETUP
         backgroundMusic(fileName: "level1-1-sound", extension: "wav")
 
         // STORYTELLER SETUP
-        let storyToTell = ["Hello there am I supposed to tell you some wisdom?", "Oh so you assume that, because that I have a huge eye ?!", "You better watch yourself,\nyour only luck is that these green waters are stupid friendly", "Get out of my face already", "Wait wait...", "Maybe if you find this pink round donut, I might be able to help you"]
-        storyTeller = StoryTeller(entityManager: entityManager, storyToTell: storyToTell)
+        storyTeller = StoryTeller(entityManager: entityManager, storyToTell: [""], triggerable: true, imageNamed: "bigeyyy")
         if let sNode = storyTeller?.component(ofType: SpriteComponent.self)?.node {
+            storyTellerNode = sNode
             sNode.position = CGPoint.randomPosition(x: -10...10, y: -10...10)
             sNode.zRotation = CGFloat(0)
             sNode.zPosition = 3
             entityManager.add(entity: storyTeller!)
-            updateStoryText(with: "I ain't that big though", around: sNode, timeToFocusOn: 3.3, forDuration: 2)
+            updateStoryText(with: "I ain't that big though", around: sNode, forDuration: 0.5)
+        }
+        if let triggerComp = storyTeller?.component(ofType: TriggerComponent.self){
+            triggerComponent = triggerComp
+            triggerComp.didTrigger()
         }
 
         // WANDER SETUP & INITIAL TEXTS
-        waitAndRun(delay: 3, function: { () in self.updateStoryText(with: "Find out what is this realm about", around: self.entityManager.loadWander(messages: ["One is kinda tricky though", "No eye sees the truth"])!, timeToFocusOn: 2.2, forDuration: 1.5) })
-        let wander = entityManager.loadWander(messages: ["Hi", "Have you seen the donuts?","There are four of them"], loopOn: 3)!
-        waitAndRun(delay: 5, function: { () in self.updateStoryText(with: "...", around: wander, timeToFocusOn: 2, forDuration: 1) })
-        waitAndRun(delay: 7, function: { () in self.updateStoryText(with: "Explore and interact", around: self.playerNode!, displayIn: 0.5, fadeOut: 0.5, timeToFocusOn: 2) })
+        self.updateStoryText(with: "Play around and find out", around: self.entityManager.loadWander(messages: ["Did you talk with the big eye?", "Not many eyes can see the truth"], position: CGPoint.randomPosition(x: -840...840, y: -640...640))!, forDuration: 1)
+        let wander = entityManager.loadWander(messages: ["Hello", "Have you seen the donuts?", "There are four funky donuts"], loopOn: 3, position: CGPoint.randomPosition(x: -840...840, y: -640...640))!
+        self.updateStoryText(with: "Alright I should explore this place\nand interact with those creatures, I think.", around: self.playerNode!, forDuration: 1)
 
 
         //      FEEDBACK SETUP
         var touchF: Dictionary<bitmasks, [String]> = Dictionary<bitmasks, [String]>()
-        touchF[bitmasks.wander] = ["Find the big boi", "Only he got the knowledge", "Don't touch me alright?"]
-        touchF[bitmasks.storyTeller] = ["Wassap", "Oh yeah get as low as you can", "Did you find it?", "Go lower"]
+        touchF[bitmasks.wander] = ["Find the big eye", "Only he got the knowledge", "Don't touch me alright?"]
+        touchF[bitmasks.storyTeller] = ["Hello", "Oh yeah get as low as you can", "Did you find it?", "Go lower"]
 
         var hintF: Dictionary<GKEntity, [String]> = Dictionary<GKEntity, [String]>()
-        hintF[wander.entity!] = ["What are those creatures"]
-        hintF[storyTeller!] = ["That big guy got some secrets"]
+        hintF[wander.entity!] = ["I should find some other creatures"]
+        hintF[storyTeller!] = ["That big guy told me something important"]
+        
+        var hintP: Dictionary<bitmasks, [String]> = Dictionary<bitmasks, [String]>()
+        hintP[bitmasks.wander] = ["Hmm why do they need so many eyes"]
+        hintP[bitmasks.storyTeller] = ["That big guy looks more pissed each time I bump him"]
+        hintP[bitmasks.collectible] = ["This looks like something that doesn't belong here", "I want to eat it, but I don't know"]
+        hintP[bitmasks.frame] = ["I think I can't go further.","I may try to break through,\nbut I doubt that it will be useful"]
 
-        let feedback = FeedbackComponent(feedbackHint: hintF, feedbackTouch: touchF)
+        let feedback = FeedbackComponent(feedbackHint: hintF, feedbackTouch: touchF, feedbackPlayer: hintP)
         entityManager.addComponentToPlayer(component: feedback)
 
 //        DIALOG SETUP
-        dialogController = DialogController(gameScene: self, dialog1TextAndID: ("Eat it", 1), dialog2TextAndID: ("Push it", 2))
+        dialogController = DialogController(gameScene: self)
+//        HELP SETUP
+        helpBox = HelpBox(levelName: "level1-1")
+
         corners.shuffle()
         spawnDecoyDonut(cornerNum: 0)
         spawnDecoyDonut(cornerNum: 1)
@@ -79,7 +88,7 @@ class Level1_1: Level1 {
     }
 
     private func spawnDecoyDonut(cornerNum: Int) {
-        let d = Collectible(texture: "donut", size: CGSize(width: 70, height: 70), id: String(-cornerNum), protectable: false, entityManager: entityManager, location: corners[cornerNum])
+        let d = Collectible(imageNamed: "donut", size: CGSize(width: 70, height: 70), id: String(-cornerNum), protectable: false, entityManager: entityManager, location: corners[cornerNum])
         let node = d.spriteComp.node
         node.zPosition = 5
         switch cornerNum {
@@ -96,7 +105,7 @@ class Level1_1: Level1 {
     }
 
     func spawnDonut() {
-        donut = Collectible(texture: "donut", size: CGSize(width: 70, height: 70), id: "1", protectable: false, entityManager: entityManager, location: corners[3])
+        donut = Collectible(imageNamed: "donut", size: CGSize(width: 70, height: 70), id: "1", protectable: false, entityManager: entityManager, location: corners[3])
         if let node = donut?.spriteComp.node {
             node.zPosition = 5
             node.run(SKAction.repeatForever(.sequence([.wait(forDuration: 0.5), SKAction.run({ () in node.run(SKAction.applyImpulse(CGVector(dx: Int.random(in: -20...20), dy: Int.random(in: -20...20)), duration: 0.3)) })])))
@@ -104,72 +113,88 @@ class Level1_1: Level1 {
         entityManager.add(entity: donut!)
     }
 
-    override func nextLevel() {
+    func nextLevel(didTriggerPlayer: Bool) {
         changingLevel = true
-        print("loading next level")
-        if let scene = SKScene(fileNamed: "Level1_2") {
-            self.removeAllActions()
-            self.removeAllChildren()
-            saveLevel(levelName: "Level1_2")
-            self.view?.presentScene(scene)
+        if didTriggerPlayer{
+            let nextlevel = "Level1_2S"
+            if let scene = SKScene(fileNamed: nextlevel) {
+                (scene as? Level1_2S)?.didPlayerAteDonuts = true
+                self.removeAllActions()
+                self.removeAllChildren()
+                saveLevel(levelName: nextlevel)
+                self.view?.presentScene(scene)
+            }
+        }else{
+            let nextlevel = "Level1_2"
+            if let scene = SKScene(fileNamed: nextlevel) {
+                self.removeAllActions()
+                self.removeAllChildren()
+                saveLevel(levelName: nextlevel)
+                self.view?.presentScene(scene)
+            }
         }
     }
 
     override func didBegin(_ contact: SKPhysicsContact) {
-        let player: SKPhysicsBody
+//        prvni nazor hrace a pote az se zobrazi dialog
+        super.didBegin(contact)
         let otherNode: SKPhysicsBody
 
         if contact.bodyA.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyA
             otherNode = contact.bodyB
         } else if contact.bodyB.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyB
             otherNode = contact.bodyA
         } else {
             return
         }
         if let entity = otherNode.node?.entity {
-            saveFeedback(feedback: (entityManager.player?.component(ofType: FeedbackComponent.self)?.giveFeedbackHint(on: entity))!)
+            let feedbackComp: FeedbackComponent? = entityManager.player?.component(ofType: FeedbackComponent.self)
+            saveFeedback(feedback: (feedbackComp?.giveFeedbackHint(on: entity))!)
         }
 //        DIALOG RESOLUTIONS
 //        1. PINK DONUT IS EATEN
 //        2. PINK DONUT IS PUSHED
 //        3. GREEN DONUT IS EATEN
 //        4. GREEN DONUT IS PUSHED
-        if !(dialogController?.active ?? false) && otherNode.node != lastTouched && dialogController?.finished ?? false {
-            if (dialogStoryResolution ?? 0) == 2 || (dialogStoryResolution ?? 0) == 4 && otherNode.node?.name == "-2" {
-                dialogController?.setUpNewDialogs(dialog1TextAndID: ("Eat it", 3), dialog2TextAndID: ("Push it", 4))
-            } else {
+        if !(dialogController?.active ?? false) && otherNode.node != lastTouched && dialogController?.finished ?? false
+                   && otherNode.categoryBitMask == bitmasks.collectible.rawValue {
+//            if (dialogStoryResolution ?? 0) == 2 || ((dialogStoryResolution ?? 0) == 4 && otherNode.node?.name == "-2") {
+            if otherNode.node?.name == "1"{
+//                dialog pink
                 dialogController?.setUpNewDialogs(dialog1TextAndID: ("Eat it", 1), dialog2TextAndID: ("Push it", 2))
+            }else if otherNode.node?.name == "-2"{
+//                dialog green
+                if didDeliverPink{
+                    dialogController?.setUpNewDialogs(dialog1TextAndID: ("Eat it", 4), dialog2TextAndID: ("Push it", 5))
+                }else{
+                    dialogController?.setUpNewDialogs(dialog1TextAndID: ("Eat it", 3), dialog2TextAndID: ("Push it", 5))
+                }
             }
-        }
-        if !(dialogController?.active ?? false) && otherNode.categoryBitMask == bitmasks.collectible.rawValue, !(dialogController?.finished ?? false) {
-            if  otherNode.node?.name == "1" || (dialogStoryResolution ?? 0) == 2 && otherNode.node?.name == "-2" {
-                wasStoryDialog = true
-                disableMovement()
-                dialogController?.showDialog(parentNode: camera!);
-            } else {
-                wasStoryDialog = false
-                disableMovement()
-                dialogController?.showDialog(parentNode: camera!);
+//            }
+            else {
+                print("other dialog")
+                dialogController?.setUpNewDialogs(dialog1TextAndID: ("Eat it", 3), dialog2TextAndID: ("Push it", 5))
             }
+            print("Showing dialog")
+            pauseGameState()
+            playerNode?.isPaused = true
+            dialogController?.showDialog(parentNode: camera!);
         }
         lastTouched = otherNode.node
-        super.didBegin(contact)
     }
 
     private func applyPenalty(nodeCausedThis: String?) {
         switch nodeCausedThis {
         case "0":
-            playerNode?.run(SKAction.repeat(.sequence([.wait(forDuration: 0.5), SKAction.run({ () in self.playerNode?.run(SKAction.applyImpulse(CGVector(dx: Int.random(in: -10...10), dy: Int.random(in: -10...10)), duration: 0.3)) })]), count: 50))
+            playerNode?.run(SKAction.repeat(.sequence([.wait(forDuration: 0.5), SKAction.run({ () in self.playerNode?.run(SKAction.applyImpulse(CGVector(dx: Int.random(in: -50...50), dy: Int.random(in: -50...50)), duration: 0.3)) })]), count: 50))
         case "-1":
             gameOver()
         case "-2":
             warpAnimation(position: playerNode?.position ?? CGPoint(x: 5000, y: 5000))
-            if donut?.collected ?? false {
-                nextLevel()
-            }
             playerNode?.run(.colorize(with: .green, colorBlendFactor: 0.9, duration: 1))
+            if donut?.collected ?? false {
+                playerNode?.run(SKAction.sequence([.wait(forDuration: 0.4), SKAction.run({ () in self.nextLevel(didTriggerPlayer: true) })]))
+            }
         default:
             playerNode?.run(SKAction.colorize(with: .blue, colorBlendFactor: 0.9, duration: 1))
         }
@@ -177,55 +202,89 @@ class Level1_1: Level1 {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if (!(dialogController?.finished ?? false)) {
-            if (wasStoryDialog) {
                 dialogStoryResolution = dialogController?.dialogResolution(touches: touches, touchedIn: camera!)
                 if dialogStoryResolution != nil {
-                    enableMovement()
                     if dialogStoryResolution! == 1 {
 //                        DONUT IS COLLECTED
+                        triggerComponent?.finished()
                         print("collected - player way")
                         donut?.collect()
                         storyTeller?.component(ofType: StoryComponent.self)?.addAnotherStory(story: ["Hey you ate it!", "Alright then find yourself a way out"])
                     } else if dialogStoryResolution! == 2 {
 //                        DONUT IS REMOVED NOT COLLECTED
                         print("will be removed - story")
-                        storyTeller?.component(ofType: StoryComponent.self)?.addAnotherStory(story:
-                        ["Oh my gaaawd yes", "Now you need to find and eat green donut, then come back to me."],
-                                completion: { () in
-                                    if self.donut != nil {
-                                        self.entityManager.remove(entity: self.donut!)
-                                    }
-                                })
+                        didDeliverPink = true
+                        if !didEatGreen{
+                            storyTeller?.component(ofType: StoryComponent.self)?.addAnotherStory(story:
+                            ["Perfect you found it! So, yummy!", "Now, follow my instructions carefully\nand you'll be able to get to the depths.","Now you need to find and eat green donut, then come back to me."],
+                                    completion: { () in
+                                        print("removed")
+                                        if self.donut != nil {
+                                            self.entityManager.remove(entity: self.donut!)
+                                        }
+                                        self.triggerComponent?.finished()
+                                    })
+                        }else{
+                            storyTeller?.component(ofType: StoryComponent.self)?.addAnotherStory(story:
+                            ["Perfect you found it! So, yummy!", "Oh I see that you have already ate the green donut"] + finalText,
+                                    completion: { () in
+                                        self.resumeGameState()
+                                        self.playerNode?.run(SKAction.sequence([.wait(forDuration: 7),.applyImpulse(CGVector(dx: 0, dy: -500), duration: 1), .wait(forDuration: 0.7), SKAction.run({ () in self.nextLevel(didTriggerPlayer: false) })]))
+                                    })
+                        }
                     } else if dialogStoryResolution! == 4 {
+                        (entityManager.findEntity(entityNodeName: "-2") as? Collectible)?.collect()
                         storyTeller?.component(ofType: StoryComponent.self)?.addAnotherStory(story:
-                        ["You made it", "So you know, you have to go as to the bottom,\n that's your direction take care and eat some donuts!"],
-                                completion: { () in (self.entityManager.findEntity(entityNodeName: "-2") as? Collectible)?.collect() })
-                        playerNode?.run(SKAction.sequence([.applyImpulse(CGVector(dx: 0, dy: -500), duration: 1), .wait(forDuration: 1), SKAction.run({ () in self.nextLevel() })]))
+                        ["You made it, great!"],
+                                completion: { () in
+                                    self.resumeGameState()
+                                    self.playerNode?.run(SKAction.sequence([.wait(forDuration: 8),.applyImpulse(CGVector(dx: 0, dy: -500), duration: 1), .wait(forDuration: 0.7), SKAction.run({ () in self.nextLevel(didTriggerPlayer: false) })]))
+                                })
                     }
-                }
-            } else {
-                dialogResolution = dialogController?.dialogResolution(touches: touches, touchedIn: camera!)
-                if dialogResolution != nil {
-                    enableMovement()
-                    if dialogResolution! == 1 {
-                        switch lastTouched?.name {
-                        case "0":
-                            (entityManager.findEntity(entityNodeName: "0") as? Collectible)?.collect()
-                            applyPenalty(nodeCausedThis: "0")
-                        case "-1":
-                            (entityManager.findEntity(entityNodeName: "-1") as? Collectible)?.collect()
-                            applyPenalty(nodeCausedThis: "-1")
-                        case "-2":
-                            dialogStoryResolution = 3
-                            (entityManager.findEntity(entityNodeName: "-2") as? Collectible)?.collect()
-                            applyPenalty(nodeCausedThis: "-2")
-                        case .none: break
-                        case .some(_): break
+                 else {
+                    dialogResolution = dialogController?.dialogResolution(touches: touches, touchedIn: camera!)
+                    if dialogResolution != nil {
+                        if dialogResolution! == 3 {
+                            switch lastTouched?.name {
+                            case "0":
+                                (entityManager.findEntity(entityNodeName: "0") as? Collectible)?.collect()
+                                applyPenalty(nodeCausedThis: "0")
+                            case "-1":
+                                (entityManager.findEntity(entityNodeName: "-1") as? Collectible)?.collect()
+                                applyPenalty(nodeCausedThis: "-1")
+                            case "-2":
+                                (entityManager.findEntity(entityNodeName: "-2") as? Collectible)?.collect()
+                                dialogStoryResolution = 3
+                                didEatGreen = true
+                                applyPenalty(nodeCausedThis: "-2")
+                            case .none: break
+                            case .some(_): break
+                                }
+                            }
                         }
                     }
+                resumeGameState()
                 }
-            }
         }
         super.touchesBegan(touches, with: event)
+    }
+
+    override func update(_ currentTime: TimeInterval) {
+        if !didStrangerToldStory && ((playerNode?.position)! - (storyTellerNode?.position)!).length() < 300 {
+            didStrangerToldStory = true
+            updateStoryText(with: "Hello traveler!", around: storyTellerNode!)
+            updateStoryText(with: "Hello. I'm looking for a way to get to deeper depths.", around: playerNode!)
+            updateStoryText(with: "Interesting place, I'm sure.\nThe creatures down there are weird and wonderful. ", around: storyTellerNode!)
+            updateStoryText(with: "Do you know a way to get there?", around: playerNode!)
+            updateStoryText(with: "Ah, I might be able to help you, traveler.\nIn exchange, I'd like a yummy pink donut.", around: storyTellerNode!)
+            updateStoryText(with: "Alright, then. Let me know when you have the donut\nand I'll tell you how to get to the depths.", around: playerNode!)
+        }
+
+        if  ((storyTellerNode?.position)! - (donut?.spriteComp.node.position)!).length() < 300{
+            triggerComponent?.didTrigger()
+        }else if (dialogResolution == 2) || (dialogResolution == 4){
+            triggerComponent?.canceled()
+        }
+        super.update(currentTime)
     }
 }

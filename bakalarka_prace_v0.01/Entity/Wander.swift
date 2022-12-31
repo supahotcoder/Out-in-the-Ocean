@@ -1,8 +1,6 @@
 //
 //  Wander.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 17/12/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
@@ -16,13 +14,13 @@ class Wander: GKEntity {
     private let entityManager: EntityManager
 
     //INTERACTION INIT
-    init(imageName: String = "wander", entityManager: EntityManager, messages: [String], loopMessagesOn: Int, warningMsgs: [String]) {
+    init(imageName: String = "wander", entityManager: EntityManager, messages: [String], loopMessagesOn: Int? = nil, warningMsgs: [String]) {
         self.entityManager = entityManager
         super.init()
 
         let texture = SKTexture(imageNamed: imageName)
 
-        let spriteComp = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 120, height: 120))
+        let spriteComp = SpriteComponent(entity: self, texture: texture, size: BodyPathsBodySizes.getBodySize(textureName: imageName))
         addComponent(spriteComp)
 
         let msgComp = MessageComponent(node: spriteComp.node, entityManager: entityManager, messages: messages, loopOn: loopMessagesOn, warningMsgs: warningMsgs)
@@ -35,7 +33,7 @@ class Wander: GKEntity {
         let moveComp = MoveComponent(maxSpeed: 40, maxAcceleration: 20, effectiveRadius: Float(spriteComp.node.size.width), entityManager: self.entityManager)
         addComponent(moveComp)
 
-        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.wander.rawValue, dynamicObject: true, canRotate: true, pathBody: BodyPaths.getPhysicsBodyOf(textureName: imageName, sprite: spriteComp.node), mass: 5)
+        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.wander.rawValue, dynamicObject: true, canRotate: true, pathBody: BodyPathsBodySizes.getPhysicsBodyOf(textureName: imageName, sprite: spriteComp.node), mass: 5)
         addComponent(contactComp)
     }
 
@@ -46,7 +44,7 @@ class Wander: GKEntity {
 
         let texture = SKTexture(imageNamed: imageName)
 
-        let spriteComp = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 120, height: 120))
+        let spriteComp = SpriteComponent(entity: self, texture: texture, size: BodyPathsBodySizes.getBodySize(textureName: imageName))
         addComponent(spriteComp)
 
         //TODO: - Avoid || Not
@@ -56,7 +54,7 @@ class Wander: GKEntity {
         let moveComp = MoveComponent(maxSpeed: 40, maxAcceleration: 20, effectiveRadius: Float(spriteComp.node.size.width), entityManager: self.entityManager)
         addComponent(moveComp)
 
-        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.wander.rawValue, dynamicObject: true, canRotate: true, pathBody: BodyPaths.getPhysicsBodyOf(textureName: imageName, sprite: spriteComp.node), mass: 5)
+        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.wander.rawValue, dynamicObject: true, canRotate: true, pathBody: BodyPathsBodySizes.getPhysicsBodyOf(textureName: imageName, sprite: spriteComp.node), mass: 5)
         addComponent(contactComp)
     }
 

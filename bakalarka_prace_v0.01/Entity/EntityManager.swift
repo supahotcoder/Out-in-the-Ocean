@@ -1,8 +1,6 @@
 //
 //  Game.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 08/10/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
@@ -13,7 +11,7 @@ class EntityManager {
     
     private(set) var gameEntities = Set<GKEntity>()
     
-    private(set) var scene : SKScene? // možná se bude měnit podle levelu, proto var
+    private(set) var scene : GameSceneClass? // možná se bude měnit podle levelu, proto var
     
     private(set) var player: GKEntity? = nil
     
@@ -21,7 +19,7 @@ class EntityManager {
     
     var gameOver = false
     
-     init(scene : SKScene) {
+     init(scene: GameSceneClass) {
         self.scene = scene
     }
     
@@ -36,20 +34,24 @@ class EntityManager {
         player?.addComponent(component)
     }
 
-    func tellStory(text: String, around: SKNode,fadeIn: TimeInterval, fadeOut: TimeInterval) -> SKLabelNode? {
+    func giveFeedback(text: String, around: SKSpriteNode) -> SKLabelNode?{
         if !gameOver{
-            if let scn = scene as? GameSceneClass  {
-                let timeUntilNextText = TimeInterval(text.count / 20) + fadeIn + fadeOut + 1.0
-                print(timeUntilNextText)
-                return scn.updateStoryText(with: text, around: around, displayIn: fadeIn, fadeOut: fadeOut, timeToFocusOn: timeUntilNextText,forDuration: timeUntilNextText - fadeIn - fadeOut - 0.5)
-            }
+            return scene?.updateFeedbackText(with: text, around: around)
         }
         return nil
     }
 
-//    func getEntityFromNode(SKNode: node) -> [GKEntity]{
-//        gameEntities.filter { entity in entity.component(ofType: SpriteComponent.self)!.node. }
-//    }
+    func tellStory(text: String, around: SKNode,fadeIn: TimeInterval, fadeOut: TimeInterval) -> SKLabelNode? {
+        if !gameOver{
+            let timeUntilNextText = TimeInterval(text.count / Int(TEXT_SPEED)) + fadeIn + fadeOut + 1.0
+            return scene?.updateStoryText(with: text, around: around, fadeIn: fadeIn, fadeOut: fadeOut,forDuration: timeUntilNextText - fadeIn - fadeOut - 0.5)
+        }
+        return nil
+    }
+
+    func getEntityFromNode(node: SKNode) -> [GKEntity]{
+        return gameEntities.filter { entity in entity.component(ofType: SpriteComponent.self)?.node.name == (node as? SKSpriteNode)?.name}
+    }
 
     //Uložení hráče do proměnné (Optimalizace na výkon)
     private func setPlayer(player: GKEntity) {
@@ -159,13 +161,12 @@ class EntityManager {
     }
     //MARK: Loading Entities
     @discardableResult
-    func loadSearcher(positionTo: CGPoint? = nil) -> SKNode?{
-        let searcher = Searcher(imageName: "evil_player1", entityManager: self)
+    func loadSearcher(positionTo: CGPoint? = nil, imageNamed: String) -> SKNode?{
+        let searcher = Searcher(imageName: imageNamed, entityManager: self)
         if let sNode = searcher.component(ofType: SpriteComponent.self)?.node {
-            if positionTo != nil{
-                sNode.position = positionTo!
-            }else{
             sNode.position = CGPoint.randomPosition(x: 100...840,y: -640...640)
+            if let posSpawn = positionTo{
+                sNode.position = posSpawn
             }
             sNode.zPosition = 3
             self.add(entity: searcher)
@@ -174,11 +175,30 @@ class EntityManager {
         enemies.insert(searcher)
         return nil
     }
+
+    @discardableResult
+    func loadKamikazer(positionTo: CGPoint? = nil, imageNamed: String, skewDirectionBy: CGPoint? = nil, extraCooldown: Double? = nil) -> SKNode?{
+        let kamikazer = Kamikazer(imageName: imageNamed, entityManager: self, skewDirectionBy: skewDirectionBy, extraCooldown: extraCooldown)
+        if let sNode = kamikazer.component(ofType: SpriteComponent.self)?.node {
+            sNode.position = CGPoint.randomPosition(x: 100...840,y: -640...640)
+            if let posSpawn = positionTo{
+                sNode.position = posSpawn
+            }
+            sNode.zPosition = 3
+            self.add(entity: kamikazer)
+            return sNode
+        }
+        enemies.insert(kamikazer)
+        return nil
+    }
     
-    func loadActiveBackground(imageName: String) -> ActiveBackground? {
+    func loadActiveBackground(imageName: String, position: CGPoint? = nil) -> ActiveBackground? {
         let activeBack = ActiveBackground(imageName: imageName,entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
             acNode.position = CGPoint.randomPosition(x: -840...840,y: -640...640)
+            if let pos = position{
+                acNode.position = pos
+            }
             //CGPoint(x: Int.random(in: 0...840) - Int.random(in: 0...840), y: Int.random(in: 0...640) - Int.random(in: 0...640))
             acNode.zRotation = CGFloat.random(in: 0...360)
             acNode.zPosition = 3
@@ -192,8 +212,8 @@ class EntityManager {
     
     // NEPOUŽÍVAT !!!!
     // Todo: - change or delete
-    func loadWarper(shouldSpin: Bool = true,customImage: String = "spin") -> ActiveBackground? {
-        let activeBack = ActiveBackground(imageName: customImage,entityManager: self)
+    func loadWarper(shouldSpin: Bool = true, imageNamed: String = "spin") -> ActiveBackground? {
+        let activeBack = ActiveBackground(imageName: imageNamed,entityManager: self)
         if let acNode = activeBack.component(ofType: SpriteComponent.self)?.node {
             acNode.position = CGPoint.randomPosition(x: -840...840,y: -640...640)
             acNode.zRotation = CGFloat.random(in: 0...360)
@@ -204,18 +224,19 @@ class EntityManager {
         }
         return nil
     }
+
     @discardableResult
-    func loadWander(messages: [String] = [""], loopOn: Int = -1, warningMsgs: [String] = [""]) -> SKNode? {
+    func loadWander(messages: [String] = [""], imageName: String = "wander", loopOn: Int? = nil, warningMsgs: [String] = [""], position: CGPoint, rotation: CGFloat=CGFloat.random(in: 0..<360)) -> SKNode? {
         let wander: Wander
         if messages == [""]{
-            wander = Wander(entityManager: self)
+            wander = Wander(imageName: imageName, entityManager: self)
         }
         else{
-            wander = Wander(entityManager: self, messages: messages, loopMessagesOn: loopOn,warningMsgs: warningMsgs)
+            wander = Wander(imageName: imageName, entityManager: self, messages: messages, loopMessagesOn: loopOn, warningMsgs: warningMsgs)
         }
         if let sNode = wander.component(ofType: SpriteComponent.self)?.node {
-            sNode.position = CGPoint.randomPosition(x: -840...840,y: -640...640)
-            sNode.zRotation = CGFloat.random(in: 0...360)
+            sNode.position = position
+            sNode.zRotation = rotation
             sNode.zPosition = 3
             self.add(entity: wander)
             return sNode
@@ -224,18 +245,18 @@ class EntityManager {
     }
 
     @discardableResult
-    func loadStoryTeller(storyToTell: [String]) -> SKNode?{
+    func loadStoryTeller(storyToTell: [String],completion: (() -> ())? = nil, imageNamed: String, triggerable: Bool, position: CGPoint, rotation: CGFloat = 0) -> (entity: StoryTeller?, node: SKSpriteNode?) {
         let storyTeller: StoryTeller
         // STATIC UNIT
-        storyTeller = StoryTeller(entityManager: self, storyToTell: storyToTell)
+        storyTeller = StoryTeller(entityManager: self, storyToTell: storyToTell, triggerable: triggerable,completion: completion, imageNamed: imageNamed)
         if let sNode = storyTeller.component(ofType: SpriteComponent.self)?.node{
-            sNode.position = CGPoint.randomPosition(x: -10...10,y: -10...10)
-            sNode.zRotation = CGFloat(0)
+            sNode.position = position
+            sNode.zRotation = rotation
             sNode.zPosition = 3
             self.add(entity: storyTeller)
-            return sNode
+            return (storyTeller, sNode)
         }
-        return nil
+        return (nil, nil)
     }
     
 }

@@ -1,8 +1,6 @@
 //
 //  MainMenu.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 16/02/2019.
 //  Copyright © 2019 Jan Czerny. All rights reserved.
 //
 
@@ -17,24 +15,44 @@ class MainMenu: MenuEssential {
     
     private var resetProgress: SKSpriteNode!
     private var selectLevel: SKSpriteNode!
+    private var settingsButton: SKSpriteNode!
+    private var settingsBox: SettingsBox!
+    
+    private var joystick: Joystick!
     
     private var level: String!
     
     override func didMove(to view: SKView) {
+        let isGameFinished = UserDefaults.standard.bool(forKey: "finishedGame")
+
+        var songName = "main-menu"
+
+        if isGameFinished{
+            songName = "main-menu-finished-game"
+        }
         // MUSIC SETUP
         do {
-            try backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "main-menu", withExtension: "wav")!)
+
+            try backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: songName, withExtension: "wav")!)
             backgroundMusicPlayer!.numberOfLoops = -1
             backgroundMusicPlayer!.prepareToPlay()
             backgroundMusicPlayer!.play()
         }
-        catch{}
+        catch{
+            print("AVAudioPlayer crashed")
+        }
         
         level = "Level0"
         //Načtení posledního uloženého levelu
         if let lastLevel = UserDefaults.standard.string(forKey: "LastLevel"){
-            //TESTING Level1_1
-            level = "Level0"
+            level = lastLevel
+        }
+        //        Mozna oprava pokud je simulator spatne prizpusobeny (XCode 13.2.1 ma tuto chybu u simolatoru iPhone 11,12,13 PRO/MAX/MINI)
+        var deviceSize = UIScreen.main.bounds.size
+        var deviceBounds = UIScreen.main.bounds
+        if isRunningInSimulator(){
+            deviceSize = deviceSize.width > self.scene!.size.width ? deviceSize : self.scene!.size
+            deviceBounds = deviceBounds.width > self.scene!.frame.width ? deviceBounds : self.scene!.frame
         }
         
         playButton = childNode(withName: "playGame") as? SKSpriteNode
@@ -45,13 +63,35 @@ class MainMenu: MenuEssential {
         
         resetProgress = childNode(withName: "resetProgress") as? SKSpriteNode
         selectLevel = childNode(withName: "selectLevel") as? SKSpriteNode
+
+        playButton.position = CGPoint(x: 0, y: (deviceSize.height / 4))
+        adjustLabelFontSizeToFitRect(labelNode: (playButton.children.first as? SKLabelNode)!, size: playButton.size)
+        selectLevel.position = CGPoint(x: 0, y: 0)
+        adjustLabelFontSizeToFitRect(labelNode: (selectLevel.children.first as? SKLabelNode)!, size: selectLevel.size)
+        resetProgress.position = CGPoint(x: 0, y: -deviceSize.height / 4)
+        adjustLabelFontSizeToFitRect(labelNode: (resetProgress.children.first as? SKLabelNode)!, size: resetProgress.size)
+        
+        settingsButton = childNode(withName: "settings") as? SKSpriteNode
+        settingsButton.position = CGPoint(x: (deviceSize.width / 2) - (settingsButton.size.width) / 2, y: (deviceSize.height / 2) - (settingsButton.size.height) / 2)
+        
+        joystick = Joystick(screen: CGRect.zero, adjustment: CGFloat.zero)
+        let isDynamicJoystick = UserDefaults.standard.bool(forKey: "joystickSettings")
+        joystick.isDynamic = isDynamicJoystick
+        settingsBox = SettingsBox(joystick: joystick, deviceBounds: deviceBounds)
+        
+        
+        let dimmedCorners = childNode(withName: "dimmed_corners") as? SKSpriteNode
+        dimmedCorners?.size = deviceSize
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let t = touches.first?.location(in: playGameButton){
             touchAnimation(position: (touches.first?.location(in: playGameButton))!)
-            if playButton.frame.contains(t){
+            if settingsBox.active{
+                settingsBox.didTouched(touches: touches, touchedIn: self.scene!)
+            }
+            else if playButton.frame.contains(t){
                 buttonPressed(node: playButton)
                 backgroundMusicPlayer?.pause()
                 backgroundMusicPlayer?.stop()
@@ -64,13 +104,14 @@ class MainMenu: MenuEssential {
                     }
                 }
             //TODO: - Po testování nahodit zpátky na Level1_1
-            if resetProgress.frame.contains(t){
+            else if resetProgress.frame.contains(t){
                 buttonPressed(node: resetProgress)
                 UserDefaults.standard.removeObject(forKey: "LastLevel")
-                level = "Level1_3"
-                
+                UserDefaults.standard.removeObject(forKey: "finishedGame")
+                UserDefaults.standard.removeObject(forKey: "Feedback")
+                UserDefaults.standard.synchronize()
             }
-            if selectLevel.frame.contains(t){
+            else if selectLevel.frame.contains(t){
                 buttonPressed(node: selectLevel)
                 backgroundMusicPlayer?.stop()
                 if let scene = SKScene(fileNamed: "LevelSelect") {
@@ -85,6 +126,9 @@ class MainMenu: MenuEssential {
                     let transition:SKTransition = SKTransition.fade(withDuration: 1)
                     self.view?.presentScene(scene, transition: transition)
                 }
+            }
+            else if settingsButton.frame.contains(t){
+                settingsBox.showSettings(parentNode: self.scene!)
             }
         }
     }

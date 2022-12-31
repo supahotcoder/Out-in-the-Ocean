@@ -1,8 +1,6 @@
 //
 //  Level1_3.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 04/04/2019.
 //  Copyright © 2019 Jan Czerny. All rights reserved.
 //
 
@@ -17,45 +15,39 @@ class Level1_3: Level1 {
     var c3: Collectible!
     var c4: Collectible!
 
-//    TODO: FEEDBACK COMP BUDE MIT JAKYSI ZAASOBNIK  A UKLADAT SE NEAJK PODLE PRIORIT NEBO PODLE POSLEDNIHO S CIM MEL CO DOCINENI
-//          TEORETICKY PAK PO SMRTI BUD BUDE RIKAT VIC VECI NEBO JENOM JEDEN A KDYZ NIC DALSIHO NEBUDE MIT TAK ZE ZASOBNIKU HODI NECO
-
     override func didMove(to view: SKView) {
         //LEVEL FUNCTIONALITY
-        self.background = childNode(withName: "pozadi") as? SKSpriteNode
+        self.background = childNode(withName: "background") as? SKSpriteNode
         self.name = "Level1_3"
         super.didMove(to: view)
 
         //SEARCHER SETUP
-        let searcher = entityManager.loadSearcher()
-        entityManager.loadSearcher()
-        // SPINNER SETUP
+        let searcher = entityManager.loadSearcher(imageNamed: "evil_player1")
+        entityManager.loadSearcher(imageNamed: "evil_player1")
+        // WARPER SETUP
         let warper = ActiveBackground(imageName: "spin", entityManager: entityManager)
         warper.component(ofType: SpriteComponent.self)?.node.zPosition = 3
         warperNode = warper.component(ofType: SpriteComponent.self)!.node
         warperNode.run(SKAction.rotate(byAngle: 90, duration: 600))
         self.addChild(warperNode)
 
-        //TEXT SETUP
-        updateStoryText(with: "Okay let's find out what's this about", around: playerNode!, displayIn: 0, fadeOut: 1, timeToFocusOn: 4)
+        // TEXT SETUP
+        updateStoryText(with: "Okay let's see.", around: playerNode!, displayIn: 0, fadeOut: 1, forDuration: 3)
 
         if (!GameSceneClass.haveDied) {
-            updateGoalText(with: "Watch the environment\n and yourself especially", around: playerNode!)
+            updateGoalText(with: "Maybe I should watch the environment\nand myself especially", around: playerNode!)
         }
-        //TEXTMSGS SETUP
-        //TODO: - TODO: ADD Text file story strings
-
         //WANDER SETUP
         let msgs = ["Hi", "...", "Hello stranger", "It's getting greener", "Welcome Traveler",
-                    "Something,\n is not right in there", "Not me", "Did you found\n what you've been looking for?", "Don't bother me"]
-        let warning = ["Get out", "Beware", "Watch out", "Booo"]
-        let wander = entityManager.loadWander(messages: msgs, loopOn: 5, warningMsgs: warning)
-        entityManager.loadWander(messages: msgs, warningMsgs: warning)
-        entityManager.loadWander(messages: msgs, loopOn: 5, warningMsgs: warning)
-        entityManager.loadWander(warningMsgs: warning)
-        entityManager.loadWander(messages: msgs, loopOn: 0, warningMsgs: warning)
-        entityManager.loadWander(messages: msgs, loopOn: 2, warningMsgs: warning)
-        entityManager.loadWander(messages: msgs, loopOn: 4, warningMsgs: warning)
+                    "Something,\nis not right in there", "Not me", "Did you found\nwhat you've been looking for?", "Don't bother me"]
+        let warning = ["Get out!", "Beware!", "Watch out!", "They are coming!"]
+        let wander = entityManager.loadWander(messages: msgs, warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
+        entityManager.loadWander(messages: msgs, warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
+        entityManager.loadWander(messages: msgs, warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
+        entityManager.loadWander(warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
+        entityManager.loadWander(messages: [msgs[0]], warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
+        entityManager.loadWander(messages: Array(msgs.prefix(2)), warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
+        entityManager.loadWander(messages: Array(msgs.prefix(3)), warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
         //MUSIC SETUP
         backgroundMusic(fileName: "level1-3-sound", extension: "wav")
 
@@ -67,13 +59,11 @@ class Level1_3: Level1 {
         effectNode.shouldEnableEffects = true
         self.addChild(effectNode)
 
-        //TESTING - spawning collectible and that effect
-        #warning("searcher protect collectible")
-        // nízké hodnoty zvětšení pro rozeznání
-        c1 = Collectible(texture: "donut", size: CGSize(width: 60, height: 60), id: "c1", protectable: true, entityManager: entityManager)
-        c2 = Collectible(texture: "donut", size: CGSize(width: 60, height: 60), id: "c2", protectable: true, entityManager: entityManager)
-        c3 = Collectible(texture: "donut", size: CGSize(width: 60, height: 60), id: "c3", protectable: true, entityManager: entityManager)
-        c4 = Collectible(texture: "donut", size: CGSize(width: 60, height: 60), id: "c4", protectable: true, entityManager: entityManager)
+//      SETUP COLLECTIBLE
+        c1 = Collectible(imageNamed: "donut", size: BodyPathsBodySizes.getBodySize(textureName: "donut"), id: "c1", protectable: true, entityManager: entityManager)
+        c2 = Collectible(imageNamed: "donut", size: BodyPathsBodySizes.getBodySize(textureName: "donut"), id: "c2", protectable: true, entityManager: entityManager)
+        c3 = Collectible(imageNamed: "donut", size: BodyPathsBodySizes.getBodySize(textureName: "donut"), id: "c3", protectable: true, entityManager: entityManager)
+        c4 = Collectible(imageNamed: "donut", size: BodyPathsBodySizes.getBodySize(textureName: "donut"), id: "c4", protectable: true, entityManager: entityManager)
 
         c1.spriteComp.node.zPosition = 3
         c2.spriteComp.node.zPosition = 3
@@ -88,26 +78,23 @@ class Level1_3: Level1 {
         var touchF: Dictionary<bitmasks, [String]> = Dictionary<bitmasks, [String]>()
         touchF[bitmasks.collectible] = ["Mmmm donuts...", "Yummy", "My tummy feels weird", "Feeling bit dizzy"]
         touchF[bitmasks.wander] = ["Ouch", "Ah, sorry", "Hey", "Watch out you ... thing"]
-        touchF[bitmasks.activeBackground] = ["What just happened", "Did we just...?", "That was confusing"]
+        touchF[bitmasks.activeBackground] = ["What did just happened?", "Did we just...?", "That was confusing"]
 
         var hintF: Dictionary<GKEntity, [String]> = Dictionary<GKEntity, [String]>()
-        hintF[wander!.entity!] = ["Are those three eyed creatures\n trying to say something?", "Hmm those creatures really create mood"]
+        hintF[wander!.entity!] = ["Are those three eyed creatures\ntrying to say something?"]
         hintF[searcher!.entity!] = ["I should avoid that green ball", "I got poisoned, rather avoid that next time"]
         hintF[c1] = ["I felt different after eating those donuts", "Let's get some more donuts", "Those donuts are really good", "I'm getting addicted on the donuts"]
-        hintF[warperNode.entity!] = ["Did I just teleported", "This is gotta be it, this is my way out", "I need to use that teleporty thing"]
+        hintF[warperNode.entity!] = ["Did I just teleported", "This is gotta be it, this is my way out", "I need to use that warper"]
         let feedback = FeedbackComponent(feedbackTouch: touchF)
         entityManager.addComponentToPlayer(component: feedback)
     }
 
     override func didBegin(_ contact: SKPhysicsContact) {
-        let player: SKPhysicsBody
         let otherNode: SKPhysicsBody
 
         if contact.bodyA.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyA
             otherNode = contact.bodyB
         } else if contact.bodyB.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyB
             otherNode = contact.bodyA
         }
         // WARPER CONTACT
@@ -138,14 +125,15 @@ class Level1_3: Level1 {
             }
 
         } else if otherNode.categoryBitMask == bitmasks.collectible.rawValue {
-            // preparing for the warp
+            // priprava pro warpovani (meni se vizual hrace, to by ho melo prijmet uvazovat na co se zacina podobat)
             if collectibleCount == 2 {
                 playerNode?.run(SKAction.colorize(with: .green, colorBlendFactor: 0.9, duration: 3))
                 effectNode.filter = CIFilter(name: "CITorusLensDistortion", parameters: ["inputRadius": 20, "inputRefraction": 3])
+            } else if collectibleCount > 2{
+                gameOver()
             } else {
                 playerNode?.run(SKAction.colorize(with: UIColor(red: CGFloat(200 - collectibleCount * 200) / 255, green: CGFloat(0 + collectibleCount * 200) / 255, blue: CGFloat(200 - collectibleCount * 200) / 255, alpha: 1), colorBlendFactor: 1, duration: 3))
             }
-
             switch otherNode.node?.name {
             case "c1": c1.collect()
             case "c2": c2.collect()
@@ -161,10 +149,11 @@ class Level1_3: Level1 {
 
     override func nextLevel() {
         changingLevel = true
-        if let scene = SKScene(fileNamed: "Level2_1") {
+        let nextlevel = "Level2_1S"
+        if let scene = SKScene(fileNamed: nextlevel) {
             self.removeAllActions()
             self.removeAllChildren()
-            saveLevel(levelName: "Level2_1")
+            saveLevel(levelName: nextlevel)
             self.view?.presentScene(scene)
         }
     }

@@ -1,15 +1,55 @@
 //
 //  Constants.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 11/10/6018.
-//  Copyright © 6018 Jan Czerny. All rights reserved.
+//  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
 import Foundation
 import SpriteKit
 
+// pohyb kamery je nastaven na 0.3 sekundy at je vic prirozeny
+let CAMERA_MOVEMENT_TIME: Double = 0.3
+// promena se pouziva pro nastaveni doby po kterou text zustava na obrazovce (nekteri hraci ctou pomaleji/rychleji)
+private(set) var TEXT_SPEED: Double = UserDefaults.standard.integer(forKey: "textSpeed") != 0 ? Double(UserDefaults.standard.integer(forKey: "textSpeed")) : textSpeeds.normal.rawValue
+
+
+enum textSpeeds: Double{
+
+    case slow = 10
+    case normal = 14
+    case fast = 19
+
+    func getForDurationModifier() -> TimeInterval{
+        switch self{
+        case .slow:
+            return 1.286
+        case .normal:
+            return 1
+        case .fast:
+            return 0.736
+        }
+    }
+
+    public func text() -> String {
+        switch self{
+
+        case .slow:
+            return "Slow"
+        case .normal:
+            return "Normal"
+        case .fast:
+            return "Fast"
+        }
+    }
+}
+
+func setNewTextSpeed(speed: textSpeeds){
+//    nastavi novou rychlost pro modifikaci doby po kterou je text na obrazovce
+    TEXT_SPEED = speed.rawValue
+}
+
 enum bitmasks : UInt32 , CaseIterable {
+//    bitmasky pouzivaji se pro identifikaci fyzickeho tela, ktere pak muze z dalsim napriklad kolidovat
    // case boundaries = 0b0
     case player = 0b1
     case activeBackground = 0b10
@@ -21,7 +61,8 @@ enum bitmasks : UInt32 , CaseIterable {
     case storyTeller = 0b1000
 }
 
-enum position  {
+enum textPosition {
+//    pozice pro zobrazovani textu
     case leftTop
     case leftBottom
     case rightTop
@@ -40,17 +81,76 @@ enum position  {
             return CGPoint(x: 60, y: -60)
         case .onEntity:
             return CGPoint(x: 50, y: -40)
-}
+        }
     }
 }
 
-func displayText(displayIn: TimeInterval,fadeOut: TimeInterval, label: SKLabelNode, around: SKNode, alligment: position=position.leftBottom, forDuration: TimeInterval?=nil){
-    let showForDur = forDuration ?? TimeInterval((label.text?.count)! / 5)
-    label.run(SKAction.sequence([SKAction.wait(forDuration: displayIn),SKAction.run{label.trackNode(node: around,labelAlligment: alligment.toCGPoint)},SKAction.fadeIn(withDuration: 0.3),
-                                 SKAction.wait(forDuration: showForDur),SKAction.fadeOut(withDuration: fadeOut), SKAction.removeFromParent()]))
+enum buttonSize  {
+//    nastaveni dynamicke velikosti tlacitek, diky nejz muzeme jednoduse portovat na ruzne velikosti obrazovek
+    case closeButton
+    case pauseButton
+    case menuButton
+    
+    var toCGSize: CGSize{
+        var aspectRatio: CGFloat = 1/1.7
+        switch self {
+        case .closeButton:
+            let width = UIScreen.main.bounds.width / 10
+            return CGSize(width: width, height: width * aspectRatio)
+        case .pauseButton:
+            let width = UIScreen.main.bounds.width / 8
+            return CGSize(width: width, height: width * aspectRatio)
+        case .menuButton:
+            aspectRatio = 1/2
+            let width = UIScreen.main.bounds.width / 4
+            return CGSize(width: width, height: width * aspectRatio)
+        }
+    }
+    
+    func toCGSize(withBounds: CGRect) -> CGSize {
+        var aspectRatio: CGFloat = 1/1.7
+        switch self {
+        case .closeButton:
+            let width = withBounds.width / 10
+            return CGSize(width: width, height: width * aspectRatio)
+        case .pauseButton:
+            let width = withBounds.width / 8
+            return CGSize(width: width, height: width * aspectRatio)
+        case .menuButton:
+            aspectRatio = 1/2
+            let width = withBounds.width / 4
+            return CGSize(width: width, height: width * aspectRatio)
+        }
+    }
+}
+
+func isRunningInSimulator() -> Bool {
+//    zjisteni zda bezi hra v simulatoru (nektere simulatory (15.2 iOS) maji obcas problemy)
+        #if targetEnvironment(simulator)
+            return true
+        #else
+            return false
+        #endif
+    }
+
+func adjustLabelFontSizeToFitRect(labelNode:SKLabelNode, size:CGSize) {
+//    prizpusobi velikost fontu pro dany labelNode
+    let scalingFactor = min(size.width / labelNode.frame.width, size.height / labelNode.frame.height) * 0.75
+    labelNode.fontSize *= scalingFactor
+}
+
+func prepareTextActions(displayIn: TimeInterval, fadeIn: TimeInterval = 0, fadeOut: TimeInterval, label: SKLabelNode, around: SKNode, alignment: textPosition=textPosition.leftBottom, forDuration: TimeInterval?=nil) -> [SKAction]{
+//    pripravi akce pro zobrazeni textu na obrazovku
+    var showForDur = TimeInterval((label.text?.count)!) / TEXT_SPEED
+    if let duration = forDuration{
+        showForDur = duration * (textSpeeds(rawValue: TEXT_SPEED)?.getForDurationModifier()  ?? 1)
+    }
+    return [SKAction.wait(forDuration: displayIn),SKAction.run{label.trackNode(node: around,labelAlligment: alignment.toCGPoint)},SKAction.fadeIn(withDuration: fadeIn),
+           SKAction.wait(forDuration: showForDur),SKAction.fadeOut(withDuration: fadeOut), SKAction.removeFromParent()]
 }
 
 func deviceAdjustments(_ device: UIUserInterfaceIdiom, _ screen: CGRect) -> CGFloat {
+//    prizpusobeni pro ruzne Apple zarizeni
     var size: CGFloat = 1
     switch device {
     case .pad:

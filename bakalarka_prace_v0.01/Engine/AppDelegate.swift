@@ -1,8 +1,6 @@
 //
 //  AppDelegate.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 19.09.18.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 

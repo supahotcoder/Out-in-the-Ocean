@@ -1,8 +1,6 @@
 //
 //  ActiveBackground.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 11/10/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
@@ -14,13 +12,13 @@ class ActiveBackground: GKEntity {
     init(imageName: String, entityManager: EntityManager) {
         super.init()
         let texture = SKTexture(imageNamed: imageName)
-        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 300, height: 300))
+        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: BodyPathsBodySizes.getBodySize(textureName: imageName))
         addComponent(spriteComponent)
         
         //let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false)
         
         // Contact bude jenom na střední kruh
-        let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false, pathBody: SKPhysicsBody.init(circleOfRadius: 60))
+        let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.activeBackground.rawValue, dynamicObject: false, canRotate: false, pathBody: BodyPathsBodySizes.getPhysicsBodyOf(textureName: imageName, sprite: spriteComponent.node))
         addComponent(contactComponent)
         
         let moveComponent = MoveComponent(maxSpeed: 0, maxAcceleration: 0, effectiveRadius: Float(spriteComponent.node.size.width / 2), entityManager: entityManager)

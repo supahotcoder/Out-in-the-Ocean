@@ -1,8 +1,6 @@
 //
 //  Searcher.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 08/11/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
@@ -19,13 +17,13 @@ class Searcher: GKEntity {
         super.init()
 
         let texture = SKTexture(imageNamed: imageName)
-        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 110, height: 110))
+        let spriteComponent = SpriteComponent(entity: self, texture: texture, size: BodyPathsBodySizes.getBodySize(textureName: imageName))
         addComponent(spriteComponent)
 
         let moveComponent = MoveComponent(maxSpeed: 50, maxAcceleration: 10, effectiveRadius: Float(spriteComponent.node.size.width), entityManager: self.entityManager)
         addComponent(moveComponent)
         
-        let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.searcher.rawValue, dynamicObject: true, canRotate: true)
+        let contactComponent = ContactComponent(entity: self, bitmask: bitmasks.searcher.rawValue, dynamicObject: true, canRotate: true, pathBody: BodyPathsBodySizes.getPhysicsBodyOf(textureName: imageName, sprite: spriteComponent.node))
         addComponent(contactComponent)
         
         let enemyComponent = EnemyComponent()

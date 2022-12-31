@@ -1,8 +1,6 @@
 //
 //  Level1-2.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 26/04/2020.
 //  Copyright © 2020 Jan Czerny. All rights reserved.
 //
 
@@ -18,8 +16,8 @@ class Level1_2: Level1 {
     override func didMove(to view: SKView) {
         self.background = childNode(withName: "background1_2") as? SKSpriteNode
         self.name = "Level1_2"
+        playerSpawnPosition = CGPoint(x: -2880.0, y: 320.0)
         super.didMove(to: view)
-        playerNode?.position = CGPoint(x: -2880.0, y: 320.0)
 
 //      SETTING UP MAZE
         boundaries = StaticBackground(imageName: "boundaries1_2", entityManager: entityManager)
@@ -28,10 +26,8 @@ class Level1_2: Level1 {
         entityManager.add(entity: boundaries!)
 
 //     INITIAL MESSAGES
-        waitAndRun(delay: 1, function: { () in self.updateStoryText(with: "Find a way out!", around: self.playerNode!, displayIn: 0.2, fadeOut: 0.5, timeToFocusOn: 3) })
-        waitAndRun(delay: 3, function: { () in self.updateStoryText(with: "Stay put and try to chill out through this passage", around: self.playerNode!, displayIn: 0.5, fadeOut: 1, timeToFocusOn: 3) })
-        waitAndRun(delay: 7, function: { () in self.updateGoalText(with: "Hey pshhh", around: self.playerNode!) })
-        waitAndRun(delay: 9, function: { () in self.updateGoalText(with: "Being still is what you looking for \n in some stressful situations", around: self.playerNode!) })
+        self.updateStoryText(with: "I should find a way out.", around: self.playerNode!, fadeOut: 0.5)
+        self.updateGoalText(with: "Trying to be still in some stressful situations might be a good idea", around: self.playerNode!, displayIn: 2)
 
 //       LOADING EXIT LEVEL WARPER
         endLevelWarper = ActiveBackground(imageName: "spin", entityManager: entityManager)
@@ -42,15 +38,15 @@ class Level1_2: Level1 {
         self.addChild(warper)
 
 //       LOADING SEARCHERs
-        let searcher1 = entityManager.loadSearcher(positionTo: CGPoint(x: -2880, y: -320))
+        let searcher1 = entityManager.loadSearcher(positionTo: CGPoint(x: -2880, y: -320), imageNamed: "evil_player1")
         searcher1?.physicsBody?.collisionBitMask &= bitmasks.player.rawValue
         searcher1?.physicsBody?.collisionBitMask &= bitmasks.frame.rawValue
 
-        let searcher2 = entityManager.loadSearcher(positionTo: CGPoint(x: -320, y: -640))
+        let searcher2 = entityManager.loadSearcher(positionTo: CGPoint(x: -320, y: -640), imageNamed: "evil_player1")
         searcher2?.physicsBody?.collisionBitMask &= bitmasks.player.rawValue
         searcher2?.physicsBody?.collisionBitMask &= bitmasks.frame.rawValue
 
-        let searcher3 = entityManager.loadSearcher(positionTo: CGPoint(x: 2400, y: 320))
+        let searcher3 = entityManager.loadSearcher(positionTo: CGPoint(x: 2400, y: 320), imageNamed: "evil_player1")
         searcher3?.physicsBody?.collisionBitMask &= bitmasks.player.rawValue
         searcher3?.physicsBody?.collisionBitMask &= bitmasks.frame.rawValue
 
@@ -59,14 +55,11 @@ class Level1_2: Level1 {
     }
 
     override func didBegin(_ contact: SKPhysicsContact) {
-        let player: SKPhysicsBody
         let otherNode: SKPhysicsBody
 
         if contact.bodyA.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyA
             otherNode = contact.bodyB
         } else if contact.bodyB.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
-            player = contact.bodyB
             otherNode = contact.bodyA
         } else {
             return
@@ -86,10 +79,11 @@ class Level1_2: Level1 {
 
     override func nextLevel() {
         changingLevel = true
-        if let scene = SKScene(fileNamed: "Level1_3") {
+        let nextlevel = "Level1_2S"
+        if let scene = SKScene(fileNamed: nextlevel) {
             self.removeAllActions()
             self.removeAllChildren()
-            saveLevel(levelName: "Level1_2")
+            saveLevel(levelName: nextlevel)
             self.view?.presentScene(scene)
         }
     }

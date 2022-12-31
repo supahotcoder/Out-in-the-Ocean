@@ -1,8 +1,6 @@
 //
 //  StoryTeller.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 01/07/2019.
 //  Copyright © 2019 Jan Czerny. All rights reserved.
 //
 
@@ -16,12 +14,12 @@ class StoryTeller: GKEntity {
     private var storyComp: StoryComponent?
 
     // STATIC UNIT
-    init(entityManager: EntityManager, storyToTell: [String],completion: (() -> Void)? = nil) {
+    init(entityManager: EntityManager, storyToTell: [String], triggerable: Bool = false, completion: (() -> ())? = nil, imageNamed: String) {
         self.entityManager = entityManager
         super.init()
 
-        let texture = SKTexture(imageNamed: "big_talk")
-        let spriteComp = SpriteComponent(entity: self, texture: texture, size: CGSize(width: 200, height: 200))
+        let texture = SKTexture(imageNamed: imageNamed)
+        let spriteComp = SpriteComponent(entity: self, texture: texture, size: BodyPathsBodySizes.getBodySize(textureName: imageNamed))
         addComponent(spriteComp)
 
         storyComp = StoryComponent(node: spriteComp.node, story: storyToTell, entityManager: entityManager,completion: completion)
@@ -30,11 +28,16 @@ class StoryTeller: GKEntity {
         let avoidComp = AvoidCollisionComponent()
         addComponent(avoidComp)
 
-        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.storyTeller.rawValue, dynamicObject: true, canRotate: false, mass: 20)
+        if triggerable{
+            let trigger = TriggerComponent()
+            addComponent(trigger)
+        }
+
+        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.storyTeller.rawValue, dynamicObject: true, canRotate: false, pathBody: BodyPathsBodySizes.getPhysicsBodyOf(textureName: imageNamed, sprite: spriteComp.node), mass: 40)
         addComponent(contactComp)
         // je statická moveComponent používá jenom pro zjišťování vzdálenosti od hráče
         // DUE TO SOME UNEXPLAINABLE PROBLEMS EVEN STATIC ENTITY HAS TO MOVE SO IT WOULDN'T HAD POSITION (nal, nal)
-        let moveComp = MoveComponent(maxSpeed: 1, maxAcceleration: 40, effectiveRadius: Float(spriteComp.node.size.width / 2), entityManager: self.entityManager)
+        let moveComp = MoveComponent(maxSpeed: 1, maxAcceleration: 30, effectiveRadius: Float(spriteComp.node.size.width / 2), entityManager: self.entityManager)
         addComponent(moveComp)
     }
     

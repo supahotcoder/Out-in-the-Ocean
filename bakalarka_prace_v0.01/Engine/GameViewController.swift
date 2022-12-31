@@ -1,8 +1,6 @@
 //
 //  GameViewController.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 19.09.18.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
@@ -36,7 +34,7 @@ class GameViewController: UIViewController {
             view.showsFPS = true
             view.showsNodeCount = true
             view.showsDrawCount = true // pro pozdější optimalizaci
-//            view.showsPhysics = true
+            view.showsPhysics = true
 //            view.showsFields = true
             
         }

@@ -1,8 +1,6 @@
 //
 //  Extensions.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 12/11/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
@@ -112,9 +110,7 @@ extension CGVector{
     }
 }
 
-
-
-extension float2{
+extension vector_float2{
     func doubleConvetor() -> (x: Double,y: Double){
         return (x: Double(self.x), y: Double(self.y))
     }
@@ -127,9 +123,26 @@ extension float2{
 }
 
 extension CGPoint{
+
+    private static func avoidNode(x: ClosedRange<Int>, y: ClosedRange<Int>, nodeToAvoid: SKSpriteNode, maxDepth: Int = 100, currDepth: Int) -> CGPoint {
+        let randomPos: CGPoint = randomPosition(x: x, y: y)
+        if (randomPos - nodeToAvoid.position).length() > max(nodeToAvoid.size.width, nodeToAvoid.size.width) * 2 {
+            return randomPos
+        } else if currDepth == maxDepth {
+            return randomPos
+        } else {
+            return avoidNode(x: x, y: y, nodeToAvoid: nodeToAvoid, maxDepth: maxDepth, currDepth: currDepth + 1)
+        }
+    }
+
+    static func randomPositionAvoidNode(x: ClosedRange<Int>,y: ClosedRange<Int>, nodeToAvoid: SKSpriteNode, maxDepth: Int = 100) -> CGPoint {
+        return avoidNode(x: x, y: y, nodeToAvoid: nodeToAvoid, maxDepth: maxDepth, currDepth: 0)
+    }
     
     static func randomPosition(x: ClosedRange<Int>,y: ClosedRange<Int>) -> CGPoint {
-        return CGPoint(x: Int.random(in: x), y: Int.random(in: y))
+        let x = GKRandomDistribution(randomSource: GKRandomSource.sharedRandom(),lowestValue: x.lowerBound, highestValue: x.upperBound).nextInt()
+        let y = GKRandomDistribution(randomSource: GKRandomSource.sharedRandom(),lowestValue: y.lowerBound, highestValue: y.upperBound).nextInt()
+        return .init(x: x, y: y)
     }
     
     init(tuple: (x: Double,y: Double)) {
@@ -142,9 +155,17 @@ extension CGPoint{
            return self.x < position.x + rangeSize && self.x > position.x - rangeSize &&
            self.y < position.y + rangeSize && self.y > position.y - rangeSize
        }
+
+    static prefix func -(value: CGPoint) -> CGPoint{
+        return CGPoint(x: -value.x, y: -value.y)
+    }
     
     static func - (left: CGPoint, right: CGPoint) -> CGPoint {
         return CGPoint(x: left.x - right.x, y: left.y - right.y)
+    }
+
+    static func - (left: CGPoint, right: CGPoint) -> CGVector {
+        return  CGVector(dx: left.x - right.x, dy: left.y - right.y)
     }
     
     static func + (left: CGPoint, right: CGPoint) -> CGPoint {
@@ -157,5 +178,17 @@ extension CGPoint{
     
     func floatConvetor() -> (x: Float,y: Float){
         return (x: Float(self.x), y: Float(self.y))
+    }
+}
+
+extension CGVector{
+    static func - (left: CGVector, right: CGVector) -> CGVector {
+        return CGVector(dx: left.dx - right.dx, dy: left.dy - right.dy)
+    }
+}
+
+extension CGSize{
+    static func / (left: CGSize, right: Double) -> CGSize {
+        return CGSize(width: left.width / CGFloat(right), height: left.height / CGFloat(right))
     }
 }

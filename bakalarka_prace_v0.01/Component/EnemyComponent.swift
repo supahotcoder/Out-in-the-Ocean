@@ -1,8 +1,6 @@
 //
 //  EnemyComponent.swift
-//  bakalarka_prace_v0.01
 //
-//  Created by Janko on 20/12/2018.
 //  Copyright © 2018 Jan Czerny. All rights reserved.
 //
 
