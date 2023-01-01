@@ -48,7 +48,7 @@ extension SKCameraNode {
     // skalovani kamery pro odlisne Apple zarizeni
         switch device {
         case .phone:
-            setScale(2)
+            setScale(1)
         case .pad:
             setScale(0.5)
         default:

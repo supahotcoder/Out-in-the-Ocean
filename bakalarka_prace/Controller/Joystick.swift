@@ -11,7 +11,7 @@ class Joystick {
     
     private(set) var node : SKSpriteNode?
     private(set) var insideFrame : Bool
-    private let maxVelocity : CGFloat = 400
+    private let maxVelocity : CGFloat = 100
     private let speed: CGFloat = 4
     private let screen: CGRect
 
