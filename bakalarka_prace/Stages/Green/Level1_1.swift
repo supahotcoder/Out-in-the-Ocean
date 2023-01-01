@@ -108,7 +108,7 @@ class Level1_1: Level1 {
         donut = Collectible(imageNamed: "donut", size: CGSize(width: 70, height: 70), id: "1", protectable: false, entityManager: entityManager, location: corners[3])
         if let node = donut?.spriteComp.node {
             node.zPosition = 5
-            node.run(SKAction.repeatForever(.sequence([.wait(forDuration: 0.5), SKAction.run({ () in node.run(SKAction.applyImpulse(CGVector(dx: Int.random(in: -20...20), dy: Int.random(in: -20...20)), duration: 0.3)) })])))
+            node.run(SKAction.repeatForever(.sequence([.wait(forDuration: 0.5), SKAction.run({ () in node.run(SKAction.applyImpulse(CGVector(dx: Int.random(in: -15...15), dy: Int.random(in: -15...15)), duration: 0.3)) })])))
         }
         entityManager.add(entity: donut!)
     }
@@ -116,20 +116,24 @@ class Level1_1: Level1 {
     func nextLevel(didTriggerPlayer: Bool) {
         changingLevel = true
         if didTriggerPlayer{
+            UserDefaults.standard.set(true, forKey: "Level1_2S_by_player")
+            UserDefaults.standard.synchronize()
             let nextlevel = "Level1_2S"
+            saveLevel(levelName: nextlevel)
             if let scene = SKScene(fileNamed: nextlevel) {
                 (scene as? Level1_2S)?.didPlayerAteDonuts = true
                 self.removeAllActions()
                 self.removeAllChildren()
-                saveLevel(levelName: nextlevel)
                 self.view?.presentScene(scene)
             }
         }else{
+            UserDefaults.standard.set(false, forKey: "Level1_2S_by_player")
+            UserDefaults.standard.synchronize()
             let nextlevel = "Level1_2"
+            saveLevel(levelName: nextlevel)
             if let scene = SKScene(fileNamed: nextlevel) {
                 self.removeAllActions()
                 self.removeAllChildren()
-                saveLevel(levelName: nextlevel)
                 self.view?.presentScene(scene)
             }
         }

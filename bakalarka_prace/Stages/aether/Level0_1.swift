@@ -28,8 +28,8 @@ class Level0_1: LevelStory {
         super.didMove(to: view)
 //        HELP SETUP
         helpBox = HelpBox(levelName: "level0-1")
-        // pokus otoceni hrace na pribehovou postavu
-        playerNode?.zRotation = 0.7
+        // otoceni hrace na pribehovou postavu
+        playerNode?.zRotation = 2.8
 
 //       LOAD EXIT LEVEL WARPER
         let warper = ActiveBackground(imageName: "spin", entityManager: entityManager)

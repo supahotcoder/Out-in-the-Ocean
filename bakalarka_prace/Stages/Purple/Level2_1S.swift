@@ -53,7 +53,12 @@ class Level2_1S: LevelStory {
         let nextLevel = "Level2_1"
         if let scene = SKScene(fileNamed: nextLevel) {
             if sideStoryCompleted{
+                UserDefaults.standard.set(true, forKey: "Level2_1_side_story")
+                UserDefaults.standard.synchronize()
                 (scene as? Level2_1)?.didPlayerGatheredInfo = true
+            }else{
+                UserDefaults.standard.set(false, forKey: "Level2_1_side_story")
+                UserDefaults.standard.synchronize()
             }
             self.removeAllActions()
             self.removeAllChildren()

@@ -124,19 +124,19 @@ extension vector_float2{
 
 extension CGPoint{
 
-    private static func avoidNode(x: ClosedRange<Int>, y: ClosedRange<Int>, nodeToAvoid: SKSpriteNode, maxDepth: Int = 100, currDepth: Int) -> CGPoint {
+    private static func avoidNode(x: ClosedRange<Int>, y: ClosedRange<Int>, nodeToAvoid: SKSpriteNode, xBodySizesFromNode: CGFloat, maxDepth: Int = 100, currDepth: Int) -> CGPoint {
         let randomPos: CGPoint = randomPosition(x: x, y: y)
-        if (randomPos - nodeToAvoid.position).length() > max(nodeToAvoid.size.width, nodeToAvoid.size.width) * 2 {
+        if (randomPos - nodeToAvoid.position).length() > max(nodeToAvoid.size.width, nodeToAvoid.size.width) * xBodySizesFromNode {
             return randomPos
         } else if currDepth == maxDepth {
             return randomPos
         } else {
-            return avoidNode(x: x, y: y, nodeToAvoid: nodeToAvoid, maxDepth: maxDepth, currDepth: currDepth + 1)
+            return avoidNode(x: x, y: y, nodeToAvoid: nodeToAvoid, xBodySizesFromNode: xBodySizesFromNode, maxDepth: maxDepth, currDepth: currDepth + 1)
         }
     }
 
-    static func randomPositionAvoidNode(x: ClosedRange<Int>,y: ClosedRange<Int>, nodeToAvoid: SKSpriteNode, maxDepth: Int = 100) -> CGPoint {
-        return avoidNode(x: x, y: y, nodeToAvoid: nodeToAvoid, maxDepth: maxDepth, currDepth: 0)
+    static func randomPositionAvoidNode(x: ClosedRange<Int>,y: ClosedRange<Int>, nodeToAvoid: SKSpriteNode, maxDepth: Int = 100, xBodySizesFromNode: Int = 2) -> CGPoint {
+        return avoidNode(x: x, y: y, nodeToAvoid: nodeToAvoid, xBodySizesFromNode: CGFloat(xBodySizesFromNode), maxDepth: maxDepth, currDepth: 0)
     }
     
     static func randomPosition(x: ClosedRange<Int>,y: ClosedRange<Int>) -> CGPoint {

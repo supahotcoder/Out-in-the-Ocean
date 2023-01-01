@@ -43,13 +43,15 @@ class Level3_1: GameScene{
         // WANDERS (DEADLY)
 //        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint(x: -400, y: 680))
 //        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint(x: -400, y: -680))
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -300...400, y: -680...680, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -300...400, y: -680...680, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -300...400, y: -680...680, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -300...400, y: -680...680, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -300...400, y: -680...680, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -300...400, y: -680...680, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -300...400, y: -680...680, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
 
         // WARPER SETUP
         let warper = ActiveBackground(imageName: "spin", entityManager: entityManager)
@@ -59,7 +61,7 @@ class Level3_1: GameScene{
         warperNode.run(SKAction.rotate(byAngle: 90, duration: 600))
         self.addChild(warperNode)
         // SLIME SETUP
-        slimeNode = entityManager.loadStoryTeller(storyToTell: [""], imageNamed: "slime", triggerable: true, position: CGPoint(x: -440, y: -450), rotation: CGFloat(0)).node
+        slimeNode = entityManager.loadStoryTeller(storyToTell: [""], imageNamed: "slime", triggerable: true, position: CGPoint(x: -600, y: -600), rotation: CGFloat(0)).node
     }
 
     @discardableResult
@@ -76,14 +78,14 @@ class Level3_1: GameScene{
     func warp(contact: SKPhysicsContact, otherNode: SKNode?, teleportTo: CGPoint? = nil) {
         if otherNode != nil {
             warpAnimation(position: contact.contactPoint,warpFile: "Warp2")
-            var destination = CGPoint.randomPositionAvoidNode(x: -840...840, y: -640...640, nodeToAvoid: playerNode!)
+            var destination = CGPoint.randomPositionAvoidNode(x: -640...640, y: -640...640, nodeToAvoid: playerNode!)
             if let tpTo = teleportTo {
                 destination = tpTo
             }
             // první se vynoří animace a až za 1.5s teleportovaný objekt
             teleport(pos: destination, otherNode: otherNode)
             if otherNode != warperNode{
-                teleport(pos: CGPoint.randomPositionAvoidNode(x: -840...840, y: -640...640, nodeToAvoid: playerNode!), otherNode: warperNode, isWarper: true)
+                teleport(pos: CGPoint.randomPositionAvoidNode(x: -640...640, y: -640...640, nodeToAvoid: playerNode!), otherNode: warperNode, isWarper: true)
             }
         }
     }
@@ -151,7 +153,7 @@ class Level3_1: GameScene{
         if otherNode.categoryBitMask == bitmasks.wander.rawValue {
             gameOver()
         } else if otherNode.categoryBitMask == bitmasks.frame.rawValue {
-            teleport(pos: CGPoint.randomPositionAvoidNode(x: -540...540, y: -640...640, nodeToAvoid: slimeNode), otherNode: playerNode!)
+            teleport(pos: CGPoint.randomPositionAvoidNode(x: -640...640, y: -640...640, nodeToAvoid: slimeNode), otherNode: playerNode!)
         }else if otherNode.categoryBitMask == bitmasks.activeBackground.rawValue {
             warp(contact: contact, otherNode: playerNode!)
         }else if otherNode.categoryBitMask == bitmasks.storyTeller.rawValue {
@@ -161,6 +163,9 @@ class Level3_1: GameScene{
 
     func nextLevel(){
         changingLevel = true
+        playerNode?.physicsBody?.categoryBitMask = 0b0
+        playerNode?.physicsBody?.contactTestBitMask = 0b0
+        playerNode?.physicsBody?.collisionBitMask = 0b0
         let nextlevel = "Level4_1"
             joystickNode?.removeAllChildren()
             joystickNode?.removeFromParent()
@@ -187,11 +192,11 @@ class Level3_1: GameScene{
 
     override func update(_ currentTime: TimeInterval) {
         if -lastTimeWarperTp.timeIntervalSinceNow > 6{
-            teleport(pos: CGPoint.randomPositionAvoidNode(x: -540...540, y: -640...640, nodeToAvoid: playerNode!), otherNode: warperNode)
+            teleport(pos: CGPoint.randomPositionAvoidNode(x: -640...640, y: -640...640, nodeToAvoid: playerNode!), otherNode: warperNode)
             lastTimeWarperTp = Date()
         }
         if -lastTimeSlimeTp.timeIntervalSinceNow > 8{
-            teleport(pos: CGPoint.randomPositionAvoidNode(x: -540...540, y: -640...640, nodeToAvoid: playerNode!), otherNode: slimeNode)
+            teleport(pos: CGPoint.randomPositionAvoidNode(x: -640...640, y: -640...640, nodeToAvoid: playerNode!, xBodySizesFromNode: 4), otherNode: slimeNode)
             lastTimeSlimeTp = Date()
         }
 

@@ -45,6 +45,10 @@ class Level2_1: Level2 {
         fluidCrystals.zPosition = 2
         self.addChild(fluidCrystals)
 
+        if !didPlayerGatheredInfo{
+//            pokud restartujeme hru, nebo ji nacteme znova tak chceme zachovat puvodni rozhodnuti hrace
+            didPlayerGatheredInfo = UserDefaults.standard.bool(forKey: "Level2_1_side_story")
+        }
 
         //      SETTING UP MINERALS
         let minerals = StaticBackground(imageName: "minerals", entityManager: entityManager)
@@ -159,18 +163,49 @@ class Level2_1: Level2 {
 
     private func nextLevel() {
         changingLevel = true
+        playerNode?.physicsBody?.categoryBitMask = 0b0
+        playerNode?.physicsBody?.contactTestBitMask = 0b0
+        playerNode?.physicsBody?.collisionBitMask = 0b0
+        UserDefaults.standard.set(false, forKey: "Level2_1_side_story")
+        UserDefaults.standard.synchronize()
         let warp = SKEmitterNode(fileNamed: "Warp2")!
         warp.position = (playerNode?.position)!
         warp.zPosition = 6
         self.addChild(warp)
+        let nextlevel = "Level3_1S"
+        if let scene = SKScene(fileNamed: nextlevel) {
+            self.removeAllActions()
+            self.removeAllChildren()
+            self.view?.presentScene(scene)
+        }
     }
 
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
+    override func gameOver() {
+        GameSceneClass.haveDied = true
+        playerNode?.physicsBody?.categoryBitMask = 0b0
+        playerNode?.physicsBody?.contactTestBitMask = 0b0
+        playerNode?.physicsBody?.collisionBitMask = 0b0
+        playerNode?.run(SKAction.fadeOut(withDuration: 2))
+        let end = SKEmitterNode(fileNamed: "Ending2")!
+        end.position = (playerNode?.position)!
+        end.zPosition = 6
+        self.addChild(end)
+        let seconds = CGFloat(end.numParticlesToEmit) / end.particleBirthRate + end.particleLifetime + end.particleLifetimeRange / 2
+        self.scene?.run(SKAction.fadeOut(withDuration: TimeInterval(seconds)))
+        //zrušení pohybu a zpráv
+        joystickNode?.removeFromParent()
+        entityManager.gameOver = true
+        //přepnutí scény po End scene
+        DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(seconds)) {
+            if let scene = SKScene(fileNamed: self.name!) {
+                if self.didPlayerGatheredInfo{
+                    (scene as? Level2_1)?.didPlayerGatheredInfo = true
+                }
+                self.removeAllActions()
+                self.removeAllChildren()
+                self.view?.presentScene(scene)
+            }
+        }
     }
 
     override func update(_ currentTime: TimeInterval) {

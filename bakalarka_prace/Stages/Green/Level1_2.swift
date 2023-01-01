@@ -81,10 +81,10 @@ class Level1_2: Level1 {
     override func nextLevel() {
         changingLevel = true
         let nextlevel = "Level1_2S"
+        saveLevel(levelName: nextlevel)
         if let scene = SKScene(fileNamed: nextlevel) {
             self.removeAllActions()
             self.removeAllChildren()
-            saveLevel(levelName: nextlevel)
             self.view?.presentScene(scene)
         }
     }

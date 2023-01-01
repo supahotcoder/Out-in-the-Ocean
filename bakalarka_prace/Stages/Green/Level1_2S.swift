@@ -17,14 +17,20 @@ class Level1_2S: LevelStory {
         let edgePhysicsBody = SKPhysicsBody(edgeLoopFrom: (background?.frame)!)
         self.physicsBody = edgePhysicsBody
 //      bigeyyy big_talk
-        playerSpawnPosition = CGPoint(x: 0, y: 320.0)
+        playerSpawnPosition = CGPoint(x: -250, y: 320.0)
         super.didMove(to: view)
         //        HELP SETUP
         helpBox = HelpBox(levelName: "level1-2S")
 //        BACKGROUND SOUND SETTING
         backgroundMusic(fileName: "level1-2S-sound", extension: "wav")
 //      SETUP STORY
-        mainStoryTellerNode = entityManager.loadStoryTeller(storyToTell: [""], imageNamed: "huh", triggerable: false, position: CGPoint(x: 150, y: 300), rotation: CGFloat(0)).node
+        mainStoryTellerNode = entityManager.loadStoryTeller(storyToTell: [""], imageNamed: "huh", triggerable: false, position: CGPoint(x: -100, y: 300), rotation: CGFloat(0)).node
+        
+        if !didPlayerAteDonuts{
+//            pokud restartujeme hru, nebo ji nacteme znova tak chceme zachovat puvodni rozhodnuti hrace
+            didPlayerAteDonuts = UserDefaults.standard.bool(forKey: "Level1_2S_by_player")
+            UserDefaults.standard.synchronize()
+        }
 
         if didPlayerAteDonuts {
             updateStoryText(with: "Ah, I can't believe someone would try\nto eat the same donuts as the last guy and end up here!", around: mainStoryTellerNode!)
@@ -70,7 +76,7 @@ class Level1_2S: LevelStory {
                                                     "I could feel it in the air as it lingered,\nas if it was trying its best to communicate to me through mysterious and tender means.",
                                                     "I think that I have understood its plan,\nwhich was to protect this place and everything in it.",
                                                     "No matter what I was happy that I didn't move at all so it didn't change it's intentions.",
-                                                    "That's why we may never fully understand what lies beyond the veil."], imageNamed: "wander", triggerable: false, position: CGPoint(x: 550, y: 400), rotation: CGFloat(0))
+                                                    "That's why we may never fully understand what lies beyond the veil."], imageNamed: "wander", triggerable: false, position: CGPoint(x: 550, y: 200), rotation: CGFloat(0))
     }
 
     override func didBumpIntoStoryTeller() {
@@ -80,10 +86,12 @@ class Level1_2S: LevelStory {
     func nextLevel() {
         changingLevel = true
         let nextlevel = "Level1_3"
+        saveLevel(levelName: nextlevel)
+        UserDefaults.standard.set(false, forKey: "Level1_2S_by_player")
+        UserDefaults.standard.synchronize()
         if let scene = SKScene(fileNamed: nextlevel) {
             self.removeAllActions()
             self.removeAllChildren()
-            saveLevel(levelName: nextlevel)
             self.view?.presentScene(scene)
         }
     }

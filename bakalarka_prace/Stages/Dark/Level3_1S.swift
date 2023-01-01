@@ -25,8 +25,8 @@ class Level3_1S: LevelStory {
         helpBox = HelpBox(levelName: "level3-1S")
         mainStoryTellerNode = entityManager.loadStoryTeller(storyToTell: [""], imageNamed: "diamantier", triggerable: false, position: CGPoint(x: 150, y: 300), rotation: CGFloat(0)).node
 
-        updateStoryText(with: "Wait, I just used the crystal key to get here! Why am I here and not where I wanted to be?", around: playerNode!)
-        updateStoryText(with: "Ah, there's more to it than that.\nou see, the crystal key is just one of twelve keys of mindful teleportation.", around: mainStoryTellerNode!)
+        updateStoryText(with: "Wait, I just used the crystal key to get here!\nWhy am I here and not where I wanted to be?", around: playerNode!)
+        updateStoryText(with: "Ah, there's more to it than that.\nYou see, the crystal key is just one of twelve keys of mindful teleportation.", around: mainStoryTellerNode!)
         updateStoryText(with: "If want to teleport correctly, you must have at least two keys.", around: mainStoryTellerNode!)
         updateStoryText(with: "Otherwise, no matter how clean a mind you have, it will never work.", around: mainStoryTellerNode!)
         updateStoryText(with: "Many have tried to use only one key to go where they pleased.\nBut only found themselves in an interdimensional state of madness.", around: mainStoryTellerNode!)
@@ -49,8 +49,8 @@ class Level3_1S: LevelStory {
 
         entityManager.loadWander(messages: ["..."],imageName: "mudder", warningMsgs: [""], position: CGPoint.randomPosition(x: -320...230, y: -400...(-100)), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .systemPink, colorBlendFactor: 0.3, duration: 0))
         entityManager.loadWander(messages: ["I'm calm for now."],imageName: "mudder", warningMsgs: [""], position: CGPoint.randomPosition(x: -120...130, y: -400...(-100)), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .systemPink, colorBlendFactor: 0.3, duration: 0))
-        entityManager.loadWander(messages: ["Don't bother"],imageName: "crowner", warningMsgs: [""], position: CGPoint.randomPosition(x: -150...120, y: -400...(-100)), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .orange, colorBlendFactor: 0.3, duration: 0))
-        entityManager.loadWander(messages: ["I'm not here to have a friendly chat"],imageName: "crowner", warningMsgs: [""], position: CGPoint.randomPositionAvoidNode(x: -220...220, y: -500...(-50), nodeToAvoid: playerNode!), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .blue, colorBlendFactor: 0.3, duration: 0))
+        entityManager.loadWander(messages: ["Don't bother"],imageName: "mudder", warningMsgs: [""], position: CGPoint.randomPosition(x: -150...120, y: -400...(-100)), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .orange, colorBlendFactor: 0.3, duration: 0))
+        entityManager.loadWander(messages: ["I'm not here to have a friendly chat"],imageName: "mudder", warningMsgs: [""], position: CGPoint.randomPositionAvoidNode(x: -220...220, y: -500...(-50), nodeToAvoid: playerNode!), rotation: CGFloat.random(in: 0...360))?.run(SKAction.colorize(with: .blue, colorBlendFactor: 0.3, duration: 0))
 
         let helpfulStoryNode = entityManager.loadStoryTeller(storyToTell: ["I heard you wish to venture to an interdimensional state.",
                                                                            "But be warned that place is very unstable and there are innumerable dangers.",

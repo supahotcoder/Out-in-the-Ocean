@@ -11,7 +11,7 @@ class Joystick {
     
     private(set) var node : SKSpriteNode?
     private(set) var insideFrame : Bool
-    private let maxVelocity : CGFloat = 100
+    private let maxVelocity : CGFloat = 400
     private let speed: CGFloat = 4
     private let screen: CGRect
 
@@ -124,7 +124,7 @@ class Joystick {
     
     // regulátor maximální rychlosti
     func maxVelocityCheck(node : SKSpriteNode){
-        var velocity = (node.physicsBody?.velocity)!
+        let velocity = (node.physicsBody?.velocity)!
         let deltaZ = sqrt(pow(velocity.dx, 2) + pow(velocity.dy, 2))
         if deltaZ > maxVelocity{
             let xPart = velocity.dx / deltaZ

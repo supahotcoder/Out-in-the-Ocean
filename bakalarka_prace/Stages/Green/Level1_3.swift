@@ -20,6 +20,8 @@ class Level1_3: Level1 {
         self.background = childNode(withName: "background") as? SKSpriteNode
         self.name = "Level1_3"
         super.didMove(to: view)
+        //MUSIC SETUP
+        backgroundMusic(fileName: "level1-3-sound", extension: "wav")
         //        HELP SETUP
         helpBox = HelpBox(levelName: "level1-3")
         //SEARCHER SETUP
@@ -49,8 +51,6 @@ class Level1_3: Level1 {
         entityManager.loadWander(messages: [msgs[0]], warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
         entityManager.loadWander(messages: Array(msgs.prefix(2)), warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
         entityManager.loadWander(messages: Array(msgs.prefix(3)), warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
-        //MUSIC SETUP
-        backgroundMusic(fileName: "level1-3-sound", extension: "wav")
 
         //HUE EFFECT for collectible
         effectNode.shouldRasterize = true
@@ -151,10 +151,10 @@ class Level1_3: Level1 {
     override func nextLevel() {
         changingLevel = true
         let nextlevel = "Level2_1S"
+        saveLevel(levelName: nextlevel)
         if let scene = SKScene(fileNamed: nextlevel) {
             self.removeAllActions()
             self.removeAllChildren()
-            saveLevel(levelName: nextlevel)
             self.view?.presentScene(scene)
         }
     }

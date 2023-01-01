@@ -368,16 +368,36 @@ class GameSceneClass: SKScene, SKPhysicsContactDelegate {
 
     //MARK: - SOUNDS
 
+    fileprivate func loadAndPlayMusic(_ fileName: String, _ ex: String) throws {
+//        hudbu podle nazvu a zacne ji prehravat
+        try GameSceneClass.backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: fileName, withExtension: ex)!)
+        GameSceneClass.backgroundMusicPlayer!.numberOfLoops = -1
+        GameSceneClass.backgroundMusicPlayer!.prepareToPlay()
+        GameSceneClass.backgroundMusicPlayer!.play()
+    }
+    
     func backgroundMusic(fileName: String, extension ex: String) {
         do {
+//            potencionalni oprava pokud mame iOS 16 a zarizeni nastavene v tichem rezime, tak diky teto uprave muzeme prehravat zvuk
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+        } catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+            
+        }
+        do {
             if GameSceneClass.backgroundMusicPlayer == nil {
-                try GameSceneClass.backgroundMusicPlayer = AVAudioPlayer(contentsOf: Bundle.main.url(forResource: fileName, withExtension: ex)!)
-                GameSceneClass.backgroundMusicPlayer!.numberOfLoops = -1
-                GameSceneClass.backgroundMusicPlayer!.prepareToPlay()
-                GameSceneClass.backgroundMusicPlayer!.play()
+                try loadAndPlayMusic(fileName, ex)
             } else {
-                GameSceneClass.backgroundMusicPlayer!.prepareToPlay()
-                GameSceneClass.backgroundMusicPlayer!.play()
+                if let url = GameSceneClass.backgroundMusicPlayer!.url{
+                    if url.lastPathComponent.contains(fileName){
+                        GameSceneClass.backgroundMusicPlayer!.prepareToPlay()
+                        GameSceneClass.backgroundMusicPlayer!.play()
+                    }else{
+                        try loadAndPlayMusic(fileName, ex)
+                    }
+                }else{
+                    try loadAndPlayMusic(fileName, ex)
+                }
             }
         } catch {
             print("AVAudioPlayer crashed")
@@ -414,6 +434,7 @@ class GameSceneClass: SKScene, SKPhysicsContactDelegate {
                 if !cam.hasActions() && !cameraFocusActions.isEmpty{
                     if let focusActions = cameraFocusActions.dequeue(){
                         hidePauseButton()
+                        disableMovement()
                         cam.run(focusActions)
                     }
                     if cameraFocusActions.isEmpty{
@@ -552,13 +573,17 @@ class GameSceneClass: SKScene, SKPhysicsContactDelegate {
     
     func resumeGame() {
         totalTimeInMenu += abs(openedMenuDate.timeIntervalSinceNow)
-        GameSceneClass.backgroundMusicPlayer?.play();
+        GameSceneClass.backgroundMusicPlayer?.play()
         restartButton?.isHidden = true
         resumeButton?.isHidden = true
-        helpButton?.isHidden = false
+        helpButton?.isHidden = true
         settingsButton?.isHidden = true
         menuButton?.isHidden = true
         resumeGameState()
+        if !cameraFocusActions.isEmpty{
+            disableMovement()
+            hidePauseButton()
+        }
         helpButton?.removeFromParent()
         resumeButton?.removeFromParent()
         restartButton?.removeFromParent()

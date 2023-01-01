@@ -29,6 +29,10 @@ class MainMenu: MenuEssential {
 
         if isGameFinished{
             songName = "main-menu-finished-game"
+            if UserDefaults.standard.string(forKey: "LastLevel") == "MainMenu"{
+                UserDefaults.standard.set("Level4_1", forKey: "LastLevel")
+                UserDefaults.standard.synchronize()
+            }
         }
         // MUSIC SETUP
         do {
@@ -48,18 +52,23 @@ class MainMenu: MenuEssential {
             level = lastLevel
         }
         //        Mozna oprava pokud je simulator spatne prizpusobeny (XCode 13.2.1 ma tuto chybu u simolatoru iPhone 11,12,13 PRO/MAX/MINI)
-        var deviceSize = UIScreen.main.bounds.size
-        var deviceBounds = UIScreen.main.bounds
-        if isRunningInSimulator(){
-            deviceSize = deviceSize.width > self.scene!.size.width ? deviceSize : self.scene!.size
-            deviceBounds = deviceBounds.width > self.scene!.frame.width ? deviceBounds : self.scene!.frame
-        }
+        var deviceSize = self.scene!.size//UIScreen.main.bounds.size
+        var deviceBounds = self.scene!.frame//UIScreen.main.bounds
+//        POKUD TESTUJETE V SIMULATORU A MENU SE ZOBRAZUJE SPATNE ODKOMENTUJTE NASLEDUJICI KOD
+//        if isRunningInSimulator(){
+//            deviceSize = deviceSize.width > self.scene!.size.width ? deviceSize : self.scene!.size
+//            deviceBounds = deviceBounds.width > self.scene!.frame.width ? deviceBounds : self.scene!.frame
+//        }
         
         playButton = childNode(withName: "playGame") as? SKSpriteNode
         playGameButton = SKSpriteNode(texture: SKTexture(imageNamed: "transp"), size: CGSize(width: 500, height: 200))
         playGameButton.zPosition = 10
         playGameButton.position = CGPoint(x: 0, y: 0)
         addChild(playGameButton)
+        if isGameFinished{
+            (playButton.childNode(withName: "playGameLabel") as? SKLabelNode)?.text = "Play Again"
+
+        }
         
         resetProgress = childNode(withName: "resetProgress") as? SKSpriteNode
         selectLevel = childNode(withName: "selectLevel") as? SKSpriteNode

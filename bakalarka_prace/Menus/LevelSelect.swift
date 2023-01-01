@@ -41,32 +41,27 @@ class LevelSelect: MenuEssential {
 //        Mozna oprava pokud je simulator spatne prizpusobeny (XCode 13.2.1 ma tuto chybu u simolatoru iPhone 11,12,13 PRO/MAX/MINI)
         print(UIScreen.main.bounds.size)
         print(self.scene!.size)
-        var deviceSize = UIScreen.main.bounds.size
-        if isRunningInSimulator(){
-            deviceSize = deviceSize.width > self.scene!.size.width ? deviceSize : self.scene!.size
-        }
+        var deviceSize = self.scene!.size//UIScreen.main.bounds.size
+//        POKUD TESTUJETE V SIMULATORU A MENU SE ZOBRAZUJE SPATNE ODKOMENTUJTE NASLEDUJICI KOD
+//        if isRunningInSimulator(){
+//            deviceSize = deviceSize.width > self.scene!.size.width ? deviceSize : self.scene!.size
+//        }
         
         let heightAdjust: CGFloat = 3
         let widthAdjust: CGFloat = 3
-        let levelBackgroundAdjust = 1.75
+//        let levelBackgroundAdjust = 1.75
         level1_1 = childNode(withName: "Level1_1") as? SKSpriteNode
         level1_1.position = CGPoint(x: -(deviceSize.width / widthAdjust), y: deviceSize.height / heightAdjust)
-        (level1_1.childNode(withName: level1_1.name! + "-b") as? SKSpriteNode)?.size = CGSize(width: level1_1.size.width * levelBackgroundAdjust, height: level1_1.size.height * levelBackgroundAdjust)
         level1_2 = childNode(withName: "Level1_2") as? SKSpriteNode
         level1_2.position = CGPoint(x: 0, y: deviceSize.height / heightAdjust)
-        (level1_2.childNode(withName: level1_2.name! + "-b") as? SKSpriteNode)?.size = CGSize(width: level1_2.size.width * levelBackgroundAdjust, height: level1_2.size.height * levelBackgroundAdjust)
         level1_3 = childNode(withName: "Level1_3") as? SKSpriteNode
         level1_3.position = CGPoint(x: (deviceSize.width / widthAdjust), y: deviceSize.height / heightAdjust)
-        (level1_3.childNode(withName: level1_3.name! + "-b") as? SKSpriteNode)?.size = CGSize(width: level1_3.size.width * levelBackgroundAdjust, height: level1_3.size.height * levelBackgroundAdjust)
         
         level2_1 = childNode(withName: "Level2_1") as? SKSpriteNode
         level2_1.position = CGPoint(x: -(deviceSize.width / widthAdjust), y: 0)
-        (level2_1.childNode(withName: level2_1.name! + "-b") as? SKSpriteNode)?.size = CGSize(width: level2_1.size.width * levelBackgroundAdjust, height: level2_1.size.height * levelBackgroundAdjust)
         level3_1 = childNode(withName: "Level3_1") as? SKSpriteNode
-        (level3_1.childNode(withName: level3_1.name! + "-b") as? SKSpriteNode)?.size = CGSize(width: level3_1.size.width * levelBackgroundAdjust, height: level3_1.size.height * levelBackgroundAdjust)
         level3_1.position = CGPoint(x: 0, y: 0)
         level4_1 = childNode(withName: "Level4_1") as? SKSpriteNode
-        (level4_1.childNode(withName: level4_1.name! + "-b") as? SKSpriteNode)?.size = CGSize(width: level4_1.size.width * levelBackgroundAdjust, height: level4_1.size.height * levelBackgroundAdjust)
         level4_1.position = CGPoint(x: (deviceSize.width / widthAdjust), y: 0)
         
         level0_1 = childNode(withName: "Level0_1") as? SKSpriteNode

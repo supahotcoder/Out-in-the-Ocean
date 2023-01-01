@@ -26,6 +26,8 @@ class Level4_1: GameScene{
 
     private var key1: Collectible!
     private var key2: Collectible!
+    
+    private var thanks: SKLabelNode!
 
     override func didMove(to view: SKView) {
         self.name = "Level4_1"
@@ -54,7 +56,7 @@ class Level4_1: GameScene{
         self.addChild(smogFront)
         self.addChild(smogBack)
 //      BOSS SETUP
-        reversoNode = entityManager.loadStoryTeller(storyToTell: [""], imageNamed: "player_test", triggerable: false, position: CGPoint(x: 100, y: 0), rotation: CGFloat(1.7)).node
+        reversoNode = entityManager.loadStoryTeller(storyToTell: [""], imageNamed: "player_test", triggerable: false, position: CGPoint(x: 100, y: 0), rotation: CGFloat(3.2)).node
         reversoNode.run(.colorize(with: .white, colorBlendFactor: 1, duration: 0))
         reversoNode.run(.fadeIn(withDuration: 1))
 
@@ -86,6 +88,14 @@ class Level4_1: GameScene{
         updateStoryText(with: "you sent who !you not are ,force unifying the for here are you ,ahh", around: reversoNode)
         updateStoryText(with: "happens what matter no ,calm stay and move not do\nyou approach can I before thoroughly you test to have to going am I whatever", around: reversoNode)
         updateStoryText(with: "more no are and failed have many and\n,thing same the for looking ,you before come have many", around: reversoNode)
+        
+        
+        thanks = SKLabelNode(text: "Thank you for playing the game!")
+        thanks.zPosition = 6
+        thanks.fontColor = UIColor.white
+        thanks.fontSize = 30
+        thanks.run(.fadeOut(withDuration: 0))
+        camera?.addChild(thanks)
     }
 
     @discardableResult
@@ -175,8 +185,13 @@ class Level4_1: GameScene{
         }
     }
 
-    private func showEnd(thanks: SKLabelNode) {
+    private func showEnd(thanksText: [String]) {
         changingLevel = true
+        playerNode?.physicsBody?.categoryBitMask = 0b0
+        playerNode?.physicsBody?.contactTestBitMask = 0b0
+        playerNode?.physicsBody?.collisionBitMask = 0b0
+        backgroundMusic(fileName: "level4-1-finish", extension: ".wav")
+
         let nextlevel = "MainMenu"
         UserDefaults.standard.set(true, forKey: "finishedGame")
         UserDefaults.standard.synchronize()
@@ -184,7 +199,8 @@ class Level4_1: GameScene{
         pauseGKEntities()
         let entities = entityManager.gameEntities
         entities.forEach { entity in
-            if entity.component(ofType: PlayerComponent.self) == nil {
+            if entity.component(ofType: PlayerComponent.self) == nil  && entity.component(ofType: StoryComponent.self) == nil{
+                
                 entityManager.remove(entity: entity
                 )
             }
@@ -201,15 +217,22 @@ class Level4_1: GameScene{
         backColor.run(.fadeOut(withDuration: 0))
         backColor.run(.fadeIn(withDuration: 3))
         addChild(backColor)
-
+        
         camera?.removeAllActions()
-        thanks.position = camera?.position ?? (playerNode?.position)!
-        thanks.zPosition = 6
-        thanks.numberOfLines = 3
-        thanks.fontColor = UIColor.white
-        thanks.fontSize = 25
-        waitAndRun(delay: 2, function: {self.camera?.addChild(thanks)})
-        waitAndRun(delay: 15, function: { () in
+        
+        let fadeIn: Double = 0.5
+        let wait: Double = 3
+        let fadeOut: Double = 0.5
+        var actionsTime: Double = 0
+        let timing: Double = 2.5
+        for thx in thanksText {
+            waitAndRun(delay: timing + actionsTime, function: { self.thanks.text = thx
+                self.thanks.run(.sequence([.fadeIn(withDuration: fadeIn),.wait(forDuration: wait),.fadeOut(withDuration: fadeOut)]))})
+            actionsTime += fadeIn + fadeOut + wait + 0.1
+        }
+        actionsTime += fadeIn + fadeOut + wait
+        let returnToMenuIn = timing + actionsTime + 0.5
+        waitAndRun(delay: returnToMenuIn, function: { () in
             if let menu = SKScene(fileNamed: nextlevel) {
                 if UIDevice.current.userInterfaceIdiom == .pad {
                     menu.scaleMode = .resizeFill
@@ -217,7 +240,7 @@ class Level4_1: GameScene{
                     menu.scaleMode = .fill
                 }
                 self.playerNode?.run(SKAction.fadeOut(withDuration: 1), completion: {
-                    self.scene?.run(SKAction.colorize(with: UIColor.init(red: 30 / 255, green: 30 / 255, blue: 30 / 255, alpha: 1), colorBlendFactor: 0.9, duration: 3))
+                    self.scene?.run(SKAction.colorize(with: UIColor.init(red: 30 / 255, green: 30 / 255, blue: 30 / 255, alpha: 1), colorBlendFactor: 0.9, duration: 2.5))
                     self.scene?.run(SKAction.fadeOut(withDuration: 2.5), completion: {
                         self.stopAndRemoveMusic()
                         self.removeAllActions()
@@ -230,13 +253,15 @@ class Level4_1: GameScene{
     }
 
     func finishGameByPlayer(){
-        let thanks = SKLabelNode(text: "Thank you for playing!\nYou have finished story by choosing to \"help\" your species.\nIn fact you just enslaved them\nBut hey, you did a great job!")
-        showEnd(thanks: thanks)
+        gameFinito = true
+        let thanksText = ["Thank you for playing!","You have finished story by \"helping\" your species.","In fact you just enslaved them","But hey, you did a great job!"]
+        showEnd(thanksText: thanksText)
     }
 
     func finishGame(){
-        let thanks = SKLabelNode(text: "Thank you for playing!\nYou have finished story by listening to reverso.\nIn fact you might save the world\nI'm glad that you finished the game story.")
-        showEnd(thanks: thanks)
+        gameFinito = true
+        let thanksText = ["Thank you for playing!","You have finished story by listening to Reverso.","In fact you might saved the world","I'm glad that you finished the game story."]
+        showEnd(thanksText: thanksText)
     }
 
     override func update(_ currentTime: TimeInterval) {
@@ -260,41 +285,41 @@ class Level4_1: GameScene{
 
         if !reversoMovement && cameraFocusActions.isEmpty{
             reversoMovement = true
-            reversoNode.run(.moveTo(x: -130, duration: 5))
-            waitAndRun(delay: 0.5, function: {
+            reversoNode.run(.sequence([.wait(forDuration: 0.4),.moveTo(x: -130, duration: 6)]))
+            waitAndRun(delay: 0.6, function: {
                 let spawnPos = CGPoint(x: 40, y: 200)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadSearcher(positionTo: spawnPos,imageNamed: "cupcakeus")})
             waitAndRun(delay: 0.7, function: {
                 let spawnPos = CGPoint(x: 30, y: -190)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadSearcher(positionTo: spawnPos,imageNamed: "cupcakeus")})
-            waitAndRun(delay: 0.8, function: {
+            waitAndRun(delay: 0.9, function: {
                 let spawnPos = CGPoint(x: -250, y: 210)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadSearcher(positionTo: spawnPos,imageNamed: "cupcakeus")})
-            waitAndRun(delay: 1, function: {
+            waitAndRun(delay: 1.1, function: {
                 let spawnPos = CGPoint(x: -270, y: -210)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadSearcher(positionTo: spawnPos,imageNamed: "cupcakeus")})
-            waitAndRun(delay: 1.5, function: {
+            waitAndRun(delay: 1.3, function: {
                 let spawnPos = CGPoint(x: -50, y: 180)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadSearcher(positionTo: spawnPos,imageNamed: "crystalio")})
-            waitAndRun(delay: 1.5, function: {
+            waitAndRun(delay: 1.6, function: {
                 let spawnPos = CGPoint(x: -110, y: -195)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadKamikazer(positionTo: spawnPos,imageNamed: "crystalio")})
-            waitAndRun(delay: 2, function: {
+            waitAndRun(delay: 1.9, function: {
                 let spawnPos = CGPoint(x: -200, y: 150)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadKamikazer(positionTo: spawnPos,imageNamed: "crystalio")})
-            waitAndRun(delay: 2, function: {
+            waitAndRun(delay: 2.1, function: {
                 let spawnPos = CGPoint(x: -190, y: -140)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadKamikazer(positionTo: spawnPos,imageNamed: "crystalio")})
-            waitAndRun(delay: 0.5, function: {
+            waitAndRun(delay: 0.6, function: {
                 let spawnPos = CGPoint(x: 40, y: 200)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadSearcher(positionTo: spawnPos,imageNamed: "cupcakeus")})
             waitAndRun(delay: 0.7, function: {
                 let spawnPos = CGPoint(x: 30, y: -190)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadSearcher(positionTo: spawnPos,imageNamed: "cupcakeus")})
-            waitAndRun(delay: 0.8, function: {
+            waitAndRun(delay: 0.9, function: {
                 let spawnPos = CGPoint(x: -250, y: 210)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadSearcher(positionTo: spawnPos,imageNamed: "cupcakeus")})
-            waitAndRun(delay: 1, function: {
+            waitAndRun(delay: 1.1, function: {
                 let spawnPos = CGPoint(x: -270, y: -210)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadSearcher(positionTo: spawnPos,imageNamed: "cupcakeus")})
             waitAndRun(delay: 1.5, function: {
@@ -306,13 +331,13 @@ class Level4_1: GameScene{
             waitAndRun(delay: 2, function: {
                 let spawnPos = CGPoint(x: -200, y: 150)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadKamikazer(positionTo: spawnPos,imageNamed: "crystalio")})
-            waitAndRun(delay: 2, function: {
+            waitAndRun(delay: 2.4, function: {
                 let spawnPos = CGPoint(x: -190, y: -140)
                 self.warpAnimation(position: spawnPos);self.entityManager.loadKamikazer(positionTo: spawnPos,imageNamed: "crystalio")})
             timePassed = Date()
         }
 
-        if !startedFinalChapter && reversoMovement && -timePassed.timeIntervalSinceNow > 7{
+        if !gameFinito && !startedFinalChapter && reversoMovement && -timePassed.timeIntervalSinceNow > 9{
             let entities = entityManager.gameEntities
             entities.forEach { entity in
                 if entity.component(ofType: PlayerComponent.self) == nil && entity.component(ofType: StoryComponent.self) == nil{
