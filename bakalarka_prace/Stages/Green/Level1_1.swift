@@ -46,7 +46,7 @@ class Level1_1: Level1 {
             sNode.zRotation = CGFloat(0)
             sNode.zPosition = 3
             entityManager.add(entity: storyTeller!)
-            updateStoryText(with: "I ain't that big though", around: sNode, forDuration: 0.5)
+            updateStoryText(with: "Come to me I have a tale to tell.", around: sNode, forDuration: 1.5)
         }
         if let triggerComp = storyTeller?.component(ofType: TriggerComponent.self){
             triggerComponent = triggerComp
@@ -54,8 +54,11 @@ class Level1_1: Level1 {
         }
 
         // WANDER SETUP & INITIAL TEXTS
-        self.updateStoryText(with: "Play around and find out", around: self.entityManager.loadWander(messages: ["Did you talk with the big eye?", "Not many eyes can see the truth"], position: CGPoint.randomPosition(x: -840...840, y: -640...640))!, forDuration: 1)
-        let wander = entityManager.loadWander(messages: ["Hello", "Have you seen the donuts?", "There are four funky donuts"], loopOn: 3, position: CGPoint.randomPosition(x: -840...840, y: -640...640))!
+        self.updateStoryText(with: "Play around and find out", around: self.entityManager.loadWander(messages: ["Did you talk with the big eye?", "Not many eyes can see the truth","You know that all the donuts\nare always hidden near the corners of this place?"], position: CGPoint.randomPosition(x: -840...840, y: -640...640))!, forDuration: 1)
+        let wander = entityManager.loadWander(messages: ["Hello", "Have you seen the donuts?", "There are four funky donuts","The best idea is to eat\nthe pink donut first and then the green one!"], loopOn: 3, position: CGPoint.randomPosition(x: -1280...1280, y: -640...640))!
+        entityManager.loadWander(messages: ["Hello", "Have you seen the donuts?", "There are four funky donuts"], loopOn: 3, position: CGPoint.randomPosition(x: -1280...1280, y: -640...640))
+        entityManager.loadWander(messages: ["I've heard that there is a maze close from here\nand you know...they could be there!", "There is one funky donut", "I feel you"], loopOn: 3, position: CGPoint.randomPosition(x: -1280...1280, y: -640...640))
+        entityManager.loadWander(messages: ["Hey, stranger", "I might talk nonsense times", "Have you tried the combination\nof pink and green donut?"], loopOn: 3, position: CGPoint.randomPosition(x: -1280...1280, y: -640...640))
         self.updateStoryText(with: "Alright I should explore this place\nand interact with those creatures, I think.", around: self.playerNode!, forDuration: 1)
 
 

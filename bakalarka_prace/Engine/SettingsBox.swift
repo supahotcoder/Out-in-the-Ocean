@@ -43,7 +43,7 @@ class SettingsBox {
         back.addChild(labelBlueprint.copy() as! SKLabelNode)
 
         buttonBlueprint = SKSpriteNode(texture: SKTexture(imageNamed: "mainMenu"), size: buttonSize.menuButton.toCGSize(withBounds: deviceBounds))
-        labelBlueprint = SKLabelNode(text: "Text speed: Normal")
+        labelBlueprint = SKLabelNode(text: "Reading speed: Normal")
 
         labelBlueprint.position = CGPoint(x: 0, y: 0)
         labelBlueprint.color = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
@@ -64,11 +64,11 @@ class SettingsBox {
 
         textSpeedButton = buttonBlueprint.copy() as? SKSpriteNode
         textSpeedButton?.position = CGPoint(x: 0, y: -(deviceBounds.height / 6))
-        if let speed = textSpeeds(rawValue: TEXT_SPEED){
-            labelBlueprint.text = "Text speed: " + speed.text()
+        if let speed = readingSpeed(rawValue: READING_SPEED){
+            labelBlueprint.text = "Reading speed: " + speed.text()
         }else{
-            setNewTextSpeed(speed: .normal)
-            labelBlueprint.text = "Text speed: Normal"
+            setNewReadingSpeed(speed: .normal)
+            labelBlueprint.text = "Reading speed: Normal"
         }
         textSpeedButton?.addChild(labelBlueprint.copy() as! SKLabelNode)
         textSpeedButton?.zPosition = 20
@@ -102,7 +102,7 @@ class SettingsBox {
         print("bef",UserDefaults.standard.integer(forKey: "textSpeed"))
         UserDefaults.standard.set(joystick.isDynamic, forKey: "joystickSettings")
         UserDefaults.standard.synchronize()
-        UserDefaults.standard.set(Int(TEXT_SPEED), forKey: "textSpeed")
+        UserDefaults.standard.set(Int(READING_SPEED), forKey: "textSpeed")
         print("after",UserDefaults.standard.integer(forKey: "textSpeed"))
     }
 
@@ -120,16 +120,16 @@ class SettingsBox {
                     (joystickButton?.children.first as? SKLabelNode)?.text = "Static joystick"
                 }
             }else if (textSpeedButton?.frame.contains(t))!{
-                switch TEXT_SPEED{
-                case textSpeeds.slow.rawValue:
-                    setNewTextSpeed(speed: .normal)
-                    (textSpeedButton?.children.first as? SKLabelNode)?.text = "Text speed: Normal"
-                case textSpeeds.normal.rawValue:
-                    setNewTextSpeed(speed: .fast)
-                    (textSpeedButton?.children.first as? SKLabelNode)?.text = "Text speed: Fast"
-                case textSpeeds.fast.rawValue:
-                    setNewTextSpeed(speed: .slow)
-                    (textSpeedButton?.children.first as? SKLabelNode)?.text = "Text speed: Slow"
+                switch READING_SPEED{
+                case readingSpeed.slow.rawValue:
+                    setNewReadingSpeed(speed: .normal)
+                    (textSpeedButton?.children.first as? SKLabelNode)?.text = "Reading speed: Normal"
+                case readingSpeed.normal.rawValue:
+                    setNewReadingSpeed(speed: .fast)
+                    (textSpeedButton?.children.first as? SKLabelNode)?.text = "Reading speed: Fast"
+                case readingSpeed.fast.rawValue:
+                    setNewReadingSpeed(speed: .slow)
+                    (textSpeedButton?.children.first as? SKLabelNode)?.text = "Reading speed: Slow"
                 default:
                     break
                 }

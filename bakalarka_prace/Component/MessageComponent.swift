@@ -22,7 +22,6 @@ class MessageComponent: GKComponent {
     private var currentMsg = 0
     private var loopMsgOn: Int = -1
     
-    //FIXME : CHANGE
     init(node: SKSpriteNode, entityManager: EntityManager,messages msgs: [String], loopOn: Int? = nil, warningMsgs: [String]) {
         self.entityManager = entityManager
         entityNode = node

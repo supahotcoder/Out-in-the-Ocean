@@ -16,24 +16,10 @@ class FeedbackComponent : GKComponent {
     private var lastFeedbackTime: Date = Date()
     private var lastPlayerFeedbackTime: Date = Date()
 
-    init(feedbackHint: Dictionary<GKEntity,[String]>, feedbackTouch: Dictionary<bitmasks,[String]>, feedbackPlayer: Dictionary<bitmasks,[String]>) {
+    init(feedbackHint: Dictionary<GKEntity,[String]>? = nil, feedbackTouch: Dictionary<bitmasks,[String]>? = nil, feedbackPlayer: Dictionary<bitmasks,[String]>? = nil) {
         self.feedbackHint = feedbackHint
         self.feedbackTouch = feedbackTouch
         self.feedbackPlayer = feedbackPlayer
-        super.init()
-    }
-
-    init(feedbackHint: Dictionary<GKEntity,[String]>) {
-        self.feedbackHint = feedbackHint
-        self.feedbackTouch = nil
-        self.feedbackPlayer = nil
-        super.init()
-    }
-
-    init(feedbackTouch: Dictionary<bitmasks,[String]>) {
-        self.feedbackTouch = feedbackTouch
-        self.feedbackHint = nil
-        self.feedbackPlayer = nil
         super.init()
     }
 

@@ -52,7 +52,8 @@ class DialogController {
 
     func setUpNewDialogs(dialog1TextAndID: (text: String,id: Int), dialog2TextAndID: (text: String,id: Int)) {
         let buttonBlueprint = SKSpriteNode(texture: SKTexture(imageNamed: "mainMenu"), size: buttonSize.menuButton.toCGSize)
-        let labelBlueprint = SKLabelNode(text: dialog1TextAndID.text)
+        let longerText = dialog1TextAndID.text.count > dialog2TextAndID.text.count ? dialog1TextAndID.text : dialog2TextAndID.text
+        let labelBlueprint = SKLabelNode(text: longerText)
         labelBlueprint.position = CGPoint(x: 0, y: -5)
         labelBlueprint.color = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
         labelBlueprint.fontName = "HelveticaNeue-MediumItalic"

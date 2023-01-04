@@ -100,6 +100,12 @@ class Level0_1: LevelStory {
         wanderNode.run(.colorize(with: .purple, colorBlendFactor: 0.8, duration: 0))
         effectNode.filter = CIFilter(name: "CIColorControls", parameters: ["inputSaturation": 3 ,"inputBrightness": 0.2])
         self.addChild(effectNode)
+
+        var touchF: Dictionary<bitmasks, [String]> = Dictionary<bitmasks, [String]>()
+        touchF[bitmasks.wander] = ["I'm glad you're helping us","I heard that you could\nreturn as a hero."]
+
+        let feedback = FeedbackComponent(feedbackTouch: touchF)
+        entityManager.addComponentToPlayer(component: feedback)
     }
 
     override func didBumpIntoStoryTeller() {

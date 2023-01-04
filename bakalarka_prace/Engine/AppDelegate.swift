@@ -6,6 +6,7 @@
 
 import UIKit
 import SpriteKit
+import AVFAudio
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -36,6 +37,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "gameInView"), object: nil)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+            } catch {
+                print("Can't override silent mode")
+            }
+        } catch{
+            print("Can't access AVAudioSession")
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

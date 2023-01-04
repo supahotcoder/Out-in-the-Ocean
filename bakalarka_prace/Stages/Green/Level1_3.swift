@@ -35,15 +35,16 @@ class Level1_3: Level1 {
         self.addChild(warperNode)
 
         // TEXT SETUP
-        updateStoryText(with: "Okay let's see.", around: playerNode!, displayIn: 0, fadeOut: 1, forDuration: 3)
+        updateStoryText(with: "Okay let's see.", around: playerNode!, displayIn: 0, fadeOut: 1, forDuration: 2)
 
         if (!GameSceneClass.haveDied) {
             updateGoalText(with: "Maybe I should watch the environment\nand myself especially", around: playerNode!)
+            updateGoalText(with: "My body is my temple...but few donuts...could be nice", around: playerNode!)
         }
         //WANDER SETUP
         let msgs = ["Hi", "...", "Hello stranger", "It's getting greener", "Welcome Traveler",
                     "Something,\nis not right in there", "Not me", "Did you found\nwhat you've been looking for?", "Don't bother me"]
-        let warning = ["Get out!", "Beware!", "Watch out!", "They are coming!"]
+        let warning = ["Get out!", "Beware!", "Watch out!", "They are coming!","Oh no, they are close!","Don't move!"]
         let wander = entityManager.loadWander(messages: msgs, warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
         entityManager.loadWander(messages: msgs, warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
         entityManager.loadWander(messages: msgs, warningMsgs: warning, position: CGPoint.randomPosition(x: -840...840, y: -640...640))
@@ -86,7 +87,7 @@ class Level1_3: Level1 {
         hintF[searcher!.entity!] = ["I should avoid that green ball", "I got poisoned, rather avoid that next time"]
         hintF[c1] = ["I felt different after eating those donuts", "Let's get some more donuts", "Those donuts are really good", "I'm getting addicted on the donuts"]
         hintF[warperNode.entity!] = ["Did I just teleported", "This is gotta be it, this is my way out", "I need to use that warper"]
-        let feedback = FeedbackComponent(feedbackTouch: touchF)
+        let feedback = FeedbackComponent(feedbackHint: hintF, feedbackTouch: touchF)
         entityManager.addComponentToPlayer(component: feedback)
     }
 

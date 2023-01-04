@@ -22,7 +22,6 @@ class Level2: GameScene {
     }
     
     func gameOver(){
-        
     }
     
     

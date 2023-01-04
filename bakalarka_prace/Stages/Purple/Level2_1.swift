@@ -73,7 +73,9 @@ class Level2_1: Level2 {
         }
         // STORY TELLER
         let slime = entityManager.loadStoryTeller(storyToTell: [""], imageNamed: "slime", triggerable: true, position: CGPoint(x: -960, y: 0), rotation: CGFloat(0))
-        
+//        WANDERS
+        entityManager.loadWander(messages: ["Beware of the mighty crystals","Now you know what kamikaze means"],imageName: "mudder",position:CGPoint(x: 320, y: 320))
+        entityManager.loadWander(messages: ["Use me as a shield","I'm...ugh...going to...explode!","Just kidding, I wish I could though"],imageName: "mudder",position: CGPoint(x: -160, y: -480))
         storyTellerNode = slime.node
         storyTeller = slime.entity
         
@@ -96,6 +98,12 @@ class Level2_1: Level2 {
         
         entityManager.add(entity: key1!)
         entityManager.add(entity: key2!)
+        
+        var touchF: Dictionary<bitmasks, [String]> = Dictionary<bitmasks, [String]>()
+        touchF[bitmasks.collectible] = ["My mind is key to everything", "I have to unlock my memories...", "I wonder how does the secret element look"]
+        
+        let feedback = FeedbackComponent(feedbackPlayer: touchF)
+        entityManager.addComponentToPlayer(component: feedback)
         
     }
 

@@ -33,11 +33,9 @@ class GameSceneClass: SKScene, SKPhysicsContactDelegate {
     var totalTimeInMenu: Double = 0
     
     var background: SKSpriteNode?
-    var goals: [ActiveBackground] = [ActiveBackground]()
 
     var goalText = SKLabelNode()
     var playerText = SKLabelNode()
-    //#error("When story text is about to be selected: pause, focus etc.")
     var storyText = SKLabelNode()
     var warningText = SKLabelNode()
 
@@ -155,19 +153,6 @@ class GameSceneClass: SKScene, SKPhysicsContactDelegate {
         settingsBox = SettingsBox(joystick: joystick)
     }
 
-    //MARK: - MOVEMENT FUNCTIONS
-
-    func moveInDirection(direction: CGPoint, pulseForce: CGVector, with: SKSpriteNode) {
-        with.physicsBody?.applyImpulse(pulseForce, at: direction)
-    }
-
-    func changeLevelGravity(gravity: CGVector) {
-        self.physicsWorld.gravity = gravity
-    }
-
-    func move(with: SKSpriteNode, towards: SKSpriteNode, pulseForce: CGVector) {
-        with.physicsBody?.applyImpulse(pulseForce, at: towards.position)
-    }
 
     //MARK: - DISPLAY TEXT
     
@@ -230,9 +215,9 @@ class GameSceneClass: SKScene, SKPhysicsContactDelegate {
         updateText(with: text, label: &textNode)
         let fadeIn = fadeIn_  ?? 0.1
         let actions = prepareTextActions(displayIn: displayIn, fadeIn: fadeIn, fadeOut: fadeOut, label: textNode, around: around, alignment: .rightBottom, forDuration: forDuration)
-        var actionsTotalSec = displayIn + (forDuration ?? TimeInterval(text.count) / TEXT_SPEED) + fadeIn + fadeOut - (CAMERA_MOVEMENT_TIME)// kvuli casu trvani presunu kamery
+        var actionsTotalSec = displayIn + (forDuration ?? TimeInterval(text.count) / READING_SPEED) + fadeIn + fadeOut - (CAMERA_MOVEMENT_TIME)// kvuli casu trvani presunu kamery
         if let duration = forDuration{
-            let durationExtraTime = (duration * (textSpeeds(rawValue: TEXT_SPEED)?.getForDurationModifier() ?? 1)) - duration
+            let durationExtraTime = (duration * (readingSpeed(rawValue: READING_SPEED)?.getForDurationModifier() ?? 1)) - duration
             actionsTotalSec += durationExtraTime
         }
         if displayIn == 0{
@@ -378,11 +363,15 @@ class GameSceneClass: SKScene, SKPhysicsContactDelegate {
     
     func backgroundMusic(fileName: String, extension ex: String) {
         do {
-//            potencionalni oprava pokud mame iOS 16 a zarizeni nastavene v tichem rezime, tak diky teto uprave muzeme prehravat zvuk
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-        } catch {
-            print("Setting category to AVAudioSessionCategoryPlayback failed.")
-            
+//            potencionalni oprava pokud mame iOS 16 a zarizeni v tichem rezimu, tak diky teto uprave muzeme prehravat zvuk
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+            } catch {
+                print("Can't override silent mode")
+            }
+        } catch{
+            print("Can't access AVAudioSession")
         }
         do {
             if GameSceneClass.backgroundMusicPlayer == nil {
@@ -461,8 +450,7 @@ class GameSceneClass: SKScene, SKPhysicsContactDelegate {
             }
         }
         entityManager.update(deltaTime)
-
-    }
+        }
     
     func waitAndRun<T>(delay: Double, function: @escaping () -> T) {
         let wrapedFunc: () -> Void = { () in

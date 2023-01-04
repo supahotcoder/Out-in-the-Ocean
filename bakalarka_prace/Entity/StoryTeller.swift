@@ -33,7 +33,7 @@ class StoryTeller: GKEntity {
             addComponent(trigger)
         }
 
-        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.storyTeller.rawValue, dynamicObject: true, canRotate: false, pathBody: BodyPathsBodySizes.getPhysicsBodyOf(textureName: imageNamed, sprite: spriteComp.node), mass: 40)
+        let contactComp = ContactComponent(entity: self, bitmask: bitmasks.storyTeller.rawValue, dynamicObject: true, canRotate: false, pathBody: BodyPathsBodySizes.getPhysicsBodyOf(textureName: imageNamed, sprite: spriteComp.node), mass: 60)
         addComponent(contactComp)
         // je statická moveComponent používá jenom pro zjišťování vzdálenosti od hráče
         // DUE TO SOME UNEXPLAINABLE PROBLEMS EVEN STATIC ENTITY HAS TO MOVE SO IT WOULDN'T HAD POSITION (nal, nal)

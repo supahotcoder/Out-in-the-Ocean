@@ -20,6 +20,12 @@ class Level3_1S: LevelStory {
         //MUSIC SETUP
         backgroundMusic(fileName: "level3-1S-sound", extension: "wav")
         playerSpawnPosition = CGPoint(x: 0, y: 270)
+        // Bubble effect
+        let bubblesback = SKEmitterNode(fileNamed: "SmogEffect")!
+        let backgroundRange = CGVector(dx: (background?.frame.width)!, dy: (background?.frame.height)!)
+        bubblesback.particlePositionRange = backgroundRange
+        bubblesback.position = CGPoint(x: 0, y: 0)
+        self.addChild(bubblesback)
         super.didMove(to: view)
         //        HELP SETUP
         helpBox = HelpBox(levelName: "level3-1S")
@@ -57,6 +63,12 @@ class Level3_1S: LevelStory {
                                                                            "The energies of the interdimensional place\nare constantly shifting and the creatures that inhabit it are dangerous.",
                                                                            "Be sure to stay on track and focus on your end goal."],completion: {self.sideStoryCompleted = true}, imageNamed: "cupcakeus", triggerable: false, position: CGPoint(x: -120, y: -350), rotation: CGFloat(0)).node
         helpfulStoryNode?.run(SKAction.colorize(with: .purple, colorBlendFactor: 0.5, duration: 0))
+        
+        var touchF: Dictionary<bitmasks, [String]> = Dictionary<bitmasks, [String]>()
+        touchF[bitmasks.wander] = ["I don't feel like talking to you","..."]
+
+        let feedback = FeedbackComponent(feedbackTouch: touchF)
+        entityManager.addComponentToPlayer(component: feedback)
     }
 
 

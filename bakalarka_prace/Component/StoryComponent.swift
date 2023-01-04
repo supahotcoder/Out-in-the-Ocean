@@ -27,7 +27,7 @@ class StoryComponent: GKComponent {
     }
     
     func tellStory() {
-        if msg.parent == nil && current < story.count {
+        if msg.parent == nil && current < story.count && story.first?.count ?? 0 > 0{
             prepareMsg(with: story[current], fadeIn: 0.2, fadeOut: 0.7)
             current += 1
             if current < story.count, !finished{

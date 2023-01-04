@@ -10,10 +10,10 @@ import SpriteKit
 // pohyb kamery je nastaven na 0.3 sekundy at je vic prirozeny
 let CAMERA_MOVEMENT_TIME: Double = 0.3
 // promena se pouziva pro nastaveni doby po kterou text zustava na obrazovce (nekteri hraci ctou pomaleji/rychleji)
-private(set) var TEXT_SPEED: Double = UserDefaults.standard.integer(forKey: "textSpeed") != 0 ? Double(UserDefaults.standard.integer(forKey: "textSpeed")) : textSpeeds.normal.rawValue
+private(set) var READING_SPEED: Double = UserDefaults.standard.integer(forKey: "textSpeed") != 0 ? Double(UserDefaults.standard.integer(forKey: "textSpeed")) : readingSpeed.normal.rawValue
 
 
-enum textSpeeds: Double{
+enum readingSpeed: Double{
 
     case slow = 10
     case normal = 14
@@ -43,9 +43,9 @@ enum textSpeeds: Double{
     }
 }
 
-func setNewTextSpeed(speed: textSpeeds){
+func setNewReadingSpeed(speed: readingSpeed){
 //    nastavi novou rychlost pro modifikaci doby po kterou je text na obrazovce
-    TEXT_SPEED = speed.rawValue
+    READING_SPEED = speed.rawValue
 }
 
 enum bitmasks : UInt32 , CaseIterable {
@@ -141,9 +141,9 @@ func adjustLabelFontSizeToFitRect(labelNode:SKLabelNode, size:CGSize) {
 
 func prepareTextActions(displayIn: TimeInterval, fadeIn: TimeInterval = 0, fadeOut: TimeInterval, label: SKLabelNode, around: SKNode, alignment: textPosition=textPosition.leftBottom, forDuration: TimeInterval?=nil) -> [SKAction]{
 //    pripravi akce pro zobrazeni textu na obrazovku
-    var showForDur = TimeInterval((label.text?.count)!) / TEXT_SPEED
+    var showForDur = TimeInterval((label.text?.count)!) / READING_SPEED
     if let duration = forDuration{
-        showForDur = duration * (textSpeeds(rawValue: TEXT_SPEED)?.getForDurationModifier()  ?? 1)
+        showForDur = duration * (readingSpeed(rawValue: READING_SPEED)?.getForDurationModifier()  ?? 1)
     }
     return [SKAction.wait(forDuration: displayIn),SKAction.run{label.trackNode(node: around,labelAlligment: alignment.toCGPoint)},SKAction.fadeIn(withDuration: fadeIn),
            SKAction.wait(forDuration: showForDur),SKAction.fadeOut(withDuration: fadeOut), SKAction.removeFromParent()]

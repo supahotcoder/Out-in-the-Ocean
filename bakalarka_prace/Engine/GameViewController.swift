@@ -28,13 +28,12 @@ class GameViewController: UIViewController {
                 view.presentScene(scene)
             }
             
-            //test
             view.ignoresSiblingOrder = false
             
-            view.showsFPS = true
-            view.showsNodeCount = true
-            view.showsDrawCount = true // pro pozdější optimalizaci
-            view.showsPhysics = true
+//            view.showsFPS = true
+//            view.showsNodeCount = true
+//            view.showsDrawCount = true // pro pozdější optimalizaci
+//            view.showsPhysics = true
 //            view.showsFields = true
             
         }

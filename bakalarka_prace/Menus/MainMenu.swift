@@ -21,8 +21,28 @@ class MainMenu: MenuEssential {
     private var joystick: Joystick!
     
     private var level: String!
+    private var canChooseLevel: Bool!
+    
+    private let lvlSelectionLabel: SKLabelNode = SKLabelNode(text: "You haven't unlocked level selection yet!")
     
     override func didMove(to view: SKView) {
+//        detekce screenshotu, ktera povoli vyber urovni
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.userDidTakeScreenshotNotification,
+            object: nil,
+            queue: .main) { notification in
+                self.canChooseLevel = true
+                UserDefaults.standard.set(true, forKey: "CanChooseLevel")
+                
+                self.selectLevel.run(.colorize(with: .clear, colorBlendFactor: 0, duration: 0))
+                self.selectLevel.alpha = 1
+        }
+        
+        
+        lvlSelectionLabel.name = "UnlockedText"
+        lvlSelectionLabel.zPosition = 30
+        
+        canChooseLevel = UserDefaults.standard.bool(forKey: "CanChooseLevel")
         let isGameFinished = UserDefaults.standard.bool(forKey: "finishedGame")
 
         var songName = "main-menu"
@@ -31,6 +51,7 @@ class MainMenu: MenuEssential {
             songName = "main-menu-finished-game"
             if UserDefaults.standard.string(forKey: "LastLevel") == "MainMenu"{
                 UserDefaults.standard.set("Level4_1", forKey: "LastLevel")
+                UserDefaults.standard.set(true, forKey: "CanChooseLevel")
                 UserDefaults.standard.synchronize()
             }
         }
@@ -79,6 +100,10 @@ class MainMenu: MenuEssential {
         adjustLabelFontSizeToFitRect(labelNode: (selectLevel.children.first as? SKLabelNode)!, size: selectLevel.size)
         resetProgress.position = CGPoint(x: 0, y: -deviceSize.height / 4)
         adjustLabelFontSizeToFitRect(labelNode: (resetProgress.children.first as? SKLabelNode)!, size: resetProgress.size)
+        if !canChooseLevel{
+            selectLevel.run(.colorize(with: .darkGray, colorBlendFactor: 0.8, duration: 0))
+            selectLevel.alpha = 0.6
+        }
         
         settingsButton = childNode(withName: "settings") as? SKSpriteNode
         settingsButton.position = CGPoint(x: (deviceSize.width / 2) - (settingsButton.size.width) / 2, y: (deviceSize.height / 2) - (settingsButton.size.height) / 2)
@@ -115,6 +140,8 @@ class MainMenu: MenuEssential {
             //TODO: - Po testování nahodit zpátky na Level1_1
             else if resetProgress.frame.contains(t){
                 buttonPressed(node: resetProgress)
+                UserDefaults.standard.removeObject(forKey: "Level1_2S_by_player")
+                UserDefaults.standard.removeObject(forKey: "Level2_1_side_story")
                 UserDefaults.standard.removeObject(forKey: "LastLevel")
                 UserDefaults.standard.removeObject(forKey: "finishedGame")
                 UserDefaults.standard.removeObject(forKey: "Feedback")
@@ -122,19 +149,33 @@ class MainMenu: MenuEssential {
                 level = "Level0"
             }
             else if selectLevel.frame.contains(t){
-                buttonPressed(node: selectLevel)
-                backgroundMusicPlayer?.stop()
-                if let scene = SKScene(fileNamed: "LevelSelect") {
-                    if UIDevice.current.userInterfaceIdiom == .pad{
-                        scene.scaleMode = .resizeFill
+                if canChooseLevel{
+                    buttonPressed(node: selectLevel)
+                    backgroundMusicPlayer?.stop()
+                    if let scene = SKScene(fileNamed: "LevelSelect") {
+                        if UIDevice.current.userInterfaceIdiom == .pad{
+                            scene.scaleMode = .resizeFill
+                        }
+                        else{
+                            scene.scaleMode = .fill
+                        }
+                        self.removeAllActions()
+                        self.removeAllChildren()
+                        let transition:SKTransition = SKTransition.fade(withDuration: 1)
+                        self.view?.presentScene(scene, transition: transition)
                     }
-                    else{
-                        scene.scaleMode = .fill
+                }else{
+                    if !(scene?.childNode(withName: "UnlockedText")?.hasActions() ?? false){
+                        addChild(lvlSelectionLabel)
+                        lvlSelectionLabel.fontSize = (resetProgress.children[0] as! SKLabelNode).fontSize
+                        
+                        let textBackground = SKSpriteNode(color: UIColor.lightGray, size: CGSize(width: CGFloat(lvlSelectionLabel.frame.size.width * 1.1), height:CGFloat(lvlSelectionLabel.frame.size.height * 1.5)))
+                        textBackground.position = CGPoint(x: 0, y: textBackground.size.height / 3)
+                        textBackground.zPosition = -1
+                        lvlSelectionLabel.addChild(textBackground)
+                        
+                        lvlSelectionLabel.run(.sequence([.wait(forDuration: 2.5),.fadeOut(withDuration: 0.5),.removeFromParent()]))
                     }
-                    self.removeAllActions()
-                    self.removeAllChildren()
-                    let transition:SKTransition = SKTransition.fade(withDuration: 1)
-                    self.view?.presentScene(scene, transition: transition)
                 }
             }
             else if settingsButton.frame.contains(t){

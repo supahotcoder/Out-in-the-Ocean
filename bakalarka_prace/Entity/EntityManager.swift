@@ -43,7 +43,7 @@ class EntityManager {
 
     func tellStory(text: String, around: SKNode,fadeIn: TimeInterval, fadeOut: TimeInterval) -> SKLabelNode? {
         if !gameOver{
-            let timeUntilNextText = TimeInterval(text.count / Int(TEXT_SPEED)) + fadeIn + fadeOut + 1.0
+            let timeUntilNextText = TimeInterval(text.count / Int(READING_SPEED)) + fadeIn + fadeOut + 1.0
             return scene?.updateStoryText(with: text, around: around, fadeIn: fadeIn, fadeOut: fadeOut,forDuration: timeUntilNextText - fadeIn - fadeOut - 0.5)
         }
         return nil
@@ -170,9 +170,9 @@ class EntityManager {
             }
             sNode.zPosition = 3
             self.add(entity: searcher)
+            enemies.insert(searcher)
             return sNode
         }
-        enemies.insert(searcher)
         return nil
     }
 
@@ -186,9 +186,9 @@ class EntityManager {
             }
             sNode.zPosition = 3
             self.add(entity: kamikazer)
+            enemies.insert(kamikazer)
             return sNode
         }
-        enemies.insert(kamikazer)
         return nil
     }
     

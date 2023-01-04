@@ -27,31 +27,33 @@ class Level3_1: GameScene{
         physicsBody?.categoryBitMask = bitmasks.frame.rawValue
         //PLAYER POSITION
         playerSpawnPosition = CGPoint(x: 0, y: 0)
+        // Interdimensional effect
+        let frontEffect = SKEmitterNode(fileNamed: "InterdimensionalEffect")!
 
+        let backgroundRange = CGVector(dx: (background?.frame.width)!, dy: (background?.frame.height)!)
+        frontEffect.particlePositionRange = backgroundRange
+
+        frontEffect.position = CGPoint(x: 0, y: 0)
+        frontEffect.zPosition = 3
+        self.addChild(frontEffect)
         super.didMove(to: view)
         //        HELP SETUP
         helpBox = HelpBox(levelName: "level3-1")
         updateStoryText(with: "All right let's do it", around: playerNode!)
 
-        // Smog effect
-        let smogBack = SKEmitterNode(fileNamed: "SmogEffect")!
-        let backgroundRange = CGVector(dx: (background?.frame.width)!, dy: (background?.frame.height)!)
-        smogBack.particlePositionRange = backgroundRange
-        smogBack.position = CGPoint(x: 0,y: 0)
-        self.addChild(smogBack)
-
         // WANDERS (DEADLY)
 //        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint(x: -400, y: 680))
 //        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint(x: -400, y: -680))
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
-        entityManager.loadWander(imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        let deadlyMessages = ["Come closer little one","Touch me and I'll give you all the answers","I'll tell you a strategy how to find a crystal key\n...just come little closer","Don't be scared of me I won't bite!","Touch me I'll teleport you to the place you want to be","Don't trust all the guys I have the key, touch me!","I just need a hug","It's so lonely in here always the same people.\nCome talk to me","My vision is kinda bad, kindly come closer to me","When you bump to me you can teleport","Always shook hands with someone you've just met!"]
+        entityManager.loadWander(messages: deadlyMessages,imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(messages: deadlyMessages.shuffled(),imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(messages: deadlyMessages.shuffled(),imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(messages: deadlyMessages.shuffled(),imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(messages: deadlyMessages.shuffled(),imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(messages: deadlyMessages.shuffled(),imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(messages: deadlyMessages.shuffled(),imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(messages: deadlyMessages.shuffled(),imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
+        entityManager.loadWander(messages: deadlyMessages.shuffled(),imageName: "cupcakeus", position: CGPoint.randomPositionAvoidNode(x: -400...400, y: -630...630, nodeToAvoid: playerNode!),rotation: 0)
 
         // WARPER SETUP
         let warper = ActiveBackground(imageName: "spin", entityManager: entityManager)

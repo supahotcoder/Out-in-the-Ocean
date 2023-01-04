@@ -27,7 +27,6 @@ class Level1: GameScene {
 
         // první nastavíme physicsBody až poté voláme super.didMove
         super.didMove(to: view)
-
         // Bubble effect
         let bubblesback = SKEmitterNode(fileNamed: "BubbleEffect")!
         let bubblesfront = SKEmitterNode(fileNamed: "BubbleEffect")!
@@ -58,7 +57,27 @@ class Level1: GameScene {
 
     //MARK: - COLISIONS
     func didBegin(_ contact: SKPhysicsContact) {
+        let otherNode: SKPhysicsBody
 
+        if contact.bodyA.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
+            otherNode = contact.bodyB
+        } else if contact.bodyB.node?.physicsBody?.categoryBitMask == playerNode?.physicsBody?.categoryBitMask {
+            otherNode = contact.bodyA
+        } else {
+            return
+        }
+        if let pl = entityManager.player?.component(ofType: FeedbackComponent.self) {
+            if let bMask = bitmasks(rawValue: otherNode.categoryBitMask) {
+                let fbText = pl.giveTouchFeedback(on: bMask)
+                if (fbText != "") {
+                    self.updateFeedbackText(with: fbText)
+                }
+                let palyerFbText = pl.givePlayerThought(on: bMask)
+                if (palyerFbText != "") {
+                    self.updatePlayerThoughtText(with: palyerFbText, displayIn: 0.5)
+                }
+            }
+        }
     }
 
     func warp(contact: SKPhysicsContact, otherNode: SKNode?, customWarper: SKNode? = nil, teleportTo: CGPoint? = nil) {

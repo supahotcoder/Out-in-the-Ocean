@@ -24,7 +24,7 @@ class Joystick {
         }
     }
     var isHidden: Bool = false
-    var didEnable: Bool = false
+    private var didEnable: Bool = false
     
     var touch : CGPoint = CGPoint(x: 0, y: 0){
         // až při nastavování místa doteku v joysticku se počítá přesný pohyb páčky
@@ -123,7 +123,7 @@ class Joystick {
 
     
     // regulátor maximální rychlosti
-    func maxVelocityCheck(node : SKSpriteNode){
+    private func maxVelocityCheck(node : SKSpriteNode){
         let velocity = (node.physicsBody?.velocity)!
         let deltaZ = sqrt(pow(velocity.dx, 2) + pow(velocity.dy, 2))
         if deltaZ > maxVelocity{
@@ -136,7 +136,6 @@ class Joystick {
     }
     
     //pohyb s hráčem
-    var lastMovement = CGVector(dx: 0, dy: 0)
     func movement(moveWith node: SKSpriteNode) {
         if insideFrame && !isHidden{
             let movement = CGVector(dx: (thumbstick.node.position.x * speed), dy:  (thumbstick.node.position.y * speed))
